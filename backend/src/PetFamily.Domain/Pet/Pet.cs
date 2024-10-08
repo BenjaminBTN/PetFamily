@@ -35,13 +35,13 @@ namespace PetFamily.Domain.Pet
 
         public double Height { get; private set; } = default!;
 
-        public string PhonNumber { get; private set; } = default!;
+        public string PhoneNumber { get; private set; } = default!;
 
-        public bool Castrated { get; private set; } = default!;
+        public bool IsCastrated { get; private set; } = default!;
 
         public DateTime BirthDate { get; private set; } = default!;
 
-        public bool Vaccinated { get; private set; } = default!;
+        public bool IsVaccinated { get; private set; } = default!;
 
         public AssistanceStatus Status { get; private set; } = default!;
 
