@@ -31,11 +31,11 @@ namespace PetFamily.Domain.Volunteer
 
         public int Experience { get; private set; } = default!;
 
-        public int PetSearchHomeCount => Pets.Where(p => p.Status == AssistanceStatus.SearchHome).Count();
+        public int GetPetsSearchHomeCount() => _pets.Where(p => p.Status == AssistanceStatus.SearchHome).Count();
 
-        public int PetFoundHomeCount => Pets.Where(p => p.Status == AssistanceStatus.FoundHome).Count();
+        public int GetPetsFoundHomeCount() => _pets.Where(p => p.Status == AssistanceStatus.FoundHome).Count();
 
-        public int PetNeedsHelpCount => Pets.Where(p => p.Status == AssistanceStatus.NeedsHelp).Count();
+        public int GetPetsNeedsHelpCount() => _pets.Where(p => p.Status == AssistanceStatus.NeedsHelp).Count();
 
         public string PhoneNumber { get; private set; } = default!;
 
