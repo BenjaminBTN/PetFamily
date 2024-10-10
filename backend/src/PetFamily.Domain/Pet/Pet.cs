@@ -4,9 +4,10 @@ namespace PetFamily.Domain.Pet
 {
     public class Pet
     {
-        private readonly List<PetPhoto> _petPhotos = [];
-
-        private Pet() { }
+        private Pet()
+        {
+            
+        }
 
         private Pet(string name, string description)
         {
@@ -48,8 +49,6 @@ namespace PetFamily.Domain.Pet
 
         public DateTime CreationDate { get; private set; } = DateTime.Now;
 
-        public IReadOnlyList<PetPhoto> PetPhotos => _petPhotos;
-
 
         public static Result<Pet> Create(string name, string description)
         {
@@ -68,4 +67,6 @@ namespace PetFamily.Domain.Pet
             return Result.Success(pet);
         }
     }
+
+    
 }
