@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace PetFamily.Domain.Pet
+namespace PetFamily.Domain.Volunteers
 {
     public record PetPhoto
     {
@@ -15,10 +15,10 @@ namespace PetFamily.Domain.Pet
 
         public Result<PetPhoto> Create(string pathToStorage, bool isMain)
         {
-            if(String.IsNullOrWhiteSpace(pathToStorage))
+            if (string.IsNullOrWhiteSpace(pathToStorage))
                 return Result.Failure<PetPhoto>("Path can not be empty");
 
-            return Result.Success<PetPhoto>(new PetPhoto(pathToStorage, isMain));
+            return Result.Success(new PetPhoto(pathToStorage, isMain));
         }
     }
 }
