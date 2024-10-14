@@ -15,7 +15,7 @@ namespace PetFamily.Domain.Volunteers
             Description = description;
         }
 
-        public Guid Id { get; private set; }
+        public PetId Id { get; private set; }
 
         public string Name { get; private set; } = default!;
 
@@ -49,7 +49,7 @@ namespace PetFamily.Domain.Volunteers
 
         public DateTime CreationDate { get; private set; } = DateTime.Now;
 
-        public IReadOnlyList<PetPhoto> PetPhotos => _petPhotos;
+        //public IReadOnlyList<PetPhoto> PetPhotos => _petPhotos;
 
 
         public static Result<Pet> Create(string name, string description)

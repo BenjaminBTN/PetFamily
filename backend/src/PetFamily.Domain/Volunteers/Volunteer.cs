@@ -10,19 +10,15 @@ namespace PetFamily.Domain.Volunteers
 
         private Volunteer() { }
 
-        private Volunteer(string name, string surname)
+        private Volunteer(string name, string description)
         {
-            Name = name;
-            SurName = surname;
+            FullName = name;
+            Description = description;
         }
 
-        public Guid Id { get; private set; }
+        public VolunteerId Id { get; private set; }
 
-        public string Name { get; private set; } = default!;
-
-        public string MiddleName { get; private set; } = default!;
-
-        public string SurName { get; private set; } = default!;
+        public string FullName { get; private set; } = default!;
 
         public string Email { get; private set; } = default!;
 
