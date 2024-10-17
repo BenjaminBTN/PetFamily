@@ -3,19 +3,19 @@ using PetFamily.Domain.PetSpecies;
 
 namespace PetFamily.Domain.Volunteers
 {
-    public class Pet
+    public class Pet : Shared.Entity<PetId>
     {
         private readonly List<PetPhoto> _petPhotos = [];
 
-        private Pet() { }
 
-        private Pet(string name, string description)
+        private Pet(PetId id) : base(id) { }
+
+        private Pet(PetId id, string name, string description) : base(id)
         {
             Name = name;
             Description = description;
         }
 
-        public PetId Id { get; private set; }
 
         public string Name { get; private set; } = default!;
 
@@ -39,9 +39,9 @@ namespace PetFamily.Domain.Volunteers
 
         public bool IsCastrated { get; private set; } = default!;
 
-        public DateTime BirthDate { get; private set; } = default!;
-
         public bool IsVaccinated { get; private set; } = default!;
+
+        public DateTime BirthDate { get; private set; } = default!;
 
         public AssistanceStatus Status { get; private set; } = default!;
 
@@ -52,23 +52,17 @@ namespace PetFamily.Domain.Volunteers
         //public IReadOnlyList<PetPhoto> PetPhotos => _petPhotos;
 
 
-        public static Result<Pet> Create(string name, string description)
+        public static Result<Pet> Create(PetId id, string name, string description)
         {
             if (string.IsNullOrWhiteSpace(name))
-            {
                 return Result.Failure<Pet>("Name can not be empty");
-            }
 
             if (string.IsNullOrWhiteSpace(description))
-            {
                 return Result.Failure<Pet>("Description can not be empty");
-            }
 
-            var pet = new Pet(name, description);
+            var pet = new Pet(id, name, description);
 
             return Result.Success(pet);
         }
     }
-
-
 }
