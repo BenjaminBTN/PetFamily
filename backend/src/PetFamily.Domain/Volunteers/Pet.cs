@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.PetSpecies;
 
-namespace PetFamily.Domain.Pet
+namespace PetFamily.Domain.Volunteers
 {
     public class Pet
     {
@@ -14,11 +15,11 @@ namespace PetFamily.Domain.Pet
             Description = description;
         }
 
-        public Guid Id { get; private set; }
+        public PetId Id { get; private set; }
 
         public string Name { get; private set; } = default!;
 
-        public Spices Spices { get; private set; } = default!;
+        public Species Species { get; private set; } = default!;
 
         public string Description { get; private set; } = default!;
 
@@ -28,7 +29,7 @@ namespace PetFamily.Domain.Pet
 
         public string HealthInfo { get; private set; } = default!;
 
-        public string Adress {  get; private set; } = default!;
+        public string Adress { get; private set; } = default!;
 
         public double Weight { get; private set; } = default!;
 
@@ -44,21 +45,21 @@ namespace PetFamily.Domain.Pet
 
         public AssistanceStatus Status { get; private set; } = default!;
 
-        public Requisites Requisites { get; private set; } = default!;
+        public PetRequisites Requisites { get; private set; } = default!;
 
         public DateTime CreationDate { get; private set; } = DateTime.Now;
 
-        public IReadOnlyList<PetPhoto> PetPhotos => _petPhotos;
+        //public IReadOnlyList<PetPhoto> PetPhotos => _petPhotos;
 
 
         public static Result<Pet> Create(string name, string description)
         {
-            if(String.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return Result.Failure<Pet>("Name can not be empty");
             }
 
-            if(String.IsNullOrWhiteSpace(description))
+            if (string.IsNullOrWhiteSpace(description))
             {
                 return Result.Failure<Pet>("Description can not be empty");
             }
@@ -69,5 +70,5 @@ namespace PetFamily.Domain.Pet
         }
     }
 
-    
+
 }

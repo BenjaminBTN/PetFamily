@@ -1,29 +1,24 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Pet;
 
-namespace PetFamily.Domain.Volunteer
+namespace PetFamily.Domain.Volunteers
 {
     public class Volunteer
     {
         private readonly List<SocialNetwork> _networks = [];
-        private readonly List<Requisites> _requisites = [];
-        private readonly List<Pet.Pet> _pets = [];
+        private readonly List<VolunteerRequisites> _requisites = [];
+        private readonly List<Pet> _pets = [];
 
         private Volunteer() { }
 
-        private Volunteer(string name, string surname)
+        private Volunteer(string name, string description)
         {
-            Name = name;
-            SurName = surname;
+            FullName = name;
+            Description = description;
         }
 
-        public Guid Id { get; private set; }
+        public VolunteerId Id { get; private set; }
 
-        public string Name { get; private set; } = default!;
-
-        public string MiddleName { get; private set; } = default!;
-
-        public string SurName { get; private set; } = default!;
+        public string FullName { get; private set; } = default!;
 
         public string Email { get; private set; } = default!;
 
@@ -41,19 +36,19 @@ namespace PetFamily.Domain.Volunteer
 
         public IReadOnlyList<SocialNetwork> Networks => _networks;
 
-        public IReadOnlyList<Requisites> Requisites => _requisites;
+        public IReadOnlyList<VolunteerRequisites> Requisites => _requisites;
 
-        public IReadOnlyList<Pet.Pet> Pets => _pets;
+        public IReadOnlyList<Pet> Pets => _pets;
 
 
         public static Result<Volunteer> Create(string name, string surname)
         {
-            if(String.IsNullOrWhiteSpace(name))
+            if(string.IsNullOrWhiteSpace(name))
             {
                 return Result.Failure<Volunteer>("Name can not be empty");
             }
 
-            if(String.IsNullOrWhiteSpace(surname))
+            if(string.IsNullOrWhiteSpace(surname))
             {
                 return Result.Failure<Volunteer>("Surname can not be empty");
             }

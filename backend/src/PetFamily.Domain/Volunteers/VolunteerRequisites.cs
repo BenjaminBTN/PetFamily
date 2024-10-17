@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetFamily.Domain.Volunteer
+namespace PetFamily.Domain.Volunteers
 {
-    public class SocialNetwork
+    public class VolunteerRequisites
     {
         public Guid Id { get; private set; }
 
         public string Name { get; private set; } = default!;
 
-        public string Url { get; private set; } = default!;
+        public string Description { get; private set; } = default!;
     }
 }

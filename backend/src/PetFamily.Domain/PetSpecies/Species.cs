@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetFamily.Domain.Pet
+namespace PetFamily.Domain.PetSpecies
 {
-    public class Breed
+    public class Species
     {
         public Guid Id { get; private set; }
 
