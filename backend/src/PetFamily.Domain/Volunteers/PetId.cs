@@ -2,13 +2,11 @@
 {
     public record PetId
     {
+        private PetId(Guid value) => Value = value;
+
         public Guid Value { get; }
 
-        private PetId(Guid value)
-        {
-            Value = value;
-        }
-
+        
         public static PetId NewVolonteerId() => new(Guid.NewGuid());
 
         public static PetId Empty() => new(Guid.Empty);
