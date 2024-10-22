@@ -10,8 +10,8 @@ namespace PetFamily.Domain.Volunteers
             IsMain = isMain;
         }
 
-        private string PathToStorage { get; }
-        private bool IsMain { get; } = default!;
+        public string PathToStorage { get; }
+        public bool IsMain { get; } = default!;
 
         public Result<PetPhoto> Create(string pathToStorage, bool isMain)
         {

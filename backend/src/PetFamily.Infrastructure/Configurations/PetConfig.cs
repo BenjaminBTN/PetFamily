@@ -34,9 +34,39 @@ namespace PetFamily.Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
 
-            builder.Property(p => p.Adress)
+
+            builder.ComplexProperty(p => p.Address, ab => 
+            {
+                ab.Property(a => a.Country)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("country");
+
+                ab.Property(a => a.Region)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("region");
+
+                ab.Property(a => a.City)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("city");
+
+                ab.Property(a => a.Street)
+                .IsRequired()
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("street");
+
+                ab.Property(a => a.HouseNumber)
+                .IsRequired()
+                .HasColumnName("house_number");
+
+                ab.Property(a => a.PostalCode)
+                .IsRequired()
+                .HasMaxLength(Address.POSTAL_CODE_LENGTH)
+                .HasColumnName("postal_code");
+            });
+
 
             builder.Property(p => p.Weight)
                 .IsRequired();
@@ -53,6 +83,38 @@ namespace PetFamily.Infrastructure.Configurations
 
             builder.Property(p => p.IsVaccinated)
                 .IsRequired();
+
+            builder.Property(p => p.BirthDate);
+
+            builder.Property(p => p.Status)
+                .IsRequired()
+                .HasConversion<string>();
+
+            builder.Property(p => p.CreationDate)
+                .IsRequired();
+
+            builder.OwnsOne(p => p.Details, db => 
+            {
+                db.ToJson();
+
+                db.OwnsMany(d => d.RequisitesForHelp, rb => 
+                {
+                    rb.Property(r => r.Name)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+                    rb.Property(r => r.Description)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+                });
+
+                db.OwnsMany(d => d.PetPhotos, pb => 
+                {
+                    pb.Property(p => p.PathToStorage)
+                    .IsRequired();
+                    pb.Property(p => p.IsMain)
+                    .IsRequired();
+                });
+            });
         }
     }
 }

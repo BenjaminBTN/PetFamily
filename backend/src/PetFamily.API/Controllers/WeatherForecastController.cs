@@ -21,7 +21,7 @@ namespace PetFamily.API.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IActionResult Get()
         {
-            return null;
+            return Ok();
         }
     }
 }
