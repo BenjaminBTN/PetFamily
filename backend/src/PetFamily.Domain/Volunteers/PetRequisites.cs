@@ -1,17 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain.Volunteers
 {
-    public class PetRequisites
+    public record PetRequisites
     {
-        public Guid Id { get; private set; }
+        private PetRequisites(string name, string description)
+        {
+            Name = name;
+            Description = description;
+        }
 
-        public string Name { get; private set; } = default!;
+        public string Name { get; }
+        public string Description { get; }
 
-        public string Description { get; private set; } = default!;
+        public static Result<PetRequisites> Create(string name, string description)
+        {
+            if(string.IsNullOrWhiteSpace(name))
+                return Result.Failure<PetRequisites>("Name can not be empty");
+
+            if(string.IsNullOrWhiteSpace(description))
+                return Result.Failure<PetRequisites>("Description can not be empty");
+
+            return new PetRequisites(name, description);
+        }
     }
 }

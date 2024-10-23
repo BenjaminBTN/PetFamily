@@ -1,17 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain.Volunteers
 {
     public class SocialNetwork
     {
-        public Guid Id { get; private set; }
+        private SocialNetwork(string name, string url)
+        {
+            Name = name;
+            Url = url;
+        }
 
-        public string Name { get; private set; } = default!;
+        public string Name { get; }
+        public string Url { get; }
 
-        public string Url { get; private set; } = default!;
+        public static Result<SocialNetwork> Create(string name, string url)
+        {
+            if(string.IsNullOrWhiteSpace(name))
+                return Result.Failure<SocialNetwork>("Name can not be empty");
+
+            if(string.IsNullOrWhiteSpace(url))
+                return Result.Failure<SocialNetwork>("Url can not be empty");
+
+            return Result.Success(new SocialNetwork(name, url));
+        }
     }
 }

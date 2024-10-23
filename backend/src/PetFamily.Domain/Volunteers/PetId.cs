@@ -7,7 +7,7 @@
         public Guid Value { get; }
 
         
-        public static PetId NewVolonteerId() => new(Guid.NewGuid());
+        public static PetId NewId() => new(Guid.NewGuid());
 
         public static PetId Empty() => new(Guid.Empty);
 
