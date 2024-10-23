@@ -42,7 +42,7 @@ namespace PetFamily.Domain.Volunteers
                 return Result.Failure<Address>("House number is incorrect");
 
             if(string.IsNullOrWhiteSpace(postalCode) || postalCode.Length < POSTAL_CODE_LENGTH)
-                return Result.Failure<Address>("House number is incorrect");
+                return Result.Failure<Address>("Postal code is incorrect");
 
             return new Address(country, region, city, street, houseNumber, postalCode);
         }
