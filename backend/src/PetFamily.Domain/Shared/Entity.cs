@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PetFamily.Domain.Shared
+﻿namespace PetFamily.Domain.Shared
 {
     public abstract class Entity<TId> where TId : notnull
     {
