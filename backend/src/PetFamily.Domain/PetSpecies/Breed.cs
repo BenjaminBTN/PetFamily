@@ -1,15 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CSharpFunctionalExtensions;
 
 namespace PetFamily.Domain.PetSpecies
 {
-    public class Breed
+    public class Breed : Shared.Entity<BreedId>
     {
-        public Guid Id { get; private set; }
+        private Breed(BreedId id) : base(id) { }
+        private Breed(BreedId id, string name) : base(id)
+        {
+            
+        }
 
         public string Name { get; private set; } = default!;
+
+        public Result<Breed> Create(BreedId id, string name)
+        {
+            if(string.IsNullOrWhiteSpace(name))
+                return Result.Failure<Breed>("Name can not be empty");
+
+            return new Breed(id, name);
+        }
     }
 }

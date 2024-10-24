@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PetFamily.Domain.PetSpecies;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteers;
 
@@ -25,6 +26,20 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(p => p.Description)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+
+            builder.ComplexProperty(p => p.Info, ib =>
+            {
+                ib.Property(i => i.SpeciesId)
+                .IsRequired()
+                .HasConversion(
+                id => id.Value,
+                value => SpeciesId.Create(value))
+                .HasColumnName("species_id");
+
+                ib.Property(i => i.BreedId)
+                .IsRequired()
+                .HasColumnName("breed_id");
+            });
 
             builder.Property(p => p.Color)
                 .IsRequired()
