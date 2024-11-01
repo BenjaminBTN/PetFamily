@@ -19,7 +19,6 @@ namespace PetFamily.Domain.Volunteers
         public int Experience { get; private set; } = default!;
         public string PhoneNumber { get; private set; } = default!;
         public VolunteerDetails Details { get; private set; } = default!;
-
         public IReadOnlyList<Pet> Pets => _pets;
 
         public int GetPetsSearchHomeCount() => _pets.Where(p => p.Status == AssistanceStatus.SearchHome).Count();
