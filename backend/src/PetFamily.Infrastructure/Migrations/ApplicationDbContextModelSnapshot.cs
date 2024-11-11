@@ -434,8 +434,7 @@ namespace PetFamily.Infrastructure.Migrations
                             b1.Navigation("Requisites");
                         });
 
-                    b.Navigation("Details")
-                        .IsRequired();
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("PetFamily.Domain.PetSpecies.Species", b =>

@@ -13,7 +13,7 @@ using PetFamily.Infrastructure;
 namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20241024112423_Initial")]
+    [Migration("20241110142527_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -437,8 +437,7 @@ namespace PetFamily.Infrastructure.Migrations
                             b1.Navigation("Requisites");
                         });
 
-                    b.Navigation("Details")
-                        .IsRequired();
+                    b.Navigation("Details");
                 });
 
             modelBuilder.Entity("PetFamily.Domain.PetSpecies.Species", b =>
