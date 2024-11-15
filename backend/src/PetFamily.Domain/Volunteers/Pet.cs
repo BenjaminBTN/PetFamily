@@ -1,16 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
+using System;
 
 namespace PetFamily.Domain.Volunteers
 {
     public class Pet : Shared.Entity<PetId>
     {
-        private Pet(PetId id) : base(id) { }
-        private Pet(PetId id, string name, string description) : base(id)
-        {
-            Name = name;
-            Description = description;
-        }
-
         public string Name { get; private set; } = default!;
         public string Description { get; private set; } = default!;
         public PetInfo Info { get; private set; } = default!;
@@ -27,13 +22,20 @@ namespace PetFamily.Domain.Volunteers
         public DateTime CreationDate { get; private set; } = DateTime.Now;
         public PetDetails Details { get; private set; } = default!;
 
-        public static Result<Pet> Create(PetId id, string name, string description)
+        private Pet(PetId id) : base(id) { }
+        private Pet(PetId id, string name, string description) : base(id)
+        {
+            Name = name;
+            Description = description;
+        }
+
+        public static Result<Pet, Error> Create(PetId id, string name, string description)
         {
             if (string.IsNullOrWhiteSpace(name))
-                return Result.Failure<Pet>("Name can not be empty");
+                return Errors.General.InvalidValue("Name");
 
             if (string.IsNullOrWhiteSpace(description))
-                return Result.Failure<Pet>("Description can not be empty");
+                return Errors.General.InvalidValue("Description");
 
             return new Pet(id, name, description); 
         }

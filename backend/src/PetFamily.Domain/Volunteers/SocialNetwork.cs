@@ -1,27 +1,28 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Volunteers
 {
     public class SocialNetwork
     {
+        public string Name { get; }
+        public string Url { get; }
+
         private SocialNetwork(string name, string url)
         {
             Name = name;
             Url = url;
         }
 
-        public string Name { get; }
-        public string Url { get; }
-
-        public static Result<SocialNetwork> Create(string name, string url)
+        public static Result<SocialNetwork, Error> Create(string name, string url)
         {
             if(string.IsNullOrWhiteSpace(name))
-                return Result.Failure<SocialNetwork>("Name can not be empty");
+                return Errors.General.InvalidValue("Name");
 
             if(string.IsNullOrWhiteSpace(url))
-                return Result.Failure<SocialNetwork>("Url can not be empty");
+                return Errors.General.InvalidValue("Url");
 
-            return Result.Success(new SocialNetwork(name, url));
+            return new SocialNetwork(name, url);
         }
     }
 }

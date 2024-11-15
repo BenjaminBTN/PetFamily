@@ -91,7 +91,7 @@ namespace PetFamily.Infrastructure.Configurations
 
             builder.Property(p => p.PhoneNumber)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_PHONE_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH);
 
             builder.Property(p => p.IsCastrated)
                 .IsRequired();
