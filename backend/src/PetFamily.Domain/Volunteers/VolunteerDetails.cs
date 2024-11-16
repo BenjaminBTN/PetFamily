@@ -1,4 +1,4 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Collections.Generic;
 
 namespace PetFamily.Domain.Volunteers
 {

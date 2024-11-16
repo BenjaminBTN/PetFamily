@@ -1,24 +1,25 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Volunteers
 {
     public record PetPhoto
     {
+        public string PathToStorage { get; }
+        public bool IsMain { get; }
+
         private PetPhoto(string pathToStorage, bool isMain)
         {
             PathToStorage = pathToStorage;
             IsMain = isMain;
         }
 
-        public string PathToStorage { get; }
-        public bool IsMain { get; } = default!;
-
-        public Result<PetPhoto> Create(string pathToStorage, bool isMain)
+        public Result<PetPhoto, Error> Create(string pathToStorage, bool isMain = default)
         {
             if (string.IsNullOrWhiteSpace(pathToStorage))
-                return Result.Failure<PetPhoto>("Path can not be empty");
+                return Errors.General.NullValue("Path");
 
-            return Result.Success(new PetPhoto(pathToStorage, isMain));
+            return new PetPhoto(pathToStorage, isMain);
         }
     }
 }

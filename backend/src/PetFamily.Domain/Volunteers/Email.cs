@@ -1,21 +1,19 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 using System.Text.RegularExpressions;
 
 namespace PetFamily.Domain.Volunteers
 {
     public record Email
     {
-        private Email(string value)
-        {
-            Value = value;
-        }
-
         public string Value { get; }
 
-        public static Result<Email> Create(string value)
+        private Email(string value) => Value = value;
+
+        public static Result<Email, Error> Create(string value)
         {
-            if(Regex.IsMatch(value, @"^(\S+)@(\S+)\.(\w+)$"))
-                return Result.Failure<Email>("Email is incorrect");
+            if(!Regex.IsMatch(value, @"^(\w+)@(\w+)\.(\w+)$"))
+                return Errors.General.InvalidValue("Email");
 
             return new Email(value);
         }

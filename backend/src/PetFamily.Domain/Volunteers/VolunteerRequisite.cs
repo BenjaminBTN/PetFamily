@@ -1,25 +1,26 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Volunteers
 {
     public class VolunteerRequisite
     {
+        public string Name { get; }
+        public string Description { get; }
+
         private VolunteerRequisite(string name, string description)
         {
             Name = name;
             Description = description;
         }
 
-        public string Name { get; }
-        public string Description { get; }
-
-        public static Result<VolunteerRequisite> Create(string name, string description)
+        public static Result<VolunteerRequisite, Error> Create(string name, string description)
         {
             if(string.IsNullOrWhiteSpace(name))
-                return Result.Failure<VolunteerRequisite>("Name can not be empty");
+                return Errors.General.InvalidValue("Name");
 
             if(string.IsNullOrWhiteSpace(description))
-                return Result.Failure<VolunteerRequisite>("Description can not be empty");
+                return Errors.General.InvalidValue("Description");
 
             return new VolunteerRequisite(name, description);
         }

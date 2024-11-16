@@ -1,9 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.Domain.Volunteers
 {
     public record FullName
     {
+        public string Name { get; }
+        public string Surname { get; }
+        public string Patronymic { get; }
+
         private FullName(string name, string surname, string patronymic)
         {
             Name = name;
@@ -11,20 +16,16 @@ namespace PetFamily.Domain.Volunteers
             Patronymic = patronymic;
         }
 
-        public string Name { get; }
-        public string Surname { get; }
-        public string Patronymic { get; }
-
-        public static Result<FullName> Create(string name, string surname, string patronymic)
+        public static Result<FullName, Error> Create(string name, string surname, string patronymic)
         {
             if(string.IsNullOrWhiteSpace(name))
-                return Result.Failure<FullName>("Name can not be empty");
+                return Errors.General.InvalidValue("Name");
 
             if(string.IsNullOrWhiteSpace(surname))
-                return Result.Failure<FullName>("Surname can not be empty");
+                return Errors.General.InvalidValue("Surname");
 
             if(string.IsNullOrWhiteSpace(patronymic))
-                return Result.Failure<FullName>("Patronymic can not be empty");
+                return Errors.General.InvalidValue("Patronymic");
 
             return new FullName(name, surname, patronymic);
         }

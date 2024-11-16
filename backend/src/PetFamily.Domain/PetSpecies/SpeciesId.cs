@@ -1,10 +1,12 @@
-﻿namespace PetFamily.Domain.PetSpecies
+﻿using System;
+
+namespace PetFamily.Domain.PetSpecies
 {
     public record SpeciesId
     {
-        private SpeciesId(Guid value) => Value = value;
-
         public Guid Value { get; }
+
+        private SpeciesId(Guid value) => Value = value;
 
         public static SpeciesId NewId() => new(Guid.NewGuid());
         public static SpeciesId Empty() => new(Guid.Empty);

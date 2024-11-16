@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteers;
 
 namespace PetFamily.Application.Volunteers.CreateVolunteer
@@ -12,9 +13,10 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
             _repository = repository;
         }
 
-        public async Task<Result<Guid, string>> Handle(CreateVolunteerRequest request, CancellationToken token)
+        public async Task<Result<Guid, Error>> Handle(CreateVolunteerRequest request, CancellationToken token)
         {
             var id = VolunteerId.NewId();
+
             var fullNameResult = FullName.Create(request.Name, request.Surname, request.Patronymic);
             if(fullNameResult.IsFailure)
                 return fullNameResult.Error;
@@ -23,8 +25,12 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
             if(emailResult.IsFailure)
                 return emailResult.Error;
 
+            var phoneNumberResult = PhoneNumber.Create(request.PhoneNumber);
+            if(phoneNumberResult.IsFailure)
+                return phoneNumberResult.Error;
+
             var volunteer = Volunteer.Create(id, fullNameResult.Value, request.Description, emailResult.Value, 
-                request.Experience, request.PhoneNumber).Value;
+                request.Experience, phoneNumberResult.Value).Value;
 
             await _repository.Add(volunteer, token);
 

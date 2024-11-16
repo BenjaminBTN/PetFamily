@@ -52,9 +52,13 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(v => v.Experience)
                 .IsRequired();
 
-            builder.Property(v => v.PhoneNumber)
+            builder.ComplexProperty(v => v.PhoneNumber, pb =>
+            {
+                pb.Property(p => p.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_PHONE_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH)
+                .HasColumnName("phone_number");
+            });
 
             builder.OwnsOne(v => v.Details, vb =>
             {
