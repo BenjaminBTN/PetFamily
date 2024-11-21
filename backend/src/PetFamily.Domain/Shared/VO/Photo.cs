@@ -1,25 +1,25 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.Volunteers
+namespace PetFamily.Domain.Shared.VO
 {
-    public record PetPhoto
+    public record Photo
     {
         public string PathToStorage { get; }
         public bool IsMain { get; }
 
-        private PetPhoto(string pathToStorage, bool isMain)
+        private Photo(string pathToStorage, bool isMain)
         {
             PathToStorage = pathToStorage;
             IsMain = isMain;
         }
 
-        public Result<PetPhoto, Error> Create(string pathToStorage, bool isMain = default)
+        public Result<Photo, Error> Create(string pathToStorage, bool isMain = default)
         {
-            if (string.IsNullOrWhiteSpace(pathToStorage))
+            if(string.IsNullOrWhiteSpace(pathToStorage))
                 return Errors.General.NullValue("Path");
 
-            return new PetPhoto(pathToStorage, isMain);
+            return new Photo(pathToStorage, isMain);
         }
     }
 }

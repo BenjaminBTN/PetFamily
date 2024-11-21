@@ -1,9 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.PetSpecies;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.SpeciesMenegement.VO;
 using System;
 
-namespace PetFamily.Domain.Volunteers
+namespace PetFamily.Domain.PetManagement.VO
 {
     public record PetInfo
     {

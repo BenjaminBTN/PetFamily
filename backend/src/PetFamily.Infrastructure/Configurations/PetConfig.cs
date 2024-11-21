@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetFamily.Domain.PetSpecies;
+using PetFamily.Domain.PetManagement.Entities;
+using PetFamily.Domain.PetManagement.VO;
 using PetFamily.Domain.Shared;
-using PetFamily.Domain.Volunteers;
+using PetFamily.Domain.Shared.VO;
+using PetFamily.Domain.SpeciesMenegement.VO;
 
 namespace PetFamily.Infrastructure.Configurations
 {
@@ -89,9 +91,13 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(p => p.Height)
                 .IsRequired();
 
-            builder.Property(p => p.PhoneNumber)
+            builder.OwnsOne(p => p.PhoneNumber, phb =>
+            {
+                phb.Property(phb => phb.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH);
+                .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH)
+                .HasColumnName("phone_number");
+            });
 
             builder.Property(p => p.IsCastrated)
                 .IsRequired();

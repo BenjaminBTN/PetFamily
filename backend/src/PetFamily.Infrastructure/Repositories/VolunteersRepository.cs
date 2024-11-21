@@ -1,5 +1,5 @@
 ﻿using PetFamily.Application.Volunteers;
-using PetFamily.Domain.Volunteers;
+using PetFamily.Domain.PetManagement;
 
 namespace PetFamily.Infrastructure.Repositories
 {

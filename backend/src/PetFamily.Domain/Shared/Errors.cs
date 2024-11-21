@@ -12,6 +12,12 @@ namespace PetFamily.Domain.Shared
                 return Error.Validation("value.is.invalid", $"'{value}' is invalid");
             }
 
+            public static Error OverMaxLength(string? name = null)
+            {
+                var value = name ?? "Value";
+                return Error.Validation("value.is.over.max.length", $"'{value}' is over the maximum length");
+            }
+
             public static Error NotFound(Guid? id = null)
             {
                 var forId = $" for ID '{id}'." ?? "";

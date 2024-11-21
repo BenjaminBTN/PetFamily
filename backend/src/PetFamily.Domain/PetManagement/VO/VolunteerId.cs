@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PetFamily.Domain.Volunteers
+namespace PetFamily.Domain.PetManagement.VO
 {
     public record VolunteerId
     {
@@ -8,7 +8,7 @@ namespace PetFamily.Domain.Volunteers
 
         private VolunteerId(Guid value) => Value = value;
 
-        public static VolunteerId NewId() => new (Guid.NewGuid());
+        public static VolunteerId NewId() => new(Guid.NewGuid());
         public static VolunteerId Empty() => new(Guid.Empty);
         public static VolunteerId Create(Guid id) => new(id);
     }

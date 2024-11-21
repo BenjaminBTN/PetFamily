@@ -27,11 +27,11 @@
     }
 
 
-    public enum ErrorType 
+    public enum ErrorType
     {
         Validation,
         NotFound,
         Failure,
-        Conflict 
+        Conflict
     }
 }
