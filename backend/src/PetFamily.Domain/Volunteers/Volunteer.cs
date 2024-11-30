@@ -1,14 +1,14 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.PetManagement.Entities;
-using PetFamily.Domain.PetManagement.Enums;
-using PetFamily.Domain.PetManagement.VO;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
+using PetFamily.Domain.Volunteers.Entities;
+using PetFamily.Domain.Volunteers.Enums;
+using PetFamily.Domain.Volunteers.VO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PetFamily.Domain.PetManagement
+namespace PetFamily.Domain.Volunteers
 {
     public class Volunteer : Shared.Entity<VolunteerId>
     {
@@ -21,7 +21,7 @@ namespace PetFamily.Domain.PetManagement
         public int Experience { get; private set; } = default;
         public PhoneNumber PhoneNumber { get; private set; } = default!;
         public VolunteerRequisitesList Requisites { get; private set; } = default!;
-        public SocialNetworksList? Networks { get; private set; } = default!;
+        public SocialNetworksList Networks { get; private set; } = default!;
         public DateTime CreationDate { get; } = DateTime.Now;
         public IReadOnlyList<Pet> Pets => _pets;
 
@@ -29,22 +29,23 @@ namespace PetFamily.Domain.PetManagement
         private Volunteer(VolunteerId id) : base(id) { }
 
         private Volunteer(
-            VolunteerId id, 
-            FullName name, 
-            string description, 
+            VolunteerId id,
+            FullName name,
+            string description,
             Email email,
-            int experience, 
-            PhoneNumber phoneNumber,
-            VolunteerRequisitesList requisites,
-            SocialNetworksList? networks) : base(id)
+            int experience,
+            PhoneNumber phoneNumber
+            //VolunteerRequisitesList requisites,
+            //SocialNetworksList? networks
+            ) : base(id)
         {
             FullName = name;
             Description = description;
             Email = email;
             Experience = experience;
             PhoneNumber = phoneNumber;
-            Requisites = requisites;
-            Networks = networks;
+            //Requisites = requisites;
+            //Networks = networks;
         }
 
 
@@ -54,14 +55,15 @@ namespace PetFamily.Domain.PetManagement
 
 
         public static Result<Volunteer, Error> Create(
-            VolunteerId id, 
-            FullName name, 
-            string description, 
+            VolunteerId id,
+            FullName name,
+            string description,
             Email email,
-            int experience, 
-            PhoneNumber phoneNumber,
-            VolunteerRequisitesList requisites,
-            SocialNetworksList? networks)
+            int experience,
+            PhoneNumber phoneNumber
+            //VolunteerRequisitesList requisites,
+            //SocialNetworksList? networks
+            )
         {
             if(string.IsNullOrWhiteSpace(description))
                 return Errors.General.InvalidValue("Description");
@@ -69,16 +71,17 @@ namespace PetFamily.Domain.PetManagement
             if(experience < 0)
                 return Errors.General.InvalidValue("Experience");
 
-            return new Volunteer(id, name, description, email, experience, phoneNumber, requisites, networks);
+            //return new Volunteer(id, name, description, email, experience, phoneNumber, requisites, networks);
+            return new Volunteer(id, name, description, email, experience, phoneNumber);
         }
 
 
         public static Result<Guid, Error> Update(
-            Volunteer volunteer, 
-            FullName? name, 
-            string description, 
+            Volunteer volunteer,
+            FullName? name,
+            string description,
             Email? email,
-            int experience, 
+            int experience,
             PhoneNumber? phoneNumber,
             VolunteerRequisitesList? requisites,
             SocialNetworksList? networks)

@@ -1,11 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.PetManagement.Enums;
-using PetFamily.Domain.PetManagement.VO;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
+using PetFamily.Domain.Volunteers.Enums;
+using PetFamily.Domain.Volunteers.VO;
 using System;
 
-namespace PetFamily.Domain.PetManagement.Entities
+namespace PetFamily.Domain.Volunteers.Entities
 {
     public class Pet : Shared.Entity<PetId>
     {
@@ -23,14 +23,14 @@ namespace PetFamily.Domain.PetManagement.Entities
         public DateTime? BirthDate { get; private set; } = default!;
         public AssistanceStatus Status { get; private set; } = default!;
         public RequisitesForHelpList RequisitesForHelp { get; private set; } = default!;
-        public DateTime CreationDate { get; } = DateTime.Now;
         public PhotosList PetPhotos { get; private set; } = default!;
+        public DateTime CreationDate { get; } = DateTime.Now;
 
 
         private Pet(PetId id) : base(id) { }
 
         private Pet(
-            PetId id, 
+            PetId id,
             string name,
             string description,
             PetInfo info,
@@ -64,8 +64,8 @@ namespace PetFamily.Domain.PetManagement.Entities
 
 
         public static Result<Pet, Error> Create(
-            PetId id, 
-            string name, 
+            PetId id,
+            string name,
             string description,
             PetInfo info,
             string color,
@@ -99,20 +99,20 @@ namespace PetFamily.Domain.PetManagement.Entities
                 return Errors.General.InvalidValue("Height");
 
             return new Pet(
-                id, 
-                name, 
-                description, 
-                info, 
-                color, 
-                healthInfo, 
-                address, 
-                weight, 
-                height, 
-                phoneNumber, 
-                isCastrated, 
-                isVaccinated, 
-                birthDate, 
-                status, 
+                id,
+                name,
+                description,
+                info,
+                color,
+                healthInfo,
+                address,
+                weight,
+                height,
+                phoneNumber,
+                isCastrated,
+                isVaccinated,
+                birthDate,
+                status,
                 requisites);
         }
 

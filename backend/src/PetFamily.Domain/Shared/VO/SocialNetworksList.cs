@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,10 +8,10 @@ namespace PetFamily.Domain.Shared.VO
     {
         public IReadOnlyList<SocialNetwork> Networks { get; }
 
-
-        private SocialNetworksList(IEnumerable<SocialNetwork> networks)
+        private SocialNetworksList() { }
+        private SocialNetworksList(List<SocialNetwork> networks)
         {
-            Networks = networks.ToList();
+            Networks = networks;
         }
 
 
@@ -21,7 +20,7 @@ namespace PetFamily.Domain.Shared.VO
             if(networks == null)
                 return Errors.General.NullValue("Networks");
 
-            return new SocialNetworksList(networks);
+            return new SocialNetworksList(networks.ToList());
         }
     }
 }

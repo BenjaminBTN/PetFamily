@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetFamily.Domain.PetManagement.Entities;
-using PetFamily.Domain.PetManagement.VO;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
-using PetFamily.Domain.SpeciesMenegement.VO;
+using PetFamily.Domain.Species.VO;
+using PetFamily.Domain.Volunteers.Entities;
+using PetFamily.Domain.Volunteers.VO;
 
 namespace PetFamily.Infrastructure.Configurations
 {
@@ -105,37 +105,47 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(p => p.IsVaccinated)
                 .IsRequired();
 
-            builder.Property(p => p.BirthDate);
+            builder.Property(p => p.BirthDate)
+                .IsRequired(false);
 
             builder.Property(p => p.Status)
                 .IsRequired()
                 .HasConversion<string>();
 
-            builder.Property(p => p.CreationDate)
-                .IsRequired();
 
-            builder.OwnsOne(p => p.Details, db => 
+            builder.OwnsOne(p => p.RequisitesForHelp, rhb =>
             {
-                db.ToJson();
-
-                db.OwnsMany(d => d.RequisitesForHelp, rb => 
+                rhb.ToJson("requisites_for_help");
+                rhb.OwnsMany(r => r.Requisites, rb =>
                 {
                     rb.Property(r => r.Name)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+
                     rb.Property(r => r.Description)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
                 });
+            });
 
-                db.OwnsMany(d => d.PetPhotos, pb => 
+
+            builder.OwnsOne(p => p.PetPhotos, ppb =>
+            {
+                ppb.ToJson("pet_photos");
+                ppb.OwnsMany(p => p.Photos, pb =>
                 {
-                    pb.Property(p => p.PathToStorage)
-                    .IsRequired();
-                    pb.Property(p => p.IsMain)
+                    pb.Property(r => r.PathToStorage)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+
+                    pb.Property(r => r.IsMain)
                     .IsRequired();
                 });
             });
+
+
+            builder.Property(p => p.CreationDate)
+                .IsRequired();
         }
     }
 }

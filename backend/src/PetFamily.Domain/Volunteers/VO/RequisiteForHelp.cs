@@ -1,20 +1,20 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.PetManagement.VO
+namespace PetFamily.Domain.Volunteers.VO
 {
-    public class VolunteerRequisite
+    public record RequisiteForHelp
     {
         public string Name { get; }
         public string Description { get; }
 
-        private VolunteerRequisite(string name, string description)
+        private RequisiteForHelp(string name, string description)
         {
             Name = name;
             Description = description;
         }
 
-        public static Result<VolunteerRequisite, Error> Create(string name, string description)
+        public static Result<RequisiteForHelp, Error> Create(string name, string description)
         {
             if(string.IsNullOrWhiteSpace(name))
                 return Errors.General.InvalidValue("Name");
@@ -22,7 +22,7 @@ namespace PetFamily.Domain.PetManagement.VO
             if(string.IsNullOrWhiteSpace(description))
                 return Errors.General.InvalidValue("Description");
 
-            return new VolunteerRequisite(name, description);
+            return new RequisiteForHelp(name, description);
         }
     }
 }

@@ -3,16 +3,16 @@ using PetFamily.Domain.Shared;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PetFamily.Domain.PetManagement.VO
+namespace PetFamily.Domain.Volunteers.VO
 {
     public record RequisitesForHelpList
     {
         public IReadOnlyList<RequisiteForHelp> Requisites { get; }
 
-
-        private RequisitesForHelpList(IEnumerable<RequisiteForHelp> requisites)
+        private RequisitesForHelpList() { }
+        private RequisitesForHelpList(List<RequisiteForHelp> requisites)
         {
-            Requisites = requisites.ToList();
+            Requisites = requisites;
         }
 
 
@@ -21,7 +21,7 @@ namespace PetFamily.Domain.PetManagement.VO
             if(requisites == null)
                 return Errors.General.NullValue("Requisites");
 
-            return new RequisitesForHelpList(requisites);
+            return new RequisitesForHelpList(requisites.ToList());
         }
     }
 }
