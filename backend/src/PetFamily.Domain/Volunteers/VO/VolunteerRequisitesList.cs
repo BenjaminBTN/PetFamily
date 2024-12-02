@@ -7,9 +7,9 @@ namespace PetFamily.Domain.Volunteers.VO
 {
     public record VolunteerRequisitesList
     {
-        public IReadOnlyList<VolunteerRequisite> Requisites { get; }
+        public IReadOnlyList<VolunteerRequisite> Requisites { get; } = [];
 
-        private VolunteerRequisitesList() { }
+        public VolunteerRequisitesList() { }
         private VolunteerRequisitesList(List<VolunteerRequisite> requisites)
         {
             Requisites = requisites;

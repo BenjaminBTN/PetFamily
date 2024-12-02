@@ -24,7 +24,7 @@ namespace PetFamily.Domain.Volunteers.Entities
         public AssistanceStatus Status { get; private set; } = default!;
         public RequisitesForHelpList RequisitesForHelp { get; private set; } = default!;
         public PhotosList PetPhotos { get; private set; } = default!;
-        public DateTime CreationDate { get; } = DateTime.Now;
+        public DateTime CreationDate { get; } = DateTime.Now.ToUniversalTime();
 
 
         private Pet(PetId id) : base(id) { }

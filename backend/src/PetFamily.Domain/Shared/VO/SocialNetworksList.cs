@@ -6,9 +6,9 @@ namespace PetFamily.Domain.Shared.VO
 {
     public record SocialNetworksList
     {
-        public IReadOnlyList<SocialNetwork> Networks { get; }
+        public IReadOnlyList<SocialNetwork> Networks { get; } = [];
 
-        private SocialNetworksList() { }
+        public SocialNetworksList() { }
         private SocialNetworksList(List<SocialNetwork> networks)
         {
             Networks = networks;

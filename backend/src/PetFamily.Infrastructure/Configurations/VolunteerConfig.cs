@@ -69,11 +69,11 @@ namespace PetFamily.Infrastructure.Configurations
                 vrb.OwnsMany(vr => vr.Requisites, rb =>
                 {
                     rb.Property(r => r.Name)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
 
                     rb.Property(r => r.Description)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
                 });
             });

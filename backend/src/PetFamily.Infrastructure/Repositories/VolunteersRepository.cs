@@ -15,7 +15,7 @@ namespace PetFamily.Infrastructure.Repositories
         public async Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
             await _context.Volunteers.AddAsync(volunteer, cancellationToken);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return volunteer.Id.Value;
         }
     }
