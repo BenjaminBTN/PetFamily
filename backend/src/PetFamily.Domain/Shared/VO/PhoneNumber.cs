@@ -2,7 +2,7 @@
 using PetFamily.Domain.Shared;
 using System.Text.RegularExpressions;
 
-namespace PetFamily.Domain.Volunteers
+namespace PetFamily.Domain.Shared.VO
 {
     public record PhoneNumber
     {

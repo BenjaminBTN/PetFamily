@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using PetFamily.API.Controllers.Volunteers.Requests;
 using PetFamily.Application.Volunteers.CreateVolunteer;
+using PetFamily.Application.Volunteers.Dtos;
 
 namespace PetFamily.API.Controllers
 {
@@ -13,7 +15,16 @@ namespace PetFamily.API.Controllers
             [FromBody]CreateVolunteerRequest request, 
             CancellationToken cancellationToken = default)
         {
-            var result = await handler.Handle(request, cancellationToken);
+            var fullName = new FullNameDto(request.Name, request.Surname, request.Patronymic);
+
+            var command = new CreateVolunteerCommand(
+                fullName,
+                request.Description,
+                request.Email,
+                request.Experience,
+                request.PhoneNumber);
+
+            var result = await handler.Handle(command, cancellationToken);
 
             if(result.IsFailure)
                 return BadRequest(result.Error);

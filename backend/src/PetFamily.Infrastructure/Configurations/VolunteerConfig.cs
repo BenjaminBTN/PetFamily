@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteers;
+using PetFamily.Domain.Volunteers.VO;
 
 namespace PetFamily.Infrastructure.Configurations
 {
@@ -45,7 +46,7 @@ namespace PetFamily.Infrastructure.Configurations
             {
                 eb.Property(e => e.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
                 .HasColumnName("email");
             });
 
@@ -60,30 +61,41 @@ namespace PetFamily.Infrastructure.Configurations
                 .HasColumnName("phone_number");
             });
 
-            builder.OwnsOne(v => v.Details, vb =>
-            {
-                vb.ToJson();
 
-                vb.OwnsMany(v => v.Requisites, rb =>
+            builder.OwnsOne(v => v.Requisites, vrb =>
+            {
+                vrb.ToJson("requisites");
+
+                vrb.OwnsMany(vr => vr.Requisites, rb =>
                 {
                     rb.Property(r => r.Name)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-                    rb.Property(r => r.Description)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
-                });
 
-                vb.OwnsMany(v => v.Networks, nb =>
-                {
-                    nb.Property(n => n.Name)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
-                    nb.Property(n => n.Url)
-                    .IsRequired()
+                    rb.Property(r => r.Description)
+                    .IsRequired(false)
                     .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
                 });
             });
+
+            builder.OwnsOne(v => v.Networks, vnb =>
+            {
+                vnb.ToJson("networks");
+
+                vnb.OwnsMany(vn => vn.Networks, nb =>
+                {
+                    nb.Property(n => n.Name)
+                    .IsRequired(false)
+                    .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+
+                    nb.Property(n => n.Url)
+                    .IsRequired(false);
+                });
+            });
+
+
+            builder.Property(v => v.CreationDate)
+                .IsRequired();
 
             builder.HasMany(v => v.Pets)
                 .WithOne()

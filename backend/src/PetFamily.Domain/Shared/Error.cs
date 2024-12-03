@@ -4,13 +4,13 @@
     {
         public string Code { get; }
         public string Message { get; }
-        public ErrorType Type { get; }
+        public string Type { get; }
 
         private Error(string code, string message, ErrorType type)
         {
             Code = code;
             Message = message;
-            Type = type;
+            Type = type.ToString();
         }
 
         public static Error Validation(string code, string message) =>
@@ -27,11 +27,11 @@
     }
 
 
-    public enum ErrorType 
+    public enum ErrorType
     {
         Validation,
         NotFound,
         Failure,
-        Conflict 
+        Conflict
     }
 }
