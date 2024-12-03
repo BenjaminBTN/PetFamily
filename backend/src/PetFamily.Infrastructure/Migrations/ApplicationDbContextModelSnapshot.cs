@@ -474,12 +474,10 @@ namespace PetFamily.Infrastructure.Migrations
                                         .HasColumnType("integer");
 
                                     b2.Property<string>("Description")
-                                        .IsRequired()
                                         .HasMaxLength(2000)
                                         .HasColumnType("character varying(2000)");
 
                                     b2.Property<string>("Name")
-                                        .IsRequired()
                                         .HasMaxLength(100)
                                         .HasColumnType("character varying(100)");
 

@@ -34,18 +34,16 @@ namespace PetFamily.Domain.Volunteers
             string description,
             Email email,
             int experience,
-            PhoneNumber phoneNumber
-            //VolunteerRequisitesList requisites,
-            //SocialNetworksList? networks
-            ) : base(id)
+            PhoneNumber phoneNumber) 
+            : base(id)
         {
             FullName = name;
             Description = description;
             Email = email;
             Experience = experience;
             PhoneNumber = phoneNumber;
-            Requisites = new VolunteerRequisitesList();
-            Networks = new SocialNetworksList();
+            Requisites = new();
+            Networks = new();
         }
 
 
@@ -60,10 +58,7 @@ namespace PetFamily.Domain.Volunteers
             string description,
             Email email,
             int experience,
-            PhoneNumber phoneNumber
-            //VolunteerRequisitesList requisites,
-            //SocialNetworksList? networks
-            )
+            PhoneNumber phoneNumber)
         {
             if(string.IsNullOrWhiteSpace(description))
                 return Errors.General.InvalidValue("Description");
@@ -71,7 +66,6 @@ namespace PetFamily.Domain.Volunteers
             if(experience < 0)
                 return Errors.General.InvalidValue("Experience");
 
-            //return new Volunteer(id, name, description, email, experience, phoneNumber, requisites, networks);
             return new Volunteer(id, name, description, email, experience, phoneNumber);
         }
 
