@@ -11,8 +11,8 @@ namespace PetFamily.API.Controllers
     {
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
-            [FromServices]CreateVolunteerHandler handler, 
-            [FromBody]CreateVolunteerRequest request, 
+            [FromBody]CreateVolunteerRequest request,
+            [FromServices]CreateVolunteerHandler handler,
             CancellationToken cancellationToken = default)
         {
             var fullName = new FullNameDto(request.Name, request.Surname, request.Patronymic);
