@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
 using PetFamily.Domain.Volunteers;
@@ -12,34 +13,34 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
     public class CreateVolunteerHandler
     {
         private readonly IVolunteersRepository _repository;
+        private readonly IValidator<CreateVolunteerCommand> _validator;
 
-        public CreateVolunteerHandler(IVolunteersRepository repository)
+        public CreateVolunteerHandler(IVolunteersRepository repository, IValidator<CreateVolunteerCommand> validator)
         {
             _repository = repository;
+            _validator = validator;
         }
 
-        public async Task<Result<Guid, Error>> Handle(CreateVolunteerCommand command, CancellationToken cancellationToken = default)
+        public async Task<Result<Guid, Error>> Handle(CreateVolunteerCommand command, CancellationToken cancellationToken)
         {
+            var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+
+            // доработать после введения Envelope
+            if(validationResult.IsValid == false)
+                return Errors.General.InvalidValue(validationResult.Errors[0].PropertyName);
+
             var id = VolunteerId.NewId();
 
-            var fullNameResult = FullName.Create(command.FullName.Name, command.FullName.Surname, command.FullName.Patronymic);
-            if(fullNameResult.IsFailure)
-                return fullNameResult.Error;
+            var fullName = FullName.Create(command.FullName.Name, command.FullName.Surname, command.FullName.Patronymic).Value;
 
-            var emailResult = Email.Create(command.Email);
-            if(emailResult.IsFailure)
-                return emailResult.Error;
+            var email = Email.Create(command.Email).Value;
 
-            var phoneNumberResult = PhoneNumber.Create(command.PhoneNumber);
-            if(phoneNumberResult.IsFailure)
-                return phoneNumberResult.Error;
+            var phoneNumber = PhoneNumber.Create(command.PhoneNumber).Value;
 
-            var volunteer = Volunteer.Create(id, fullNameResult.Value, command.Description, emailResult.Value, 
-                command.Experience, phoneNumberResult.Value).Value;
+            var volunteer = Volunteer.Create(id, fullName, command.Description, email, 
+                command.Experience, phoneNumber).Value;
 
-            await _repository.Add(volunteer, cancellationToken);
-
-            return volunteer.Id.Value;
+            return await _repository.Add(volunteer, cancellationToken);
         }
     }
 }

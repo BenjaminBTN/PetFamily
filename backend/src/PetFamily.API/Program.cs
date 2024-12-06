@@ -1,5 +1,5 @@
+using PetFamily.Application;
 using PetFamily.Application.Volunteers;
-using PetFamily.Application.Volunteers.CreateVolunteer;
 using PetFamily.Infrastructure;
 using PetFamily.Infrastructure.Repositories;
 
@@ -13,7 +13,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ApplicationDbContext>();
-builder.Services.AddScoped<CreateVolunteerHandler>();
+builder.Services.AddApplication();
 builder.Services.AddScoped<IVolunteersRepository, VolunteersRepository>();
 
 
