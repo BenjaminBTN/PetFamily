@@ -9,11 +9,22 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
     {
         public CreateVolunteerCommandValidator() 
         {
-            RuleFor(c => c.FullName).MustBeValueObject((f => FullName.Create(f.Name, f.Surname, f.Patronymic)));
-            RuleFor(c => c.Description).NotEmpty().MaximumLength(Constants.MAX_HIGH_TEXT_LENGTH);
-            RuleFor(c => c.Email).EmailAddress();
-            RuleFor(c => c.Experience).GreaterThanOrEqualTo(0);
-            RuleFor(c => c.PhoneNumber).Matches(@"^\+?[1-9][0-9]{10}$");
+            RuleFor(c => c.FullNameDto).MustBeValueObject(f => FullName.Create(f.Name, f.Surname, f.Patronymic));
+
+            RuleFor(c => c.Description)
+                .NotEmpty()
+                .WithMessage(Errors.General.InvalidValue("{PropertyName}").Serialize());
+            RuleFor(c => c.Description)
+                .MaximumLength(Constants.MAX_HIGH_TEXT_LENGTH)
+                .WithMessage(Errors.General.InvalidValue("{PropertyName}").Serialize());
+
+            RuleFor(c => c.Email).MustBeValueObject((value => Email.Create(value)));
+
+            RuleFor(c => c.Experience)
+                .GreaterThanOrEqualTo(0)
+                .WithMessage(Errors.General.InvalidValue("{PropertyName}").Serialize());
+
+            RuleFor(c => c.PhoneNumber).MustBeValueObject(value => PhoneNumber.Create(value)); 
         }
     }
 }

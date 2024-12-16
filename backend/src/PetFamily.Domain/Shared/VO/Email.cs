@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared;
 using System.Text.RegularExpressions;
 
 namespace PetFamily.Domain.Shared.VO

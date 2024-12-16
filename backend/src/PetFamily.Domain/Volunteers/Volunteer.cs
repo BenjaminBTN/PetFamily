@@ -20,9 +20,9 @@ namespace PetFamily.Domain.Volunteers
         public Email Email { get; private set; } = default!;
         public int Experience { get; private set; } = default;
         public PhoneNumber PhoneNumber { get; private set; } = default!;
-        public VolunteerRequisitesList Requisites { get; private set; }
-        public SocialNetworksList Networks { get; private set; }
-        public DateTime CreationDate { get; } = DateTime.Now.ToUniversalTime();
+        public VolunteerRequisiteList Requisites { get; private set; }
+        public SocialNetworkList Networks { get; private set; }
+        public DateTime CreationDate { get; } = DateTime.Now.ToLocalTime();
         public IReadOnlyList<Pet> Pets => _pets;
 
 
@@ -77,8 +77,8 @@ namespace PetFamily.Domain.Volunteers
             Email? email,
             int experience,
             PhoneNumber? phoneNumber,
-            VolunteerRequisitesList? requisites,
-            SocialNetworksList? networks)
+            VolunteerRequisiteList? requisites,
+            SocialNetworkList? networks)
         {
             if(volunteer == null)
                 return Errors.General.NullValue("Volunteer");
