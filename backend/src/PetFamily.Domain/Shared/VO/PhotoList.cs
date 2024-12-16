@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace PetFamily.Domain.Shared.VO
 {
-    public record PhotosList
+    public record PhotoList
     {
         public IReadOnlyList<Photo> Photos { get; } = [];
 
-        private PhotosList() { }
-        public PhotosList(IEnumerable<Photo> photos)
+        private PhotoList() { }
+        public PhotoList(IEnumerable<Photo> photos)
         {
             Photos = photos.ToList();
         }

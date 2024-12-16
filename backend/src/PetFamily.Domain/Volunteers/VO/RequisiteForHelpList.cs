@@ -4,12 +4,12 @@ using System.Linq;
 
 namespace PetFamily.Domain.Volunteers.VO
 {
-    public record RequisitesForHelpList
+    public record RequisiteForHelpList
     {
         public IReadOnlyList<RequisiteForHelp> Requisites { get; } = [];
 
-        private RequisitesForHelpList() { }
-        public RequisitesForHelpList(IEnumerable<RequisiteForHelp> requisites)
+        private RequisiteForHelpList() { }
+        public RequisiteForHelpList(IEnumerable<RequisiteForHelp> requisites)
         {
             Requisites = requisites.ToList();
         }

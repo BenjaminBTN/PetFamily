@@ -18,7 +18,7 @@ namespace PetFamily.Application.Validators
                 if(result.IsSuccess)
                     return;
 
-                context.AddFailure(result.Error.Message);
+                context.AddFailure(result.Error.Serialize());
             });
         }
     }

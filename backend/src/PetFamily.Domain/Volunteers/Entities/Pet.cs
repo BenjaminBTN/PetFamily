@@ -22,9 +22,9 @@ namespace PetFamily.Domain.Volunteers.Entities
         public bool IsVaccinated { get; private set; } = default;
         public DateTime? BirthDate { get; private set; } = default!;
         public AssistanceStatus Status { get; private set; } = default!;
-        public RequisitesForHelpList RequisitesForHelp { get; private set; } = default!;
-        public PhotosList PetPhotos { get; private set; } = default!;
-        public DateTime CreationDate { get; } = DateTime.Now.ToUniversalTime();
+        public RequisiteForHelpList RequisitesForHelp { get; private set; } = default!;
+        public PhotoList PetPhotos { get; private set; } = default!;
+        public DateTime CreationDate { get; } = DateTime.Now.ToLocalTime();
 
 
         private Pet(PetId id) : base(id) { }
@@ -44,7 +44,7 @@ namespace PetFamily.Domain.Volunteers.Entities
             bool isVaccinated,
             DateTime? birthDate,
             AssistanceStatus status,
-            RequisitesForHelpList requisites) : base(id)
+            RequisiteForHelpList requisites) : base(id)
         {
             Name = name;
             Description = description;
@@ -78,7 +78,7 @@ namespace PetFamily.Domain.Volunteers.Entities
             bool isVaccinated,
             DateTime? birthDate,
             AssistanceStatus status,
-            RequisitesForHelpList requisites)
+            RequisiteForHelpList requisites)
         {
             if(string.IsNullOrWhiteSpace(name))
                 return Errors.General.InvalidValue("Name");
@@ -131,7 +131,7 @@ namespace PetFamily.Domain.Volunteers.Entities
             bool isVaccinated,
             DateTime? birthDate,
             AssistanceStatus? status,
-            RequisitesForHelpList requisites)
+            RequisiteForHelpList requisites)
         {
             if(pet == null)
                 return Errors.General.NullValue("Pet");
