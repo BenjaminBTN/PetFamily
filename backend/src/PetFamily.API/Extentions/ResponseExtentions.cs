@@ -16,7 +16,7 @@ namespace PetFamily.API.Extentions
                 };
             }
 
-
+            //check there is only one type of error
             var distinctErrorTypes = errors.Select(e => e.Type).Distinct().ToList();
 
             if(distinctErrorTypes.Count > 1)
