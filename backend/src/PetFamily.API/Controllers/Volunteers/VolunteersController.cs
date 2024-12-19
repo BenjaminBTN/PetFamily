@@ -14,7 +14,6 @@ namespace PetFamily.API.Controllers
             [FromServices]CreateVolunteerHandler handler,
             CancellationToken cancellationToken = default)
         {
-            
             var command = request.ToCommand();
 
             var result = await handler.Handle(command, cancellationToken);
