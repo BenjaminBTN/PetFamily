@@ -1,10 +1,25 @@
 using PetFamily.API.Middlewares;
 using PetFamily.Application;
-using PetFamily.Application.Volunteers;
 using PetFamily.Infrastructure;
-using PetFamily.Infrastructure.Repositories;
+using Serilog;
+using Serilog.Events;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// added for the possibility of using Local Time
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .WriteTo.Debug()
+    .WriteTo.File("logs/logs_by_serilog.txt")
+    .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
+    .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning)
+    .Enrich.WithMachineName()
+    .CreateLogger();
+
+builder.Services.AddSerilog();
 
 // Add services to the container.
 builder.Services.AddControllers();
@@ -13,12 +28,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ApplicationDbContext>();
 builder.Services.AddApplication();
-builder.Services.AddScoped<IVolunteersRepository, VolunteersRepository>();
-
+builder.Services.AddInfrastructure();
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
 
 app.UseExceptionMiddleware();
 
