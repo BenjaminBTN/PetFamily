@@ -42,6 +42,8 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
                     var error = Error.Deserialise(validationError.ErrorMessage);
                     errors.Add(Error.Validation(error.Code, error.Message, validationError.PropertyName));
 
+                    _logger.LogError("Can not create new record of volunteer: {errorMessage}", error.Message);
+
                     return new ErrorList(errors);
                 }
             }
