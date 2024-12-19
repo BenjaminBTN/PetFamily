@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
+using Microsoft.Extensions.Logging;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
 using PetFamily.Domain.Volunteers;
@@ -15,11 +16,16 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
     {
         private readonly IVolunteersRepository _repository;
         private readonly IValidator<CreateVolunteerCommand> _validator;
+        private readonly ILogger<CreateVolunteerCommand> _logger;
 
-        public CreateVolunteerHandler(IVolunteersRepository repository, IValidator<CreateVolunteerCommand> validator)
+        public CreateVolunteerHandler(
+            IVolunteersRepository repository,
+            IValidator<CreateVolunteerCommand> validator,
+            ILogger<CreateVolunteerCommand> logger)
         {
             _repository = repository;
             _validator = validator;
+            _logger = logger;
         }
 
         public async Task<Result<Guid, ErrorList>> Handle(CreateVolunteerCommand command, CancellationToken cancellationToken)
@@ -35,6 +41,8 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
                 {
                     var error = Error.Deserialise(validationError.ErrorMessage);
                     errors.Add(Error.Validation(error.Code, error.Message, validationError.PropertyName));
+
+                    _logger.LogError("Can not create new record of volunteer: {errorMessage}", error.Message);
 
                     return new ErrorList(errors);
                 }
@@ -60,7 +68,11 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
                 command.Experience, 
                 phoneNumber).Value;
 
-            return await _repository.Add(volunteer, cancellationToken);
+            await _repository.Add(volunteer, cancellationToken);
+
+            _logger.LogInformation("New record of volunteer created with ID: {id}", volunteer.Id.Value);
+
+            return volunteer.Id.Value;
         }
     }
 }
