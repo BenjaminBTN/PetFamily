@@ -484,4 +484,4 @@ $RECYCLE.BIN/
 *.swp
 
 # My files
-backend/.filenesting.json
+.filenesting.json
