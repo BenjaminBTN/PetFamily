@@ -1,10 +1,10 @@
 ﻿using PetFamily.Application.Volunteers.Dtos;
-using PetFamily.Application.Volunteers.Update;
+using PetFamily.Application.Volunteers.Update.MainInfo;
 using PetFamily.Domain.Volunteers.VO;
 
 namespace PetFamily.API.Controllers.Volunteers.Requests
 {
-    public record UpdateVolunteerRequest(
+    public record UpdateMainInfoRequest(
         string Name,
         string Surname,
         string Patronymic,

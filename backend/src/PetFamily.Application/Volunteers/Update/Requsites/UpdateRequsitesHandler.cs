@@ -1,33 +1,33 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using PetFamily.Application.Volunteers.Update;
+using PetFamily.Application.Volunteers.Dtos;
 using PetFamily.Domain.Shared;
-using PetFamily.Domain.Shared.VO;
+using PetFamily.Domain.Volunteers.VO;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.Volunteers.Create
+namespace PetFamily.Application.Volunteers.Update.Requsites
 {
-    public class UpdateMainInfoHandler
+    public class UpdateRequsitesHandler
     {
         private readonly IVolunteersRepository _repository;
-        private readonly IValidator<UpdateMainInfoCommand> _validator;
-        private readonly ILogger<UpdateMainInfoCommand> _logger;
+        private readonly IValidator<UpdateRequsitesCommand> _validator;
+        private readonly ILogger<UpdateRequsitesCommand> _logger;
 
-        public UpdateMainInfoHandler(
+        public UpdateRequsitesHandler(
             IVolunteersRepository repository,
-            IValidator<UpdateMainInfoCommand> validator,
-            ILogger<UpdateMainInfoCommand> logger)
+            IValidator<UpdateRequsitesCommand> validator,
+            ILogger<UpdateRequsitesCommand> logger)
         {
             _repository = repository;
             _validator = validator;
             _logger = logger;
         }
 
-        public async Task<Result<Guid, ErrorList>> Handle(UpdateMainInfoCommand command, CancellationToken cancellationToken)
+        public async Task<Result<Guid, ErrorList>> Handle(UpdateRequsitesCommand command, CancellationToken cancellationToken)
         {
             // validation
             var validationResult = await _validator.ValidateAsync(command, cancellationToken);
@@ -51,32 +51,25 @@ namespace PetFamily.Application.Volunteers.Create
             // getting an entity
             var volunteer = await _repository.GetById(command.VolunteerId, cancellationToken);
             if(volunteer == null)
-            {
                 return Errors.General.NotFound(command.VolunteerId.Value).ToErrorList();
+
+            // create VO
+            List<VolunteerRequisite> list = [];
+
+            foreach(RequsiteDto dto in command.RequsiteDtos)
+            {
+                var requisite = VolunteerRequisite.Create(dto.Name, dto.Description).Value;
+                list.Add(requisite);
             }
 
-            var fullName = FullName.Create(
-                command.FullNameDto.Name,
-                command.FullNameDto.Surname,
-                command.FullNameDto.Patronymic).Value;
-
-            var description = Description.Create(command.Description).Value;
-
-            var email = Email.Create(command.Email).Value;
-
-            var phoneNumber = PhoneNumber.Create(command.PhoneNumber).Value;
+            var requisiteList = new VolunteerRequisiteList(list);
 
             // update
-            volunteer.UpdateMainInfo(
-                fullName,
-                description,
-                email,
-                command.Experience,
-                phoneNumber);
+            volunteer.UpdateRequisites(requisiteList);
 
             await _repository.Save(volunteer, cancellationToken);
 
-            _logger.LogInformation("An existing volunteer record with ID: {id} has been successfully updated", 
+            _logger.LogInformation("An existing volunteer record with ID: {id} has been successfully updated",
                 volunteer.Id.Value);
 
             return volunteer.Id.Value;

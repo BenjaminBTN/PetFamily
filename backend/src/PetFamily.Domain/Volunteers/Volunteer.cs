@@ -80,5 +80,11 @@ namespace PetFamily.Domain.Volunteers
             Experience = experience;
             PhoneNumber = phoneNumber;
         }
+
+
+        public void UpdateRequisites(VolunteerRequisiteList requisites)
+        {
+            Requisites = requisites;
+        }
     }
 }

@@ -6,7 +6,7 @@ namespace PetFamily.Domain.Shared.VO
 {
     public record PhotoList
     {
-        public IReadOnlyList<Photo> Photos { get; } = [];
+        public IReadOnlyList<Photo> Photos { get; } = new List<Photo>();
 
         private PhotoList() { }
         public PhotoList(IEnumerable<Photo> photos)

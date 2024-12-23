@@ -1,7 +1,7 @@
 ﻿using PetFamily.Application.Volunteers.Dtos;
 using PetFamily.Domain.Volunteers.VO;
 
-namespace PetFamily.Application.Volunteers.Update
+namespace PetFamily.Application.Volunteers.Update.MainInfo
 {
     public record UpdateMainInfoCommand(
         VolunteerId VolunteerId,
