@@ -16,9 +16,9 @@ namespace PetFamily.Domain.Volunteers
 
 
         public FullName FullName { get; private set; } = default!;
-        public string Description { get; private set; } = default!;
+        public Description Description { get; private set; } = default!;
         public Email Email { get; private set; } = default!;
-        public int Experience { get; private set; } = default;
+        public double Experience { get; private set; } = default;
         public PhoneNumber PhoneNumber { get; private set; } = default!;
         public VolunteerRequisiteList Requisites { get; private set; }
         public SocialNetworkList Networks { get; private set; }
@@ -31,9 +31,9 @@ namespace PetFamily.Domain.Volunteers
         private Volunteer(
             VolunteerId id,
             FullName name,
-            string description,
+            Description description,
             Email email,
-            int experience,
+            double experience,
             PhoneNumber phoneNumber) 
             : base(id)
         {
@@ -55,14 +55,11 @@ namespace PetFamily.Domain.Volunteers
         public static Result<Volunteer, Error> Create(
             VolunteerId id,
             FullName name,
-            string description,
+            Description description,
             Email email,
-            int experience,
+            double experience,
             PhoneNumber phoneNumber)
         {
-            if(string.IsNullOrWhiteSpace(description))
-                return Errors.General.InvalidValue("Description");
-
             if(experience < 0)
                 return Errors.General.InvalidValue("Experience");
 
@@ -70,41 +67,18 @@ namespace PetFamily.Domain.Volunteers
         }
 
 
-        public static Result<Guid, Error> Update(
-            Volunteer volunteer,
-            FullName? name,
-            string description,
-            Email? email,
-            int experience,
-            PhoneNumber? phoneNumber,
-            VolunteerRequisiteList? requisites,
-            SocialNetworkList? networks)
+        public void UpdateMainInfo(
+            FullName name,
+            Description description,
+            Email email,
+            double experience,
+            PhoneNumber phoneNumber)
         {
-            if(volunteer == null)
-                return Errors.General.NullValue("Volunteer");
-
-            if(name != null)
-                volunteer.FullName = name;
-
-            if(!string.IsNullOrWhiteSpace(description))
-                volunteer.Description = description;
-
-            if(email != null)
-                volunteer.Email = email;
-
-            if(experience >= 0)
-                volunteer.Experience = experience;
-
-            if(phoneNumber != null)
-                volunteer.PhoneNumber = phoneNumber;
-
-            if(requisites != null)
-                volunteer.Requisites = requisites;
-
-            if(networks != null)
-                volunteer.Networks = networks;
-
-            return volunteer.Id.Value;
+            FullName = name;
+            Description = description;
+            Email = email;
+            Experience = experience;
+            PhoneNumber = phoneNumber;
         }
     }
 }

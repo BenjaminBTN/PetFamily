@@ -1,4 +1,4 @@
-﻿using PetFamily.Application.Volunteers.CreateVolunteer;
+﻿using PetFamily.Application.Volunteers.Create;
 using PetFamily.Application.Volunteers.Dtos;
 
 namespace PetFamily.API.Controllers.Volunteers.Requests
@@ -9,7 +9,7 @@ namespace PetFamily.API.Controllers.Volunteers.Requests
         string Patronymic, 
         string Description, 
         string Email, 
-        int Experience, 
+        double Experience, 
         string PhoneNumber)
     {
         public CreateVolunteerCommand ToCommand()
@@ -21,5 +21,5 @@ namespace PetFamily.API.Controllers.Volunteers.Requests
 
             return new CreateVolunteerCommand(fullName, Description, Email, Experience, PhoneNumber);
         }
-    };
+    }
 }

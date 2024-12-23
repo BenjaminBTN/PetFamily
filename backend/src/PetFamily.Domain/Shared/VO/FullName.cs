@@ -8,7 +8,7 @@ namespace PetFamily.Domain.Shared.VO
         public string Surname { get; }
         public string? Patronymic { get; }
 
-        private FullName(string name, string surname, string patronymic)
+        private FullName(string name, string surname, string? patronymic)
         {
             Name = name;
             Surname = surname;
