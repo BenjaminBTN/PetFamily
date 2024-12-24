@@ -4,8 +4,8 @@ namespace PetFamily.Domain.Shared.VO
 {
     public class SocialNetwork
     {
-        public string? Name { get; }
-        public string? Url { get; }
+        public string Name { get; }
+        public string Url { get; }
 
         private SocialNetwork(string name, string url)
         {

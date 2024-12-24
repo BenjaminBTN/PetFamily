@@ -5,6 +5,7 @@ using PetFamily.API.Response;
 using PetFamily.Application.Volunteers.Create;
 using PetFamily.Application.Volunteers.Update.MainInfo;
 using PetFamily.Application.Volunteers.Update.Requsites;
+using PetFamily.Application.Volunteers.Update.SocialNetworks;
 
 namespace PetFamily.API.Controllers.Volunteers
 {
@@ -50,6 +51,24 @@ namespace PetFamily.API.Controllers.Volunteers
             [FromRoute] Guid id,
             [FromBody] UpdateRequsitesRequest request,
             [FromServices] UpdateRequsitesHandler handler,
+            CancellationToken cancellationToken = default)
+        {
+            var command = request.ToCommand(id);
+
+            var result = await handler.Handle(command, cancellationToken);
+
+            if(result.IsFailure)
+                return result.Error.ToResponse();
+
+            return new ObjectResult(Envelope.Ok(result.Value));
+        }
+
+        [HttpPut]
+        [Route("{id:guid}/social-networks")]
+        public async Task<ActionResult<Guid>> Update(
+            [FromRoute] Guid id,
+            [FromBody] UpdateSocialNetworksRequest request,
+            [FromServices] UpdateSocialNetworksHandler handler,
             CancellationToken cancellationToken = default)
         {
             var command = request.ToCommand(id);

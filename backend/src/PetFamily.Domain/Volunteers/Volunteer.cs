@@ -86,5 +86,11 @@ namespace PetFamily.Domain.Volunteers
         {
             Requisites = requisites;
         }
+
+
+        public void UpdateSocialNetworks(SocialNetworkList networks)
+        {
+            Networks = networks;
+        }
     }
 }

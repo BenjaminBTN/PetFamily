@@ -9,7 +9,6 @@ namespace PetFamily.API.Controllers.Volunteers.Requests
         public UpdateRequsitesCommand ToCommand(Guid id)
         {
             var volunteerId = VolunteerId.Create(id);
-
             return new(volunteerId, RequsiteDtos);
         }
     }
