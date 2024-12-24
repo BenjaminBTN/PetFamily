@@ -20,7 +20,7 @@ namespace PetFamily.Domain.Shared
 
             public static Error NotFound(Guid? id = null)
             {
-                var forId = $" for ID '{id}'." ?? "";
+                var forId = $" for ID: {id}." ?? "";
                 return Error.NotFound("record.is.not.found", $"Record is not found{forId}");
             }
 

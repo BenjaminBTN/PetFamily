@@ -38,9 +38,13 @@ namespace PetFamily.Infrastructure.Configurations
             });
 
 
-            builder.Property(v => v.Description)
+            builder.ComplexProperty(v => v.Description, db =>
+            {
+                db.Property(d => d.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
+                .HasColumnName("description");
+            });
 
             builder.ComplexProperty(v => v.Email, eb =>
             {

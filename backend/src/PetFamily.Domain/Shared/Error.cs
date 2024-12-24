@@ -31,6 +31,12 @@ namespace PetFamily.Domain.Shared
         public static Error Conflict(string code, string message) =>
             new Error(code, message, ErrorType.Conflict);
 
+        // вместо метода расширения
+        public ErrorList ToErrorList()
+        {
+            return new ErrorList([this]);
+        }
+
 
         public string Serialize()
         {

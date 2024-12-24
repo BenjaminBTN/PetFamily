@@ -28,9 +28,9 @@ namespace PetFamily.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
+                    experience = table.Column<double>(type: "double precision", nullable: false),
+                    creation_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    experience = table.Column<int>(type: "integer", nullable: false),
-                    creation_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     patronymic = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -76,9 +76,9 @@ namespace PetFamily.Infrastructure.Migrations
                     phone_number = table.Column<string>(type: "character varying(12)", maxLength: 12, nullable: false),
                     is_castrated = table.Column<bool>(type: "boolean", nullable: false),
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
-                    birth_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    birth_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: true),
                     status = table.Column<string>(type: "text", nullable: false),
-                    creation_date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    creation_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     country = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),

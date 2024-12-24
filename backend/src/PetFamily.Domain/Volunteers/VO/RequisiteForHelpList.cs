@@ -6,7 +6,7 @@ namespace PetFamily.Domain.Volunteers.VO
 {
     public record RequisiteForHelpList
     {
-        public IReadOnlyList<RequisiteForHelp> Requisites { get; } = [];
+        public IReadOnlyList<RequisiteForHelp> Requisites { get; } = new List<RequisiteForHelp>();
 
         private RequisiteForHelpList() { }
         public RequisiteForHelpList(IEnumerable<RequisiteForHelp> requisites)
