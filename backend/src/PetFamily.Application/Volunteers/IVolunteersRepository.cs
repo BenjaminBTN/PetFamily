@@ -1,4 +1,6 @@
-﻿using PetFamily.Domain.Volunteers;
+﻿using CSharpFunctionalExtensions;
+using PetFamily.Domain.Shared;
+using PetFamily.Domain.Volunteers;
 using PetFamily.Domain.Volunteers.VO;
 using System;
 using System.Threading;
@@ -13,6 +15,6 @@ namespace PetFamily.Application.Volunteers
         Task<Guid> Delete(Guid volunteerId, CancellationToken cancellationToken);
 
         // могу ли пойти таким путем, и обработать ошибку(null) уже в хендлере?
-        Task<Volunteer?> GetById(VolunteerId volunteerId, CancellationToken cancellationToken);
+        Task<Result<Volunteer, ErrorList>> GetById(VolunteerId volunteerId, CancellationToken cancellationToken);
     }
 }

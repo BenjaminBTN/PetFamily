@@ -47,10 +47,12 @@ namespace PetFamily.Application.Volunteers.Update.MainInfo
                 }
             }
 
-            // getting an entity
-            var volunteer = await _repository.GetById(command.VolunteerId, cancellationToken);
-            if(volunteer == null)
-                return Errors.General.NotFound(command.VolunteerId.Value).ToErrorList();
+            // try getting an entity
+            var volunteerResult = await _repository.GetById(command.VolunteerId, cancellationToken);
+            if(volunteerResult.IsFailure)
+                return volunteerResult.Error;
+
+            var volunteer = volunteerResult.Value;
 
             // create VOs
             var fullName = FullName.Create(

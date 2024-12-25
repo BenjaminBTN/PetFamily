@@ -1,5 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using PetFamily.Application.Volunteers;
+using PetFamily.Domain.Shared;
 using PetFamily.Domain.Volunteers;
 using PetFamily.Domain.Volunteers.VO;
 
@@ -35,11 +37,14 @@ namespace PetFamily.Infrastructure.Repositories
         }
 
         // могу ли пойти таким путем, и обработать ошибку(null) уже в хендлере?
-        public async Task<Volunteer?> GetById(VolunteerId volunteerId, CancellationToken cancellationToken = default)
+        public async Task<Result<Volunteer, ErrorList>> GetById(VolunteerId volunteerId, CancellationToken cancellationToken = default)
         {
             var volunteer = await _context.Volunteers
                 .Include(v => v.Pets)
                 .FirstOrDefaultAsync(v => v.Id == volunteerId, cancellationToken);
+
+            if(volunteer == null)
+                return Errors.General.NotFound(volunteerId.Value).ToErrorList();
 
             return volunteer;
         }
