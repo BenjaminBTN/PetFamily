@@ -6,7 +6,7 @@ namespace PetFamily.Domain.Shared.VO
 {
     public record SocialNetworkList
     {
-        public IReadOnlyList<SocialNetwork> Networks { get; } = [];
+        public IReadOnlyList<SocialNetwork> Networks { get; } = new List<SocialNetwork>();
 
         public SocialNetworkList() { }
         public SocialNetworkList(IEnumerable<SocialNetwork> networks)

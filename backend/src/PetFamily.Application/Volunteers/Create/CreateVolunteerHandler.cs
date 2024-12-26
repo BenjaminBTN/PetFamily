@@ -10,7 +10,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.Volunteers.CreateVolunteer
+namespace PetFamily.Application.Volunteers.Create
 {
     public class CreateVolunteerHandler
     {
@@ -52,20 +52,22 @@ namespace PetFamily.Application.Volunteers.CreateVolunteer
             var id = VolunteerId.NewId();
 
             var fullName = FullName.Create(
-                command.FullNameDto.Name, 
-                command.FullNameDto.Surname, 
+                command.FullNameDto.Name,
+                command.FullNameDto.Surname,
                 command.FullNameDto.Patronymic).Value;
+
+            var description = Description.Create(command.Description).Value;
 
             var email = Email.Create(command.Email).Value;
 
             var phoneNumber = PhoneNumber.Create(command.PhoneNumber).Value;
 
             var volunteer = Volunteer.Create(
-                id, 
-                fullName, 
-                command.Description, 
-                email, 
-                command.Experience, 
+                id,
+                fullName,
+                description,
+                email,
+                command.Experience,
                 phoneNumber).Value;
 
             await _repository.Add(volunteer, cancellationToken);
