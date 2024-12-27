@@ -15,12 +15,12 @@ namespace PetFamily.Application.Volunteers.Update.SocialNetworks
     {
         private readonly IVolunteersRepository _repository;
         private readonly IValidator<UpdateSocialNetworksCommand> _validator;
-        private readonly ILogger<UpdateSocialNetworksCommand> _logger;
+        private readonly ILogger<UpdateSocialNetworksHandler> _logger;
 
         public UpdateSocialNetworksHandler(
             IVolunteersRepository repository,
             IValidator<UpdateSocialNetworksCommand> validator,
-            ILogger<UpdateSocialNetworksCommand> logger)
+            ILogger<UpdateSocialNetworksHandler> logger)
         {
             _repository = repository;
             _validator = validator;

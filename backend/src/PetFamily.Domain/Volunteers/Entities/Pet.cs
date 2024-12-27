@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Shared.Interfaces;
 using PetFamily.Domain.Shared.VO;
 using PetFamily.Domain.Volunteers.Enums;
 using PetFamily.Domain.Volunteers.VO;
@@ -7,8 +8,10 @@ using System;
 
 namespace PetFamily.Domain.Volunteers.Entities
 {
-    public class Pet : Shared.Entity<PetId>
+    public class Pet : Shared.Entity<PetId>, IDeletable
     {
+        private bool _isDeleted = false;
+
         public string Name { get; private set; } = default!;
         public string Description { get; private set; } = default!;
         public PetInfo Info { get; private set; } = default!;
@@ -117,63 +120,46 @@ namespace PetFamily.Domain.Volunteers.Entities
         }
 
 
-        public static Result<Guid, Error> Update(
-            Pet pet,
+        public void Delete()
+        {
+            if(_isDeleted == false)
+                _isDeleted = true;
+        }
+
+
+        public void Restore()
+        {
+            if(_isDeleted == true)
+                _isDeleted = false;
+        }
+
+
+        public void Update(
             string name,
             string description,
-            PetInfo? info,
+            PetInfo info,
             string color,
-            Address? address,
+            Address address,
             double weight,
             double height,
-            PhoneNumber? phoneNumber,
+            PhoneNumber phoneNumber,
             bool isCastrated,
             bool isVaccinated,
-            DateTime? birthDate,
-            AssistanceStatus? status,
-            RequisiteForHelpList requisites)
+            DateTime birthDate,
+            AssistanceStatus status)
         {
-            if(pet == null)
-                return Errors.General.NullValue("Pet");
-
-            if(!string.IsNullOrWhiteSpace(name))
-                pet.Name = name;
-
-            if(!string.IsNullOrWhiteSpace(description))
-                pet.Description = description;
-
-            if(info != null)
-                pet.Info = info;
-
-            if(!string.IsNullOrWhiteSpace(color))
-                pet.Color = color;
-
-            if(address != null)
-                pet.Address = address;
-
-            if(weight > 0)
-                pet.Weight = weight;
-
-            if(height > 0)
-                pet.Height = height;
-
-            if(phoneNumber != null)
-                pet.PhoneNumber = phoneNumber;
-
-            pet.IsCastrated = isCastrated;
-
-            pet.IsVaccinated = isVaccinated;
-
-            if(birthDate != null)
-                pet.BirthDate = birthDate;
-
-            if(status != null)
-                pet.Status = (AssistanceStatus)status;
-
-            if(requisites != null)
-                pet.RequisitesForHelp = requisites;
-
-            return pet.Id.Value;
+            Name = name;
+            Description = description;
+            Info = info;
+            Color = color;
+            Address = address;
+            Weight = weight;
+            Height = height;
+            PhoneNumber = phoneNumber;
+            IsCastrated = isCastrated;
+            IsVaccinated = isVaccinated;
+            BirthDate = birthDate;
+            Status = status;
         }
     }
 }

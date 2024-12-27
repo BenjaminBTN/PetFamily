@@ -19,6 +19,7 @@ namespace PetFamily.Infrastructure.Configurations
                 id => id.Value,
                 value => VolunteerId.Create(value));
 
+
             builder.ComplexProperty(v => v.FullName, fnb =>
             {
                 fnb.Property(fn => fn.Name)
@@ -82,6 +83,7 @@ namespace PetFamily.Infrastructure.Configurations
                 });
             });
 
+
             builder.OwnsOne(v => v.Networks, vnb =>
             {
                 vnb.ToJson("networks");
@@ -104,6 +106,10 @@ namespace PetFamily.Infrastructure.Configurations
             builder.HasMany(v => v.Pets)
                 .WithOne()
                 .HasForeignKey("volunteer_id");
+
+            builder.Property<bool>("_isDeleted")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("is_deleted");
         }
     }
 }

@@ -16,12 +16,12 @@ namespace PetFamily.Application.Volunteers.Create
     {
         private readonly IVolunteersRepository _repository;
         private readonly IValidator<CreateVolunteerCommand> _validator;
-        private readonly ILogger<CreateVolunteerCommand> _logger;
+        private readonly ILogger<CreateVolunteerHandler> _logger;
 
         public CreateVolunteerHandler(
             IVolunteersRepository repository,
             IValidator<CreateVolunteerCommand> validator,
-            ILogger<CreateVolunteerCommand> logger)
+            ILogger<CreateVolunteerHandler> logger)
         {
             _repository = repository;
             _validator = validator;

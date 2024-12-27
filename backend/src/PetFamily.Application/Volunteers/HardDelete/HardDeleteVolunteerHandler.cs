@@ -1,33 +1,31 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using PetFamily.Application.Volunteers.Dtos;
 using PetFamily.Domain.Shared;
-using PetFamily.Domain.Volunteers.VO;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.Volunteers.Update.Requsites
+namespace PetFamily.Application.Volunteers.HardDelete
 {
-    public class UpdateRequsitesHandler
+    public class HardDeleteVolunteerHandler
     {
         private readonly IVolunteersRepository _repository;
-        private readonly IValidator<UpdateRequsitesCommand> _validator;
-        private readonly ILogger<UpdateRequsitesHandler> _logger;
+        private readonly IValidator<HardDeleteVolunteerCommand> _validator;
+        private readonly ILogger<HardDeleteVolunteerHandler> _logger;
 
-        public UpdateRequsitesHandler(
+        public HardDeleteVolunteerHandler(
             IVolunteersRepository repository,
-            IValidator<UpdateRequsitesCommand> validator,
-            ILogger<UpdateRequsitesHandler> logger)
+            IValidator<HardDeleteVolunteerCommand> validator,
+            ILogger<HardDeleteVolunteerHandler> logger)
         {
             _repository = repository;
             _validator = validator;
             _logger = logger;
         }
 
-        public async Task<Result<Guid, ErrorList>> Handle(UpdateRequsitesCommand command, CancellationToken cancellationToken)
+        public async Task<Result<Guid, ErrorList>> Handle(HardDeleteVolunteerCommand command, CancellationToken cancellationToken)
         {
             // validation
             var validationResult = await _validator.ValidateAsync(command, cancellationToken);
@@ -42,7 +40,7 @@ namespace PetFamily.Application.Volunteers.Update.Requsites
                     var error = Error.Deserialise(validationError.ErrorMessage);
                     errors.Add(Error.Validation(error.Code, error.Message, validationError.PropertyName));
 
-                    _logger.LogError("Can not update volunteer record: {errorMessage}", error.Message);
+                    _logger.LogError("Can not delete volunteer record: {errorMessage}", error.Message);
 
                     return new ErrorList(errors);
                 }
@@ -55,23 +53,11 @@ namespace PetFamily.Application.Volunteers.Update.Requsites
 
             var volunteer = volunteerResult.Value;
 
-            // create VO
-            List<VolunteerRequisite> list = [];
+            // delete
+            await _repository.HardDelete(volunteer, cancellationToken);
 
-            foreach(RequsiteDto dto in command.RequsiteDtos)
-            {
-                var requisite = VolunteerRequisite.Create(dto.Name, dto.Description).Value;
-                list.Add(requisite);
-            }
-
-            var requisiteList = new VolunteerRequisiteList(list);
-
-            // update
-            volunteer.UpdateRequisites(requisiteList);
-
-            await _repository.Save(volunteer, cancellationToken);
-
-            _logger.LogInformation("An existing volunteer record with ID: {id} has been successfully updated",
+            _logger.LogInformation(
+                "An existing volunteer record with ID: {id} has been successfully deleted beyond recovery",
                 volunteer.Id.Value);
 
             return volunteer.Id.Value;

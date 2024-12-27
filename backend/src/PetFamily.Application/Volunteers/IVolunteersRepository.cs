@@ -12,9 +12,10 @@ namespace PetFamily.Application.Volunteers
     {
         Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken);
         Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken);
-        Task<Guid> Delete(Guid volunteerId, CancellationToken cancellationToken);
+        Task<Guid> SoftDelete(Volunteer volunteer, CancellationToken cancellationToken);
+        Task<Guid> Restore(Volunteer volunteer, CancellationToken cancellationToken);
+        Task<Guid> HardDelete(Volunteer volunteer, CancellationToken cancellationToken);
 
-        // могу ли пойти таким путем, и обработать ошибку(null) уже в хендлере?
         Task<Result<Volunteer, ErrorList>> GetById(VolunteerId volunteerId, CancellationToken cancellationToken);
     }
 }

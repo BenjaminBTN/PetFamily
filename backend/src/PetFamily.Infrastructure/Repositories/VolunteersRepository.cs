@@ -16,6 +16,7 @@ namespace PetFamily.Infrastructure.Repositories
             _context = context;
         }
 
+
         public async Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
             await _context.Volunteers.AddAsync(volunteer, cancellationToken);
@@ -23,20 +24,40 @@ namespace PetFamily.Infrastructure.Repositories
             return volunteer.Id.Value;
         }
 
+
         public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
             // метод на всякий случай включает отслежвание сущности
             _context.Volunteers.Attach(volunteer);
-            await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync(cancellationToken);
             return volunteer.Id.Value;
         }
 
-        public Task<Guid> Delete(Guid volunteerId, CancellationToken cancellationToken = default)
+
+        public async Task<Guid> SoftDelete(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
-            throw new NotImplementedException();
+            volunteer.Delete();
+            await _context.SaveChangesAsync(cancellationToken);
+            return volunteer.Id.Value;
         }
 
-        // могу ли пойти таким путем, и обработать ошибку(null) уже в хендлере?
+
+        public async Task<Guid> Restore(Volunteer volunteer, CancellationToken cancellationToken = default)
+        {
+            volunteer.Restore();
+            await _context.SaveChangesAsync(cancellationToken);
+            return volunteer.Id.Value;
+        }
+
+
+        public async Task<Guid> HardDelete(Volunteer volunteer, CancellationToken cancellationToken = default)
+        {
+            _context.Volunteers.Remove(volunteer);
+            await _context.SaveChangesAsync(cancellationToken);
+            return volunteer.Id.Value;
+        }
+
+
         public async Task<Result<Volunteer, ErrorList>> GetById(VolunteerId volunteerId, CancellationToken cancellationToken = default)
         {
             var volunteer = await _context.Volunteers

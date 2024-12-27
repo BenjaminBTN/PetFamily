@@ -14,12 +14,12 @@ namespace PetFamily.Application.Volunteers.Update.MainInfo
     {
         private readonly IVolunteersRepository _repository;
         private readonly IValidator<UpdateMainInfoCommand> _validator;
-        private readonly ILogger<UpdateMainInfoCommand> _logger;
+        private readonly ILogger<UpdateMainInfoHandler> _logger;
 
         public UpdateMainInfoHandler(
             IVolunteersRepository repository,
             IValidator<UpdateMainInfoCommand> validator,
-            ILogger<UpdateMainInfoCommand> logger)
+            ILogger<UpdateMainInfoHandler> logger)
         {
             _repository = repository;
             _validator = validator;
