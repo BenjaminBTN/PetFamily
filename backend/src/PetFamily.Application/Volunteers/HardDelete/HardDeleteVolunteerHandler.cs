@@ -1,9 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -25,25 +25,16 @@ namespace PetFamily.Application.Volunteers.HardDelete
             _logger = logger;
         }
 
-        public async Task<Result<Guid, ErrorList>> Handle(HardDeleteVolunteerCommand command, CancellationToken cancellationToken)
+        public async Task<Result<Guid, ErrorList>> Handle(
+            HardDeleteVolunteerCommand command, 
+            CancellationToken cancellationToken)
         {
             // validation
             var validationResult = await _validator.ValidateAsync(command, cancellationToken);
 
             if(validationResult.IsValid == false)
             {
-                var validationErrors = validationResult.Errors;
-                List<Error> errors = [];
-
-                foreach(var validationError in validationErrors)
-                {
-                    var error = Error.Deserialise(validationError.ErrorMessage);
-                    errors.Add(Error.Validation(error.Code, error.Message, validationError.PropertyName));
-
-                    _logger.LogError("Can not delete volunteer record: {errorMessage}", error.Message);
-
-                    return new ErrorList(errors);
-                }
+                return validationResult.ToErrorList(_logger, "delete", "volunteer");
             }
 
             // try getting an entity

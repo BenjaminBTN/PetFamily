@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Controllers.Volunteers.Requests;
-using PetFamily.API.Extentions;
+using PetFamily.API.Extensions;
 using PetFamily.API.Response;
 using PetFamily.Application.Volunteers.Create;
 using PetFamily.Application.Volunteers.HardDelete;
