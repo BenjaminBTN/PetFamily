@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Extensions;
 using PetFamily.Application.Volunteers.Dtos;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
@@ -15,12 +16,12 @@ namespace PetFamily.Application.Volunteers.Update.SocialNetworks
     {
         private readonly IVolunteersRepository _repository;
         private readonly IValidator<UpdateSocialNetworksCommand> _validator;
-        private readonly ILogger<UpdateSocialNetworksCommand> _logger;
+        private readonly ILogger<UpdateSocialNetworksHandler> _logger;
 
         public UpdateSocialNetworksHandler(
             IVolunteersRepository repository,
             IValidator<UpdateSocialNetworksCommand> validator,
-            ILogger<UpdateSocialNetworksCommand> logger)
+            ILogger<UpdateSocialNetworksHandler> logger)
         {
             _repository = repository;
             _validator = validator;
@@ -34,18 +35,7 @@ namespace PetFamily.Application.Volunteers.Update.SocialNetworks
 
             if(validationResult.IsValid == false)
             {
-                var validationErrors = validationResult.Errors;
-                List<Error> errors = [];
-
-                foreach(var validationError in validationErrors)
-                {
-                    var error = Error.Deserialise(validationError.ErrorMessage);
-                    errors.Add(Error.Validation(error.Code, error.Message, validationError.PropertyName));
-
-                    _logger.LogError("Can not update volunteer record: {errorMessage}", error.Message);
-
-                    return new ErrorList(errors);
-                }
+                return validationResult.ToErrorList(_logger, "update", "volunteer");
             }
 
             // try getting an entity

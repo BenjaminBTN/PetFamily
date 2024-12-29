@@ -29,6 +29,7 @@ namespace PetFamily.Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
 
+
             builder.ComplexProperty(p => p.Info, ib =>
             {
                 ib.Property(i => i.SpeciesId)
@@ -42,6 +43,7 @@ namespace PetFamily.Infrastructure.Configurations
                 .IsRequired()
                 .HasColumnName("breed_id");
             });
+
 
             builder.Property(p => p.Color)
                 .IsRequired()
@@ -146,6 +148,10 @@ namespace PetFamily.Infrastructure.Configurations
 
             builder.Property(p => p.CreationDate)
                 .IsRequired();
+
+            builder.Property<bool>("_isDeleted")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("is_deleted");
         }
     }
 }

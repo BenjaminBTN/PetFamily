@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.Shared.Interfaces;
 using PetFamily.Domain.Shared.VO;
 using PetFamily.Domain.Volunteers.Entities;
 using PetFamily.Domain.Volunteers.Enums;
@@ -10,9 +11,10 @@ using System.Linq;
 
 namespace PetFamily.Domain.Volunteers
 {
-    public class Volunteer : Shared.Entity<VolunteerId>
+    public class Volunteer : Shared.Entity<VolunteerId>, IDeletable
     {
         private readonly List<Pet> _pets = [];
+        private bool _isDeleted = false;
 
 
         public FullName FullName { get; private set; } = default!;
@@ -64,6 +66,26 @@ namespace PetFamily.Domain.Volunteers
                 return Errors.General.InvalidValue("Experience");
 
             return new Volunteer(id, name, description, email, experience, phoneNumber);
+        }
+
+
+        public void Delete()
+        {
+            if(_isDeleted ==  false)
+                _isDeleted = true;
+
+            foreach(var pet in _pets)
+                pet.Delete();
+        }
+
+
+        public void Restore()
+        {
+            if(_isDeleted == true)
+                _isDeleted = false;
+
+            foreach(var pet in _pets)
+                pet.Restore();
         }
 
 

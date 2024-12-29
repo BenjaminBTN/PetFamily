@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Controllers.Volunteers.Requests;
-using PetFamily.API.Extentions;
+using PetFamily.API.Extensions;
 using PetFamily.API.Response;
 using PetFamily.Application.Volunteers.Create;
+using PetFamily.Application.Volunteers.HardDelete;
+using PetFamily.Application.Volunteers.SoftDelete;
 using PetFamily.Application.Volunteers.Update.MainInfo;
 using PetFamily.Application.Volunteers.Update.Requsites;
 using PetFamily.Application.Volunteers.Update.SocialNetworks;
+using PetFamily.Domain.Volunteers.VO;
 
 namespace PetFamily.API.Controllers.Volunteers
 {
@@ -72,6 +75,40 @@ namespace PetFamily.API.Controllers.Volunteers
             CancellationToken cancellationToken = default)
         {
             var command = request.ToCommand(id);
+
+            var result = await handler.Handle(command, cancellationToken);
+
+            if(result.IsFailure)
+                return result.Error.ToResponse();
+
+            return new ObjectResult(Envelope.Ok(result.Value));
+        }
+
+        [HttpDelete]
+        [Route("{id:guid}/soft")]
+        public async Task<ActionResult<Guid>> SoftDelete(
+            [FromRoute] Guid id,
+            [FromServices] SoftDeleteVolunteerHandler handler,
+            CancellationToken cancellationToken = default)
+        {
+            var command = new SoftDeleteVolunteerCommand(VolunteerId.Create(id));
+
+            var result = await handler.Handle(command, cancellationToken);
+
+            if(result.IsFailure)
+                return result.Error.ToResponse();
+
+            return new ObjectResult(Envelope.Ok(result.Value));
+        }
+
+        [HttpDelete]
+        [Route("{id:guid}/hard")]
+        public async Task<ActionResult<Guid>> HardDelete(
+            [FromRoute] Guid id,
+            [FromServices] HardDeleteVolunteerHandler handler,
+            CancellationToken cancellationToken = default)
+        {
+            var command = new HardDeleteVolunteerCommand(VolunteerId.Create(id));
 
             var result = await handler.Handle(command, cancellationToken);
 

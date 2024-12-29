@@ -2,9 +2,9 @@
 using PetFamily.API.Response;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.API.Extentions
+namespace PetFamily.API.Extensions
 {
-    public static class ResponseExtentions
+    public static class ResponseExtensions
     {
         public static ActionResult ToResponse(this ErrorList errors)
         {
@@ -37,9 +37,9 @@ namespace PetFamily.API.Extentions
                 _ => StatusCodes.Status500InternalServerError
             };
 
-            return new ObjectResult(Envelope.Error(errors)) 
-            { 
-                StatusCode = code 
+            return new ObjectResult(Envelope.Error(errors))
+            {
+                StatusCode = code
             };
         }
     }
