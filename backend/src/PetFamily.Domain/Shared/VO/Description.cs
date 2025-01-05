@@ -13,6 +13,9 @@ namespace PetFamily.Domain.Shared.VO
             if(string.IsNullOrWhiteSpace(value))
                 return Errors.General.InvalidValue("Description");
 
+            if(value.Length > Constants.MAX_HIGH_TEXT_LENGTH)
+                return Errors.General.OverMaxLength("Description");
+
             return new Description(value);
         }
     }

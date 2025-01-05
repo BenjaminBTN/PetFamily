@@ -25,9 +25,13 @@ namespace PetFamily.Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
 
-            builder.Property(p => p.Description)
+            builder.ComplexProperty(p => p.Description, db =>
+            {
+                db.Property(d => d.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
+                .HasColumnName("despription");
+            });
 
 
             builder.ComplexProperty(p => p.Info, ib =>
@@ -93,9 +97,9 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(p => p.Height)
                 .IsRequired();
 
-            builder.OwnsOne(p => p.PhoneNumber, phb =>
+            builder.OwnsOne(p => p.PhoneNumber, pnb =>
             {
-                phb.Property(phb => phb.Value)
+                pnb.Property(pn => pn.Value)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH)
                 .HasColumnName("phone_number");
@@ -113,6 +117,13 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(p => p.Status)
                 .IsRequired()
                 .HasConversion<string>();
+
+            builder.ComplexProperty(p => p.OrdinalNumber, ob =>
+            {
+                ob.Property(o => o.Value)
+                .IsRequired()
+                .HasColumnName("ordinal_number");
+            });
 
 
             builder.OwnsOne(p => p.RequisitesForHelp, rhb =>

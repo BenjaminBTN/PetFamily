@@ -8,7 +8,7 @@ namespace PetFamily.Domain.Volunteers.VO
     public record PetInfo
     {
         public SpeciesId SpeciesId { get; }
-        public Guid BreedId { get; }
+        public Guid BreedId { get; } = Guid.Empty;
 
         private PetInfo(SpeciesId speciesId, Guid breedId)
         {

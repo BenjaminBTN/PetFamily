@@ -13,7 +13,7 @@ namespace PetFamily.Domain.Volunteers.Entities
         private bool _isDeleted = false;
 
         public string Name { get; private set; } = default!;
-        public string Description { get; private set; } = default!;
+        public Description Description { get; private set; } = default!;
         public PetInfo Info { get; private set; } = default!;
         public string Color { get; private set; } = default!;
         public string HealthInfo { get; private set; } = default!;
@@ -25,9 +25,12 @@ namespace PetFamily.Domain.Volunteers.Entities
         public bool IsVaccinated { get; private set; } = default;
         public DateTime? BirthDate { get; private set; } = default!;
         public AssistanceStatus Status { get; private set; } = default!;
-        public RequisiteForHelpList RequisitesForHelp { get; private set; } = default!;
-        public PhotoList PetPhotos { get; private set; } = default!;
+        public OrdinalNumber OrdinalNumber { get; private set; } = default!;
+
         public DateTime CreationDate { get; } = DateTime.Now.ToLocalTime();
+
+        public RequisiteForHelpList RequisitesForHelp { get; private set; } = new();
+        public PhotoList PetPhotos { get; private set; } = new();
 
 
         private Pet(PetId id) : base(id) { }
@@ -35,7 +38,7 @@ namespace PetFamily.Domain.Volunteers.Entities
         private Pet(
             PetId id,
             string name,
-            string description,
+            Description description,
             PetInfo info,
             string color,
             string healthInfo,
@@ -46,8 +49,7 @@ namespace PetFamily.Domain.Volunteers.Entities
             bool isCastrated,
             bool isVaccinated,
             DateTime? birthDate,
-            AssistanceStatus status,
-            RequisiteForHelpList requisites) : base(id)
+            AssistanceStatus status) : base(id)
         {
             Name = name;
             Description = description;
@@ -62,14 +64,13 @@ namespace PetFamily.Domain.Volunteers.Entities
             IsVaccinated = isVaccinated;
             BirthDate = birthDate;
             Status = status;
-            RequisitesForHelp = requisites;
         }
 
 
         public static Result<Pet, Error> Create(
             PetId id,
             string name,
-            string description,
+            Description description,
             PetInfo info,
             string color,
             string healthInfo,
@@ -80,20 +81,25 @@ namespace PetFamily.Domain.Volunteers.Entities
             bool isCastrated,
             bool isVaccinated,
             DateTime? birthDate,
-            AssistanceStatus status,
-            RequisiteForHelpList requisites)
+            AssistanceStatus status)
         {
             if(string.IsNullOrWhiteSpace(name))
                 return Errors.General.InvalidValue("Name");
 
-            if(string.IsNullOrWhiteSpace(description))
-                return Errors.General.InvalidValue("Description");
+            if(name.Length > Constants.MAX_LOW_TEXT_LENGTH)
+                return Errors.General.OverMaxLength("Name");
 
             if(string.IsNullOrWhiteSpace(color))
                 return Errors.General.InvalidValue("Color");
 
+            if(color.Length > Constants.MAX_LOW_TEXT_LENGTH)
+                return Errors.General.OverMaxLength("Color");
+
             if(string.IsNullOrWhiteSpace(healthInfo))
                 return Errors.General.InvalidValue("HealthInfo");
+
+            if(healthInfo.Length > Constants.MAX_HIGH_TEXT_LENGTH)
+                return Errors.General.OverMaxLength("HealthInfo");
 
             if(weight <= 0)
                 return Errors.General.InvalidValue("Weight");
@@ -115,8 +121,7 @@ namespace PetFamily.Domain.Volunteers.Entities
                 isCastrated,
                 isVaccinated,
                 birthDate,
-                status,
-                requisites);
+                status);
         }
 
 
@@ -134,9 +139,12 @@ namespace PetFamily.Domain.Volunteers.Entities
         }
 
 
-        public void Update(
+        public void SetOrdinalNumber(OrdinalNumber ordinalNumber) => OrdinalNumber = ordinalNumber;
+
+
+        public void UpdateMainInfo(
             string name,
-            string description,
+            Description description,
             PetInfo info,
             string color,
             Address address,
@@ -160,6 +168,18 @@ namespace PetFamily.Domain.Volunteers.Entities
             IsVaccinated = isVaccinated;
             BirthDate = birthDate;
             Status = status;
+        }
+
+
+        public void UpdateRequisitesForHelp(RequisiteForHelpList requisites)
+        {
+            RequisitesForHelp = requisites;
+        }
+
+
+        public void UpdatePetPhotos(PhotoList photos)
+        {
+            PetPhotos = photos;
         }
     }
 }

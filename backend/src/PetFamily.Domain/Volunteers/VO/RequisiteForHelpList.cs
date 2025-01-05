@@ -8,7 +8,7 @@ namespace PetFamily.Domain.Volunteers.VO
     {
         public IReadOnlyList<RequisiteForHelp> Requisites { get; } = new List<RequisiteForHelp>();
 
-        private RequisiteForHelpList() { }
+        public RequisiteForHelpList() { }
         public RequisiteForHelpList(IEnumerable<RequisiteForHelp> requisites)
         {
             Requisites = requisites.ToList();

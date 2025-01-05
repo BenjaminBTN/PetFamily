@@ -13,18 +13,19 @@ namespace PetFamily.Domain.Volunteers
 {
     public class Volunteer : Shared.Entity<VolunteerId>, IDeletable
     {
-        private readonly List<Pet> _pets = [];
+        private readonly List<Pet> _pets = new();
         private bool _isDeleted = false;
-
 
         public FullName FullName { get; private set; } = default!;
         public Description Description { get; private set; } = default!;
         public Email Email { get; private set; } = default!;
         public double Experience { get; private set; } = default;
         public PhoneNumber PhoneNumber { get; private set; } = default!;
-        public VolunteerRequisiteList Requisites { get; private set; }
-        public SocialNetworkList Networks { get; private set; }
+        
         public DateTime CreationDate { get; } = DateTime.Now.ToLocalTime();
+
+        public VolunteerRequisiteList Requisites { get; private set; } = new();
+        public SocialNetworkList Networks { get; private set; } = new();
         public IReadOnlyList<Pet> Pets => _pets;
 
 
@@ -44,8 +45,6 @@ namespace PetFamily.Domain.Volunteers
             Email = email;
             Experience = experience;
             PhoneNumber = phoneNumber;
-            Requisites = new();
-            Networks = new();
         }
 
 
@@ -62,7 +61,7 @@ namespace PetFamily.Domain.Volunteers
             double experience,
             PhoneNumber phoneNumber)
         {
-            if(experience < 0)
+            if(experience < 0 || experience > 99)
                 return Errors.General.InvalidValue("Experience");
 
             return new Volunteer(id, name, description, email, experience, phoneNumber);
@@ -86,6 +85,20 @@ namespace PetFamily.Domain.Volunteers
 
             foreach(var pet in _pets)
                 pet.Restore();
+        }
+
+
+        public UnitResult<ErrorList> AddPet(Pet pet)
+        {
+            var ordinalNumberResult = OrdinalNumber.Create(_pets.Count + 1);
+            if(ordinalNumberResult.IsFailure)
+                return ordinalNumberResult.Error.ToErrorList();
+
+            pet.SetOrdinalNumber(ordinalNumberResult.Value);
+
+            _pets.Add(pet);
+
+            return UnitResult.Success<ErrorList>();
         }
 
 

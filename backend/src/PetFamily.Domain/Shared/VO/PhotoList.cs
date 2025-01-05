@@ -8,7 +8,7 @@ namespace PetFamily.Domain.Shared.VO
     {
         public IReadOnlyList<Photo> Photos { get; } = new List<Photo>();
 
-        private PhotoList() { }
+        public PhotoList() { }
         public PhotoList(IEnumerable<Photo> photos)
         {
             Photos = photos.ToList();
