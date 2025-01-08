@@ -104,7 +104,7 @@ namespace PetFamily.Domain.Volunteers
 
         public UnitResult<Error> MovePet(Pet pet, OrdinalNumber newOrdinalNumber)
         {
-            if(pet.OrdinalNumber == newOrdinalNumber || _pets.Count == 1) 
+            if(pet.OrdinalNumber == newOrdinalNumber || _pets.Count == 1)
                 return UnitResult.Success<Error>();
 
             if(newOrdinalNumber.Value > _pets.Count)
@@ -116,25 +116,39 @@ namespace PetFamily.Domain.Volunteers
                 newOrdinalNumber = lastPositionResult.Value;
             }
 
-            if(newOrdinalNumber.Value > pet.OrdinalNumber.Value)
+            var currentOrdinalNumber = pet.OrdinalNumber;
+
+            var result = ChangePetPositions(currentOrdinalNumber, newOrdinalNumber);
+            if(result.IsFailure)
+                return result.Error;
+
+            pet.SetOrdinalNumber(newOrdinalNumber);
+
+            return UnitResult.Success<Error>();
+        }
+
+
+        private UnitResult<Error> ChangePetPositions(
+            OrdinalNumber currentOrdinalNumber, 
+            OrdinalNumber newOrdinalNumber)
+        {
+            if(newOrdinalNumber.Value > currentOrdinalNumber.Value)
             {
                 var petsToMove = _pets.Where(p => p.OrdinalNumber.Value <= newOrdinalNumber.Value &&
-                                                  p.OrdinalNumber.Value > pet.OrdinalNumber.Value);
+                                                  p.OrdinalNumber.Value > currentOrdinalNumber.Value);
 
                 foreach(var petToMove in petsToMove)
                 {
                     var result = petToMove.MoveBack();
-                    if(result.IsFailure) 
+                    if(result.IsFailure)
                         return result.Error;
                 }
-
-                pet.SetOrdinalNumber(newOrdinalNumber);
             }
 
-            else if(newOrdinalNumber.Value < pet.OrdinalNumber.Value)
+            else if(newOrdinalNumber.Value < currentOrdinalNumber.Value)
             {
                 var petsToMove = _pets.Where(p => p.OrdinalNumber.Value >= newOrdinalNumber.Value &&
-                                                  p.OrdinalNumber.Value < pet.OrdinalNumber.Value);
+                                                  p.OrdinalNumber.Value < currentOrdinalNumber.Value);
 
                 foreach(var petToMove in petsToMove)
                 {
@@ -142,8 +156,6 @@ namespace PetFamily.Domain.Volunteers
                     if(result.IsFailure)
                         return result.Error;
                 }
-
-                pet.SetOrdinalNumber(newOrdinalNumber);
             }
 
             return UnitResult.Success<Error>();
