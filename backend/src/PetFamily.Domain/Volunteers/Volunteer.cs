@@ -88,17 +88,65 @@ namespace PetFamily.Domain.Volunteers
         }
 
 
-        public UnitResult<ErrorList> AddPet(Pet pet)
+        public UnitResult<Error> AddPet(Pet pet)
         {
             var ordinalNumberResult = OrdinalNumber.Create(_pets.Count + 1);
             if(ordinalNumberResult.IsFailure)
-                return ordinalNumberResult.Error.ToErrorList();
+                return ordinalNumberResult.Error;
 
             pet.SetOrdinalNumber(ordinalNumberResult.Value);
 
             _pets.Add(pet);
 
-            return UnitResult.Success<ErrorList>();
+            return UnitResult.Success<Error>();
+        }
+
+
+        public UnitResult<Error> MovePet(Pet pet, OrdinalNumber newOrdinalNumber)
+        {
+            if(pet.OrdinalNumber == newOrdinalNumber || _pets.Count == 1) 
+                return UnitResult.Success<Error>();
+
+            if(newOrdinalNumber.Value > _pets.Count)
+            {
+                var lastPositionResult = OrdinalNumber.Create(_pets.Count);
+                if(lastPositionResult.IsFailure)
+                    return lastPositionResult.Error;
+
+                newOrdinalNumber = lastPositionResult.Value;
+            }
+
+            if(newOrdinalNumber.Value > pet.OrdinalNumber.Value)
+            {
+                var petsToMove = _pets.Where(p => p.OrdinalNumber.Value <= newOrdinalNumber.Value &&
+                                                  p.OrdinalNumber.Value > pet.OrdinalNumber.Value);
+
+                foreach(var petToMove in petsToMove)
+                {
+                    var result = petToMove.MoveBack();
+                    if(result.IsFailure) 
+                        return result.Error;
+                }
+
+                pet.SetOrdinalNumber(newOrdinalNumber);
+            }
+
+            else if(newOrdinalNumber.Value < pet.OrdinalNumber.Value)
+            {
+                var petsToMove = _pets.Where(p => p.OrdinalNumber.Value >= newOrdinalNumber.Value &&
+                                                  p.OrdinalNumber.Value < pet.OrdinalNumber.Value);
+
+                foreach(var petToMove in petsToMove)
+                {
+                    var result = petToMove.MoveForward();
+                    if(result.IsFailure)
+                        return result.Error;
+                }
+
+                pet.SetOrdinalNumber(newOrdinalNumber);
+            }
+
+            return UnitResult.Success<Error>();
         }
 
 

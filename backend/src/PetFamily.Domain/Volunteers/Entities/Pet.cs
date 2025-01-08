@@ -142,6 +142,30 @@ namespace PetFamily.Domain.Volunteers.Entities
         public void SetOrdinalNumber(OrdinalNumber ordinalNumber) => OrdinalNumber = ordinalNumber;
 
 
+        public UnitResult<Error> MoveForward()
+        {
+            var result = OrdinalNumber.Forward();
+            if(result.IsFailure)
+                return result.Error;
+
+            OrdinalNumber = result.Value;
+
+            return UnitResult.Success<Error>();
+        }
+
+
+        public UnitResult<Error> MoveBack()
+        {
+            var result = OrdinalNumber.Back();
+            if(result.IsFailure)
+                return result.Error;
+
+            OrdinalNumber = result.Value;
+
+            return UnitResult.Success<Error>();
+        }
+
+
         public void UpdateMainInfo(
             string name,
             Description description,
