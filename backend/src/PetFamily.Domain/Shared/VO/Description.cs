@@ -2,7 +2,7 @@
 
 namespace PetFamily.Domain.Shared.VO
 {
-    public class Description
+    public record Description
     {
         public string Value { get; }
 

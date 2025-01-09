@@ -12,12 +12,12 @@ namespace PetFamily.Domain.Volunteers.Entities
     {
         private bool _isDeleted = false;
 
-        public string Name { get; private set; } = default!;
-        public Description Description { get; private set; } = default!;
-        public PetInfo Info { get; private set; } = default!;
-        public string Color { get; private set; } = default!;
-        public string HealthInfo { get; private set; } = default!;
-        public Address Address { get; private set; } = default!;
+        public PetName Name { get; private set; } = default!;
+        public Description? Description { get; private set; } = default!;
+        public PetType TypeInfo { get; private set; } = default!;
+        public PetColor Color { get; private set; } = default!;
+        public PetHealthInfo? HealthInfo { get; private set; } = default!;
+        public Address? Address { get; private set; } = default!;
         public double Weight { get; private set; } = default;
         public double Height { get; private set; } = default;
         public PhoneNumber PhoneNumber { get; private set; } = default!;
@@ -37,12 +37,9 @@ namespace PetFamily.Domain.Volunteers.Entities
 
         private Pet(
             PetId id,
-            string name,
-            Description description,
-            PetInfo info,
-            string color,
-            string healthInfo,
-            Address address,
+            PetName name,
+            PetType typeInfo,
+            PetColor color,
             double weight,
             double height,
             PhoneNumber phoneNumber,
@@ -52,11 +49,8 @@ namespace PetFamily.Domain.Volunteers.Entities
             AssistanceStatus status) : base(id)
         {
             Name = name;
-            Description = description;
-            Info = info;
+            TypeInfo = typeInfo;
             Color = color;
-            HealthInfo = healthInfo;
-            Address = address;
             Weight = weight;
             Height = height;
             PhoneNumber = phoneNumber;
@@ -69,12 +63,9 @@ namespace PetFamily.Domain.Volunteers.Entities
 
         public static Result<Pet, Error> Create(
             PetId id,
-            string name,
-            Description description,
-            PetInfo info,
-            string color,
-            string healthInfo,
-            Address address,
+            PetName name,
+            PetType typeInfo,
+            PetColor color,
             double weight,
             double height,
             PhoneNumber phoneNumber,
@@ -83,24 +74,6 @@ namespace PetFamily.Domain.Volunteers.Entities
             DateTime? birthDate,
             AssistanceStatus status)
         {
-            if(string.IsNullOrWhiteSpace(name))
-                return Errors.General.InvalidValue("Name");
-
-            if(name.Length > Constants.MAX_LOW_TEXT_LENGTH)
-                return Errors.General.OverMaxLength("Name");
-
-            if(string.IsNullOrWhiteSpace(color))
-                return Errors.General.InvalidValue("Color");
-
-            if(color.Length > Constants.MAX_LOW_TEXT_LENGTH)
-                return Errors.General.OverMaxLength("Color");
-
-            if(string.IsNullOrWhiteSpace(healthInfo))
-                return Errors.General.InvalidValue("HealthInfo");
-
-            if(healthInfo.Length > Constants.MAX_HIGH_TEXT_LENGTH)
-                return Errors.General.OverMaxLength("HealthInfo");
-
             if(weight <= 0)
                 return Errors.General.InvalidValue("Weight");
 
@@ -110,11 +83,8 @@ namespace PetFamily.Domain.Volunteers.Entities
             return new Pet(
                 id,
                 name,
-                description,
-                info,
+                typeInfo,
                 color,
-                healthInfo,
-                address,
                 weight,
                 height,
                 phoneNumber,
@@ -167,23 +137,25 @@ namespace PetFamily.Domain.Volunteers.Entities
 
 
         public void UpdateMainInfo(
-            string name,
-            Description description,
-            PetInfo info,
-            string color,
-            Address address,
+            PetName name,
+            Description? description,
+            PetType typeInfo,
+            PetColor color,
+            PetHealthInfo? healthInfo,
+            Address? address,
             double weight,
             double height,
             PhoneNumber phoneNumber,
             bool isCastrated,
             bool isVaccinated,
-            DateTime birthDate,
+            DateTime? birthDate,
             AssistanceStatus status)
         {
             Name = name;
             Description = description;
-            Info = info;
+            TypeInfo = typeInfo;
             Color = color;
+            HealthInfo = healthInfo;
             Address = address;
             Weight = weight;
             Height = height;
