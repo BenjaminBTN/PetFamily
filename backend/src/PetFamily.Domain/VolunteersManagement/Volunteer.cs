@@ -2,14 +2,14 @@
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Interfaces;
 using PetFamily.Domain.Shared.VO;
-using PetFamily.Domain.Volunteers.Entities;
-using PetFamily.Domain.Volunteers.Enums;
-using PetFamily.Domain.Volunteers.VO;
+using PetFamily.Domain.VolunteersManagement.Entities;
+using PetFamily.Domain.VolunteersManagement.Enums;
+using PetFamily.Domain.VolunteersManagement.VO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PetFamily.Domain.Volunteers
+namespace PetFamily.Domain.VolunteersManagement
 {
     public class Volunteer : Shared.Entity<VolunteerId>, IDeletable
     {
@@ -21,7 +21,7 @@ namespace PetFamily.Domain.Volunteers
         public Email Email { get; private set; } = default!;
         public double Experience { get; private set; } = default;
         public PhoneNumber PhoneNumber { get; private set; } = default!;
-        
+
         public DateTime CreationDate { get; } = DateTime.Now.ToLocalTime();
 
         public VolunteerRequisiteList Requisites { get; private set; } = new();
@@ -37,7 +37,7 @@ namespace PetFamily.Domain.Volunteers
             Description description,
             Email email,
             double experience,
-            PhoneNumber phoneNumber) 
+            PhoneNumber phoneNumber)
             : base(id)
         {
             FullName = name;
@@ -70,7 +70,7 @@ namespace PetFamily.Domain.Volunteers
 
         public void Delete()
         {
-            if(_isDeleted ==  false)
+            if(_isDeleted == false)
                 _isDeleted = true;
 
             foreach(var pet in _pets)
@@ -102,6 +102,16 @@ namespace PetFamily.Domain.Volunteers
         }
 
 
+        public Result<Pet, Error> GetPetById(PetId id)
+        {
+            var result = _pets.FirstOrDefault(p => p.Id == id);
+            if(result == null)
+                return Errors.General.NotFound(id.Value);
+
+            return result;
+        }
+
+
         public UnitResult<Error> MovePet(Pet pet, OrdinalNumber newOrdinalNumber)
         {
             if(pet.OrdinalNumber == newOrdinalNumber || _pets.Count == 1)
@@ -129,7 +139,7 @@ namespace PetFamily.Domain.Volunteers
 
 
         private UnitResult<Error> ChangePetPositions(
-            OrdinalNumber currentOrdinalNumber, 
+            OrdinalNumber currentOrdinalNumber,
             OrdinalNumber newOrdinalNumber)
         {
             if(newOrdinalNumber.Value > currentOrdinalNumber.Value)

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PetFamily.Domain.Volunteers.VO
+namespace PetFamily.Domain.VolunteersManagement.VO
 {
     public record RequisiteForHelpList
     {

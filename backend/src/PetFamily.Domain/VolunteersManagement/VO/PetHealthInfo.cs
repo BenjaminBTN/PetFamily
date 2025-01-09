@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.Volunteers.VO
+namespace PetFamily.Domain.VolunteersManagement.VO
 {
     public record PetHealthInfo
     {
@@ -16,7 +16,7 @@ namespace PetFamily.Domain.Volunteers.VO
 
             if(value.Length > Constants.MAX_HIGH_TEXT_LENGTH)
                 return Errors.General.OverMaxLength("PetHealthInfo");
-            
+
             return new PetHealthInfo(value);
         }
     }

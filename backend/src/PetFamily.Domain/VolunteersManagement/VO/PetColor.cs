@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.Volunteers.VO
+namespace PetFamily.Domain.VolunteersManagement.VO
 {
     public record PetColor
     {

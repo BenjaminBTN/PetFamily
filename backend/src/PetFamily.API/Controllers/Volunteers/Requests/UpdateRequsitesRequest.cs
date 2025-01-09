@@ -1,6 +1,6 @@
 ﻿using PetFamily.Application.Volunteers.Dtos;
 using PetFamily.Application.Volunteers.Update.Requsites;
-using PetFamily.Domain.Volunteers.VO;
+using PetFamily.Domain.VolunteersManagement.VO;
 
 namespace PetFamily.API.Controllers.Volunteers.Requests
 {

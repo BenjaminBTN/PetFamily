@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
-using PetFamily.Domain.Species.VO;
-using PetFamily.Domain.Volunteers.Entities;
-using PetFamily.Domain.Volunteers.VO;
+using PetFamily.Domain.SpeciesManagement.VO;
+using PetFamily.Domain.VolunteersManagement.Entities;
+using PetFamily.Domain.VolunteersManagement.VO;
 
 namespace PetFamily.Infrastructure.Configurations
 {

@@ -2,11 +2,11 @@
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Interfaces;
 using PetFamily.Domain.Shared.VO;
-using PetFamily.Domain.Volunteers.Enums;
-using PetFamily.Domain.Volunteers.VO;
+using PetFamily.Domain.VolunteersManagement.Enums;
+using PetFamily.Domain.VolunteersManagement.VO;
 using System;
 
-namespace PetFamily.Domain.Volunteers.Entities
+namespace PetFamily.Domain.VolunteersManagement.Entities
 {
     public class Pet : Shared.Entity<PetId>, IDeletable
     {

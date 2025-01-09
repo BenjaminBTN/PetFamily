@@ -2,7 +2,7 @@
 using PetFamily.Application.Validators;
 using PetFamily.Application.Volunteers.Update.SocialNetworks;
 using PetFamily.Domain.Shared;
-using PetFamily.Domain.Volunteers.VO;
+using PetFamily.Domain.VolunteersManagement.VO;
 
 namespace PetFamily.Application.Volunteers.Update.MainInfo
 {
