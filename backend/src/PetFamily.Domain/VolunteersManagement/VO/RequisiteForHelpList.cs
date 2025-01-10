@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace PetFamily.Domain.Volunteers.VO
+namespace PetFamily.Domain.VolunteersManagement.VO
 {
     public record RequisiteForHelpList
     {
         public IReadOnlyList<RequisiteForHelp> Requisites { get; } = new List<RequisiteForHelp>();
 
-        private RequisiteForHelpList() { }
+        public RequisiteForHelpList() { }
         public RequisiteForHelpList(IEnumerable<RequisiteForHelp> requisites)
         {
             Requisites = requisites.ToList();

@@ -1,5 +1,5 @@
 ﻿using PetFamily.Application.Volunteers.Dtos;
-using PetFamily.Domain.Volunteers.VO;
+using PetFamily.Domain.VolunteersManagement.VO;
 using System.Collections.Generic;
 
 namespace PetFamily.Application.Volunteers.Update.SocialNetworks

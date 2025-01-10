@@ -2,7 +2,7 @@
 
 namespace PetFamily.Domain.Shared.VO
 {
-    public class Description
+    public record Description
     {
         public string Value { get; }
 
@@ -12,6 +12,9 @@ namespace PetFamily.Domain.Shared.VO
         {
             if(string.IsNullOrWhiteSpace(value))
                 return Errors.General.InvalidValue("Description");
+
+            if(value.Length > Constants.MAX_HIGH_TEXT_LENGTH)
+                return Errors.General.OverMaxLength("Description");
 
             return new Description(value);
         }

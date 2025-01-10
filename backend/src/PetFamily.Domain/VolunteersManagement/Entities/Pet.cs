@@ -2,22 +2,22 @@
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.Interfaces;
 using PetFamily.Domain.Shared.VO;
-using PetFamily.Domain.Volunteers.Enums;
-using PetFamily.Domain.Volunteers.VO;
+using PetFamily.Domain.VolunteersManagement.Enums;
+using PetFamily.Domain.VolunteersManagement.VO;
 using System;
 
-namespace PetFamily.Domain.Volunteers.Entities
+namespace PetFamily.Domain.VolunteersManagement.Entities
 {
     public class Pet : Shared.Entity<PetId>, IDeletable
     {
         private bool _isDeleted = false;
 
-        public string Name { get; private set; } = default!;
-        public string Description { get; private set; } = default!;
-        public PetInfo Info { get; private set; } = default!;
-        public string Color { get; private set; } = default!;
-        public string HealthInfo { get; private set; } = default!;
-        public Address Address { get; private set; } = default!;
+        public PetName Name { get; private set; } = default!;
+        public Description? Description { get; private set; } = default!;
+        public PetType TypeInfo { get; private set; } = default!;
+        public PetColor Color { get; private set; } = default!;
+        public PetHealthInfo? HealthInfo { get; private set; } = default!;
+        public Address? Address { get; private set; } = default!;
         public double Weight { get; private set; } = default;
         public double Height { get; private set; } = default;
         public PhoneNumber PhoneNumber { get; private set; } = default!;
@@ -25,36 +25,32 @@ namespace PetFamily.Domain.Volunteers.Entities
         public bool IsVaccinated { get; private set; } = default;
         public DateTime? BirthDate { get; private set; } = default!;
         public AssistanceStatus Status { get; private set; } = default!;
-        public RequisiteForHelpList RequisitesForHelp { get; private set; } = default!;
-        public PhotoList PetPhotos { get; private set; } = default!;
+        public OrdinalNumber OrdinalNumber { get; private set; } = default!;
+
         public DateTime CreationDate { get; } = DateTime.Now.ToLocalTime();
+
+        public RequisiteForHelpList RequisitesForHelp { get; private set; } = new();
+        public PhotoList PetPhotos { get; private set; } = new();
 
 
         private Pet(PetId id) : base(id) { }
 
         private Pet(
             PetId id,
-            string name,
-            string description,
-            PetInfo info,
-            string color,
-            string healthInfo,
-            Address address,
+            PetName name,
+            PetType typeInfo,
+            PetColor color,
             double weight,
             double height,
             PhoneNumber phoneNumber,
             bool isCastrated,
             bool isVaccinated,
             DateTime? birthDate,
-            AssistanceStatus status,
-            RequisiteForHelpList requisites) : base(id)
+            AssistanceStatus status) : base(id)
         {
             Name = name;
-            Description = description;
-            Info = info;
+            TypeInfo = typeInfo;
             Color = color;
-            HealthInfo = healthInfo;
-            Address = address;
             Weight = weight;
             Height = height;
             PhoneNumber = phoneNumber;
@@ -62,39 +58,22 @@ namespace PetFamily.Domain.Volunteers.Entities
             IsVaccinated = isVaccinated;
             BirthDate = birthDate;
             Status = status;
-            RequisitesForHelp = requisites;
         }
 
 
         public static Result<Pet, Error> Create(
             PetId id,
-            string name,
-            string description,
-            PetInfo info,
-            string color,
-            string healthInfo,
-            Address address,
+            PetName name,
+            PetType typeInfo,
+            PetColor color,
             double weight,
             double height,
             PhoneNumber phoneNumber,
             bool isCastrated,
             bool isVaccinated,
             DateTime? birthDate,
-            AssistanceStatus status,
-            RequisiteForHelpList requisites)
+            AssistanceStatus status)
         {
-            if(string.IsNullOrWhiteSpace(name))
-                return Errors.General.InvalidValue("Name");
-
-            if(string.IsNullOrWhiteSpace(description))
-                return Errors.General.InvalidValue("Description");
-
-            if(string.IsNullOrWhiteSpace(color))
-                return Errors.General.InvalidValue("Color");
-
-            if(string.IsNullOrWhiteSpace(healthInfo))
-                return Errors.General.InvalidValue("HealthInfo");
-
             if(weight <= 0)
                 return Errors.General.InvalidValue("Weight");
 
@@ -104,19 +83,15 @@ namespace PetFamily.Domain.Volunteers.Entities
             return new Pet(
                 id,
                 name,
-                description,
-                info,
+                typeInfo,
                 color,
-                healthInfo,
-                address,
                 weight,
                 height,
                 phoneNumber,
                 isCastrated,
                 isVaccinated,
                 birthDate,
-                status,
-                requisites);
+                status);
         }
 
 
@@ -134,24 +109,53 @@ namespace PetFamily.Domain.Volunteers.Entities
         }
 
 
-        public void Update(
-            string name,
-            string description,
-            PetInfo info,
-            string color,
-            Address address,
+        public void SetOrdinalNumber(OrdinalNumber ordinalNumber) => OrdinalNumber = ordinalNumber;
+
+
+        public UnitResult<Error> MoveForward()
+        {
+            var result = OrdinalNumber.Forward();
+            if(result.IsFailure)
+                return result.Error;
+
+            OrdinalNumber = result.Value;
+
+            return UnitResult.Success<Error>();
+        }
+
+
+        public UnitResult<Error> MoveBack()
+        {
+            var result = OrdinalNumber.Back();
+            if(result.IsFailure)
+                return result.Error;
+
+            OrdinalNumber = result.Value;
+
+            return UnitResult.Success<Error>();
+        }
+
+
+        public void UpdateMainInfo(
+            PetName name,
+            Description? description,
+            PetType typeInfo,
+            PetColor color,
+            PetHealthInfo? healthInfo,
+            Address? address,
             double weight,
             double height,
             PhoneNumber phoneNumber,
             bool isCastrated,
             bool isVaccinated,
-            DateTime birthDate,
+            DateTime? birthDate,
             AssistanceStatus status)
         {
             Name = name;
             Description = description;
-            Info = info;
+            TypeInfo = typeInfo;
             Color = color;
+            HealthInfo = healthInfo;
             Address = address;
             Weight = weight;
             Height = height;
@@ -160,6 +164,18 @@ namespace PetFamily.Domain.Volunteers.Entities
             IsVaccinated = isVaccinated;
             BirthDate = birthDate;
             Status = status;
+        }
+
+
+        public void UpdateRequisitesForHelp(RequisiteForHelpList requisites)
+        {
+            RequisitesForHelp = requisites;
+        }
+
+
+        public void UpdatePetPhotos(PhotoList photos)
+        {
+            PetPhotos = photos;
         }
     }
 }

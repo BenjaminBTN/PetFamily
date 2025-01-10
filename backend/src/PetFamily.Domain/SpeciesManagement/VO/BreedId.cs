@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PetFamily.Domain.Species.VO
+namespace PetFamily.Domain.SpeciesManagement.VO
 {
     public record BreedId
     {

@@ -2,9 +2,9 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
-using PetFamily.Domain.Species.VO;
-using PetFamily.Domain.Volunteers.Entities;
-using PetFamily.Domain.Volunteers.VO;
+using PetFamily.Domain.SpeciesManagement.VO;
+using PetFamily.Domain.VolunteersManagement.Entities;
+using PetFamily.Domain.VolunteersManagement.VO;
 
 namespace PetFamily.Infrastructure.Configurations
 {
@@ -21,16 +21,24 @@ namespace PetFamily.Infrastructure.Configurations
                 id => id.Value,
                 value => PetId.Create(value));
 
-            builder.Property(p => p.Name)
+            builder.ComplexProperty(p => p.Name, db =>
+            {
+                db.Property(d => d.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("name");
+            });
 
-            builder.Property(p => p.Description)
+            builder.ComplexProperty(p => p.Description, db =>
+            {
+                db.Property(d => d.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
+                .HasColumnName("despription");
+            });
 
 
-            builder.ComplexProperty(p => p.Info, ib =>
+            builder.ComplexProperty(p => p.TypeInfo, ib =>
             {
                 ib.Property(i => i.SpeciesId)
                 .IsRequired()
@@ -44,14 +52,21 @@ namespace PetFamily.Infrastructure.Configurations
                 .HasColumnName("breed_id");
             });
 
-
-            builder.Property(p => p.Color)
+            builder.ComplexProperty(p => p.Color, db =>
+            {
+                db.Property(d => d.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("color");
+            });
 
-            builder.Property(p => p.HealthInfo)
+            builder.ComplexProperty(p => p.HealthInfo, db =>
+            {
+                db.Property(d => d.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
+                .HasColumnName("health_info");
+            });
 
 
             builder.ComplexProperty(p => p.Address, ab => 
@@ -93,9 +108,9 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(p => p.Height)
                 .IsRequired();
 
-            builder.OwnsOne(p => p.PhoneNumber, phb =>
+            builder.OwnsOne(p => p.PhoneNumber, pnb =>
             {
-                phb.Property(phb => phb.Value)
+                pnb.Property(pn => pn.Value)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_PHONE_NUMBER_LENGTH)
                 .HasColumnName("phone_number");
@@ -113,6 +128,13 @@ namespace PetFamily.Infrastructure.Configurations
             builder.Property(p => p.Status)
                 .IsRequired()
                 .HasConversion<string>();
+
+            builder.ComplexProperty(p => p.OrdinalNumber, ob =>
+            {
+                ob.Property(o => o.Value)
+                .IsRequired()
+                .HasColumnName("ordinal_number");
+            });
 
 
             builder.OwnsOne(p => p.RequisitesForHelp, rhb =>
