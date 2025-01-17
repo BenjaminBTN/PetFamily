@@ -1,22 +1,37 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using PetFamily.Infrastructure.Options;
+using Minio;
+using Minio.DataModel.Args;
 
 namespace PetFamily.API.Controllers.Volunteers
 {
     public class PetController : ApplicationController
     {
-        private readonly MinioOptions _minioOptions;
+        private readonly IMinioClient _minioClient;
 
-        public PetController(IOptions<MinioOptions> minioOptions)
+        public PetController(IMinioClient minioClient)
         {
-            _minioOptions = minioOptions.Value;
+            _minioClient = minioClient;
         }
 
         [HttpPost]
-        public async Task<ActionResult<Guid>> Create(IFormFile file)
+        public async Task<ActionResult<string>> Create(
+            IFormFile file,
+            CancellationToken cancellationToken)
         {
-            return Ok(_minioOptions.Endpoint);
+            var buckets = await _minioClient.ListBucketsAsync(cancellationToken);
+            var bucketsString = String.Join(" ", buckets.Buckets.Select(x => x.Name));
+
+            var stream = file.OpenReadStream();
+
+            PutObjectArgs objectArgs = new PutObjectArgs()
+                .WithBucket("photos")
+                .WithStreamData(stream)
+                .WithObjectSize(stream.Length)
+                .WithObject("NewFile");
+
+            await _minioClient.PutObjectAsync(objectArgs);
+
+            return bucketsString;
         }
     }
 }
