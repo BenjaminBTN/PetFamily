@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.Pets.Create
+namespace PetFamily.Application.Volunteers.AddPet
 {
-    public class CreatePetCommandValidator
+    public class AddPetCommandValidator
     {
     }
 }

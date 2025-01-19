@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Minio;
 using Minio.DataModel.Args;
-using PetFamily.Application.Providers;
-using PetFamily.Application.Providers.Dtos;
+using PetFamily.Application.Providers.FileProvider;
+using PetFamily.Application.Providers.FileProvider.Dtos;
 using PetFamily.Domain.Shared;
 using System;
 using System.Collections.Generic;
@@ -28,19 +28,19 @@ namespace PetFamily.Infrastructure.Providers
             try
             {
                 PutObjectArgs objectArgs = new PutObjectArgs()
-                .WithBucket(fileDto.Bucket)
+                .WithBucket(fileDto.BucketName)
                 .WithStreamData(fileDto.Stream)
                 .WithObjectSize(fileDto.Stream.Length)
-                .WithObject("NewFile");
+                .WithObject(fileDto.ObjectName);
 
                 var result = await _minioClient.PutObjectAsync(objectArgs, cancellationToken);
+
+                return result.ObjectName;
             }
             catch(Exception ex)
             {
                 return Error.Failure("file.upload", "File upload error");
             }
-
-            return 
         }
     }
 }

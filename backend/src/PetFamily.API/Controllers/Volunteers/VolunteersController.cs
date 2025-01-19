@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Controllers.Volunteers.Requests;
 using PetFamily.API.Extensions;
 using PetFamily.API.Response;
+using PetFamily.Application.Providers.FileProvider.Dtos;
+using PetFamily.Application.Volunteers.AddPet;
 using PetFamily.Application.Volunteers.Create;
 using PetFamily.Application.Volunteers.HardDelete;
 using PetFamily.Application.Volunteers.SoftDelete;
@@ -116,6 +118,28 @@ namespace PetFamily.API.Controllers.Volunteers
                 return result.Error.ToResponse();
 
             return new ObjectResult(Envelope.Ok(result.Value));
+        }
+
+        [HttpPost]
+        [Route("pet")]
+        public async Task<ActionResult<string>> AddPet(
+            [FromForm] AddPetRequest request,
+            IFormFile file,
+            [FromServices] AddPetHandler handler,
+            CancellationToken cancellationToken)
+        {
+            var stream = file.OpenReadStream();
+
+            var fileDto = new FileDto(stream, "photos", "newPhoto");
+            var command = new AddPetCommand(request.Name, fileDto);
+
+            var result = await handler.Handle(command, cancellationToken);
+            if(result.IsFailure)
+                return result.Error.ToString(); // to modify
+
+            await stream.DisposeAsync();
+
+            return "";
         }
     }
 }

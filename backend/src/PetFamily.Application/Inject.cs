@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using PetFamily.Application.Volunteers.AddPet;
 using PetFamily.Application.Volunteers.Create;
 using PetFamily.Application.Volunteers.HardDelete;
 using PetFamily.Application.Volunteers.SoftDelete;
@@ -18,6 +19,7 @@ namespace PetFamily.Application
             services.AddScoped<UpdateSocialNetworksHandler>();
             services.AddScoped<SoftDeleteVolunteerHandler>();
             services.AddScoped<HardDeleteVolunteerHandler>();
+            services.AddScoped<AddPetHandler>();
             services.AddScoped<IValidator, CreateVolunteerCommandValidator>();
             services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
             services.AddFluentValidationAutoValidation();
