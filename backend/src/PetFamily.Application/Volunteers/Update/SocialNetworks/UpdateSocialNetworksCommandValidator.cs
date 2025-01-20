@@ -1,10 +1,9 @@
 ﻿using FluentValidation;
 using PetFamily.Application.Validators;
-using PetFamily.Application.Volunteers.Update.SocialNetworks;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.VolunteersManagement.VO;
 
-namespace PetFamily.Application.Volunteers.Update.MainInfo
+namespace PetFamily.Application.Volunteers.Update.SocialNetworks
 {
     public class UpdateSocialNetworksCommandValidator : AbstractValidator<UpdateSocialNetworksCommand>
     {

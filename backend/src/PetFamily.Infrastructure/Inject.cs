@@ -17,7 +17,6 @@ namespace PetFamily.Infrastructure
             services.AddScoped<ApplicationDbContext>();
             services.AddScoped<IVolunteersRepository, VolunteersRepository>();
             services.AddMinio(configuration);
-            services.AddScoped<IFileProvider, MinioProvider>();
 
             return services;
         }
@@ -37,6 +36,8 @@ namespace PetFamily.Infrastructure
                 options.WithCredentials(minioOptions.AccessKey, minioOptions.SecretKey);
                 options.WithSSL(false);
             });
+
+            services.AddScoped<IFileProvider, MinioProvider>();
 
             return services;
         }
