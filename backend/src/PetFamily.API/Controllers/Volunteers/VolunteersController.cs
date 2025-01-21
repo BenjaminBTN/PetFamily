@@ -2,7 +2,11 @@ using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Controllers.Volunteers.Requests;
 using PetFamily.API.Extensions;
 using PetFamily.API.Response;
+using PetFamily.Application.Volunteers.AddFiles;
+using PetFamily.Application.Volunteers.AddPet;
 using PetFamily.Application.Volunteers.Create;
+using PetFamily.Application.Volunteers.DeleteFiles;
+using PetFamily.Application.Volunteers.GetFiles;
 using PetFamily.Application.Volunteers.HardDelete;
 using PetFamily.Application.Volunteers.SoftDelete;
 using PetFamily.Application.Volunteers.Update.MainInfo;
@@ -112,6 +116,84 @@ namespace PetFamily.API.Controllers.Volunteers
 
             var result = await handler.Handle(command, cancellationToken);
 
+            if(result.IsFailure)
+                return result.Error.ToResponse();
+
+            return new ObjectResult(Envelope.Ok(result.Value));
+        }
+
+        [HttpPost]
+        [Route("{id:guid}/pet")]
+        public async Task<ActionResult> AddPet(
+            IFormFile file,
+            [FromRoute] string bucketName,
+            [FromForm] AddPetRequest request,
+            [FromServices] AddPetHandler handler,
+            CancellationToken cancellationToken)
+        {
+            var command = new AddPetCommand(request.Name);
+
+            var result = await handler.Handle(command, cancellationToken);
+            if(result.IsFailure)
+                return result.Error.ToResponse();
+
+            return new ObjectResult(Envelope.Ok(result.Value));
+        }
+
+        [HttpPost]
+        [Route("{id:guid}/pet/{petId:guid}")]
+        public async Task<ActionResult<string>> AddPetPhotos(
+            IFormFile file,
+            [FromServices] AddFilesHandler handler,
+            CancellationToken cancellationToken)
+        {
+            await using(var stream = file.OpenReadStream())
+            {
+                var extension = "." + file.FileName.Split('.').Last();
+                var objectName = Guid.NewGuid().ToString() + extension;
+
+                var command = new AddFilesCommand(stream, "photos", objectName);
+
+                // validation
+
+                var result = await handler.Handle(command, cancellationToken);
+                if(result.IsFailure)
+                    return result.Error.ToResponse();
+
+                return new ObjectResult(Envelope.Ok(result.Value));
+            }
+        }
+
+        [HttpGet]
+        [Route("{volunteerId}/pet/{petId:guid}")]
+        public async Task<ActionResult> GetPetPhotos(
+            [FromQuery] GetFilesRequest request,
+            [FromServices] GetFilesHandler handler,
+            CancellationToken cancellationToken)
+        {
+            var command = request.ToCommand();
+
+            // validation
+
+            var result = await handler.Handle(command, cancellationToken);
+            if(result.IsFailure)
+                return result.Error.ToResponse();
+
+            return new ObjectResult(Envelope.Ok(result.Value));
+        }
+
+        [HttpDelete()]
+        [Route("{volunteerId:guid}/pet/{petId:guid}")]
+        public async Task<ActionResult> DeletePet(
+            [FromQuery] DeleteFilesRequest request,
+            [FromServices] DeleteFilesHandler handler,
+            CancellationToken cancellationToken)
+        {
+            var command = request.ToCommand();
+
+            // validation
+
+            var result = await handler.Handle(command, cancellationToken);
             if(result.IsFailure)
                 return result.Error.ToResponse();
 
