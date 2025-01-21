@@ -1,15 +1,15 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.Volunteers.AddFiles;
-using PetFamily.Application.Volunteers.AddPet;
-using PetFamily.Application.Volunteers.Create;
-using PetFamily.Application.Volunteers.DeleteFiles;
-using PetFamily.Application.Volunteers.GetFiles;
-using PetFamily.Application.Volunteers.HardDelete;
-using PetFamily.Application.Volunteers.SoftDelete;
-using PetFamily.Application.Volunteers.Update.MainInfo;
-using PetFamily.Application.Volunteers.Update.SocialNetworks;
+using PetFamily.Application.VolunteersManagement.AddFiles;
+using PetFamily.Application.VolunteersManagement.AddPet;
+using PetFamily.Application.VolunteersManagement.Create;
+using PetFamily.Application.VolunteersManagement.DeleteFiles;
+using PetFamily.Application.VolunteersManagement.GetFiles;
+using PetFamily.Application.VolunteersManagement.HardDelete;
+using PetFamily.Application.VolunteersManagement.SoftDelete;
+using PetFamily.Application.VolunteersManagement.Update.MainInfo;
+using PetFamily.Application.VolunteersManagement.Update.SocialNetworks;
 
 namespace PetFamily.Application
 {

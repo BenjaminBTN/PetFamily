@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Application.Volunteers.AddFiles;
-using PetFamily.Application.Volunteers.DeleteFiles;
-using PetFamily.Application.Volunteers.GetFiles;
+using PetFamily.Application.VolunteersManagement.AddFiles;
+using PetFamily.Application.VolunteersManagement.DeleteFiles;
+using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Domain.Shared;
 using System.Threading;
 using System.Threading.Tasks;

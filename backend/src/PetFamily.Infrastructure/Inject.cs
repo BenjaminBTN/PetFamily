@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PetFamily.Application.Providers.FileProvider;
-using PetFamily.Application.Volunteers;
+using PetFamily.Application.VolunteersManagement;
 using PetFamily.Infrastructure.Options;
 using PetFamily.Infrastructure.Providers;
 using PetFamily.Infrastructure.Repositories;

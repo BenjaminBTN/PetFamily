@@ -184,7 +184,8 @@ namespace PetFamily.Domain.UnitTests
 
         private static Pet CreatePet()
         {
-            var name = PetName.Create("A").Value;
+            var name = PetName.Create("Name").Value;
+            var description = Description.Create("Description").Value;
             var typeInfo = PetType.Create(SpeciesId.NewId(), BreedId.NewId().Value).Value;
             var petColor = PetColor.Create("Red").Value;
             var phoneNumber = PhoneNumber.Create("76665554433").Value;
@@ -192,8 +193,11 @@ namespace PetFamily.Domain.UnitTests
             var pet = Pet.Create(
                 PetId.NewId(),
                 name,
+                description,
                 typeInfo,
                 petColor,
+                null,
+                null,
                 1.0,
                 1,
                 phoneNumber,
