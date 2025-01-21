@@ -13,7 +13,7 @@ namespace PetFamily.Domain.VolunteersManagement.Entities
         private bool _isDeleted = false;
 
         public PetName Name { get; private set; } = default!;
-        public Description? Description { get; private set; } = default!;
+        public Description Description { get; private set; } = default!;
         public PetType TypeInfo { get; private set; } = default!;
         public PetColor Color { get; private set; } = default!;
         public PetHealthInfo? HealthInfo { get; private set; } = default!;
@@ -38,8 +38,11 @@ namespace PetFamily.Domain.VolunteersManagement.Entities
         private Pet(
             PetId id,
             PetName name,
+            Description description,
             PetType typeInfo,
             PetColor color,
+            PetHealthInfo? healthInfo,
+            Address? address,
             double weight,
             double height,
             PhoneNumber phoneNumber,
@@ -49,8 +52,11 @@ namespace PetFamily.Domain.VolunteersManagement.Entities
             AssistanceStatus status) : base(id)
         {
             Name = name;
+            Description = description;
             TypeInfo = typeInfo;
             Color = color;
+            HealthInfo = healthInfo;
+            Address = address;
             Weight = weight;
             Height = height;
             PhoneNumber = phoneNumber;
@@ -64,8 +70,11 @@ namespace PetFamily.Domain.VolunteersManagement.Entities
         public static Result<Pet, Error> Create(
             PetId id,
             PetName name,
+            Description description,
             PetType typeInfo,
             PetColor color,
+            PetHealthInfo? healthInfo,
+            Address? address,
             double weight,
             double height,
             PhoneNumber phoneNumber,
@@ -83,8 +92,11 @@ namespace PetFamily.Domain.VolunteersManagement.Entities
             return new Pet(
                 id,
                 name,
+                description,
                 typeInfo,
                 color,
+                healthInfo,
+                address,
                 weight,
                 height,
                 phoneNumber,
@@ -109,7 +121,8 @@ namespace PetFamily.Domain.VolunteersManagement.Entities
         }
 
 
-        public void SetOrdinalNumber(OrdinalNumber ordinalNumber) => OrdinalNumber = ordinalNumber;
+        public void SetOrdinalNumber(OrdinalNumber ordinalNumber) => 
+            OrdinalNumber = ordinalNumber;
 
 
         public UnitResult<Error> MoveForward()
@@ -138,7 +151,7 @@ namespace PetFamily.Domain.VolunteersManagement.Entities
 
         public void UpdateMainInfo(
             PetName name,
-            Description? description,
+            Description description,
             PetType typeInfo,
             PetColor color,
             PetHealthInfo? healthInfo,

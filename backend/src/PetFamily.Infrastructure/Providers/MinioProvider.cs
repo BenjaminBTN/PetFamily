@@ -3,9 +3,9 @@ using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
 using PetFamily.Application.Providers.FileProvider;
-using PetFamily.Application.Volunteers.AddFiles;
-using PetFamily.Application.Volunteers.DeleteFiles;
-using PetFamily.Application.Volunteers.GetFiles;
+using PetFamily.Application.VolunteersManagement.AddFiles;
+using PetFamily.Application.VolunteersManagement.DeleteFiles;
+using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Domain.Shared;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
