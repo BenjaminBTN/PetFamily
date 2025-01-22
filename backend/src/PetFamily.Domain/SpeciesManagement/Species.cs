@@ -11,38 +11,21 @@ namespace PetFamily.Domain.SpeciesManagement
     {
         private readonly List<Breed> _breeds = [];
 
-        public string Name { get; private set; } = default!;
+        public SpeciesName Name { get; private set; } = default!;
         public IReadOnlyList<Breed> Breeds => _breeds;
 
 
         private Species(SpeciesId id) : base(id) { }
 
-        private Species(SpeciesId id, string name) : base(id)
+        public Species(SpeciesId id, SpeciesName name) : base(id)
         {
             Name = name;
         }
 
 
-        public static Result<Species, Error> Create(SpeciesId id, string name)
+        public Result<Guid, Error> Update(Species species, SpeciesName name)
         {
-            if(string.IsNullOrWhiteSpace(name))
-                return Errors.General.InvalidValue("Name");
-
-            if(name.Length > Constants.MAX_LOW_TEXT_LENGTH)
-                return Errors.General.OverMaxLength("Name");
-
-            return new Species(id, name);
-        }
-
-
-        public static Result<Guid, Error> Update(Species species, string name)
-        {
-            if(!string.IsNullOrWhiteSpace(name))
-                species.Name = name;
-
-            if(name.Length > Constants.MAX_LOW_TEXT_LENGTH)
-                return Errors.General.OverMaxLength("Name");
-
+            Name = name;
             return species.Id.Value;
         }
     }
