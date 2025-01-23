@@ -2,8 +2,10 @@
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.SpeciesManagement.Entities;
 using PetFamily.Domain.SpeciesManagement.VO;
-using System;
+using PetFamily.Domain.VolunteersManagement.Entities;
+using PetFamily.Domain.VolunteersManagement.VO;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace PetFamily.Domain.SpeciesManagement
 {
@@ -23,10 +25,25 @@ namespace PetFamily.Domain.SpeciesManagement
         }
 
 
-        public Result<Guid, Error> Update(Species species, SpeciesName name)
+        public void AddBreed(Breed breed)
+        {
+            _breeds.Add(breed);
+        }
+
+
+        public Result<Breed, Error> GetBreedById(BreedId id)
+        {
+            var result = _breeds.FirstOrDefault(b => b.Id == id);
+            if(result == null)
+                return Errors.General.NotFound(id.Value);
+
+            return result;
+        }
+
+
+        public void Update(SpeciesName name)
         {
             Name = name;
-            return species.Id.Value;
         }
     }
 }

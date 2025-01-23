@@ -126,13 +126,11 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         [Route("{id:guid}/pet")]
         public async Task<ActionResult> AddPet(
             [FromRoute] Guid id,
-            [FromForm] AddPetRequest request,
+            [FromBody] AddPetRequest request,
             [FromServices] AddPetHandler handler,
             CancellationToken cancellationToken)
         {
             var command = new AddPetCommand(request.Name);
-
-            // validation
 
             var result = await handler.Handle(command, cancellationToken);
             if(result.IsFailure)
@@ -155,8 +153,6 @@ namespace PetFamily.API.Controllers.VolunteersManagement
 
                 var command = new AddFilesCommand(stream, "photos", objectName);
 
-                // validation
-
                 var result = await handler.Handle(command, cancellationToken);
                 if(result.IsFailure)
                     return result.Error.ToResponse();
@@ -174,8 +170,6 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         {
             var command = request.ToCommand();
 
-            // validation
-
             var result = await handler.Handle(command, cancellationToken);
             if(result.IsFailure)
                 return result.Error.ToResponse();
@@ -191,8 +185,6 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             CancellationToken cancellationToken)
         {
             var command = request.ToCommand();
-
-            // validation
 
             var result = await handler.Handle(command, cancellationToken);
             if(result.IsFailure)

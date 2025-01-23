@@ -60,9 +60,11 @@ namespace PetFamily.Infrastructure.Configurations
                 .HasColumnName("color");
             });
 
-            builder.ComplexProperty(p => p.HealthInfo, db =>
+            builder.ComplexProperty(p => p.HealthInfo, hb =>
             {
-                db.Property(d => d.Value)
+                hb.IsRequired();
+
+                hb.Property(h => h.Value)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH)
                 .HasColumnName("health_info");
@@ -71,6 +73,8 @@ namespace PetFamily.Infrastructure.Configurations
 
             builder.ComplexProperty(p => p.Address, ab => 
             {
+                ab.IsRequired();
+
                 ab.Property(a => a.Country)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)

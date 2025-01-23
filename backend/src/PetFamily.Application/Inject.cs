@@ -1,6 +1,8 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
+using PetFamily.Application.SpeciesManagement.AddBreed;
+using PetFamily.Application.SpeciesManagement.Create;
 using PetFamily.Application.VolunteersManagement.AddFiles;
 using PetFamily.Application.VolunteersManagement.AddPet;
 using PetFamily.Application.VolunteersManagement.Create;
@@ -26,7 +28,9 @@ namespace PetFamily.Application
             services.AddScoped<AddFilesHandler>();
             services.AddScoped<GetFilesHandler>();
             services.AddScoped<DeleteFilesHandler>();
-            services.AddScoped<IValidator, CreateVolunteerCommandValidator>();
+            services.AddScoped<CreateSpeciesHandler>();
+            services.AddScoped<AddBreedHandler>();
+
             services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
             services.AddFluentValidationAutoValidation();
 
