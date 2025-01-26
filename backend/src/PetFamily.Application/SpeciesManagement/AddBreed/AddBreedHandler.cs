@@ -3,7 +3,6 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
-using PetFamily.Domain.SpeciesManagement;
 using PetFamily.Domain.SpeciesManagement.Entities;
 using PetFamily.Domain.SpeciesManagement.VO;
 using System;
@@ -36,7 +35,9 @@ namespace PetFamily.Application.SpeciesManagement.AddBreed
             if(validationResult.IsValid == false)
                 return validationResult.ToErrorList(_logger, "add", "breed");
 
-            var speciesResult = await _repository.GetById(command.SpeciesId, cancellationToken);
+            var speciesId = SpeciesId.Create(command.SpeciesId);
+
+            var speciesResult = await _repository.GetById(speciesId, cancellationToken);
             if(speciesResult.IsFailure)
                 return speciesResult.Error.ToErrorList();
 

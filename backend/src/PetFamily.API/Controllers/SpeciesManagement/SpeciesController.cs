@@ -34,9 +34,7 @@ namespace PetFamily.API.Controllers.SpeciesManagement
             [FromServices] AddBreedHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var speciesId = SpeciesId.Create(id);
-
-            var command = request.ToCommand(speciesId);
+            var command = request.ToCommand(id);
 
             var result = await handler.Handle(command, cancellationToken);
 

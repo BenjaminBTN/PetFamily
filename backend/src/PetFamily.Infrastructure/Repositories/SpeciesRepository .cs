@@ -42,6 +42,18 @@ namespace PetFamily.Infrastructure.Repositories
             return species;
         }
 
+        public async Task<Result<Species, Error>> GetByName(SpeciesName name, CancellationToken cancellationToken)
+        {
+            var species = await _context.Species
+                .Include(s => s.Breeds)
+                .FirstOrDefaultAsync(s => s.Name == name, cancellationToken);
+
+            if(species == null)
+                return Errors.General.NotFound("Name");
+
+            return species;
+        }
+
         public async Task<Guid> Save(Species species, CancellationToken cancellationToken)
         {
             _context.Species.Attach(species);

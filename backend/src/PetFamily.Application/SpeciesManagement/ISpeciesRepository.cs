@@ -15,5 +15,6 @@ namespace PetFamily.Application.SpeciesManagement
         Task<Guid> Delete(Species species, CancellationToken cancellationToken);
 
         Task<Result<Species, Error>> GetById(SpeciesId speciesId, CancellationToken cancellationToken);
+        Task<Result<Species, Error>> GetByName(SpeciesName name, CancellationToken cancellationToken);
     }
 }

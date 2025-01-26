@@ -41,6 +41,16 @@ namespace PetFamily.Domain.SpeciesManagement
         }
 
 
+        public Result<Breed, Error> GetBreedByName(BreedName name)
+        {
+            var result = _breeds.FirstOrDefault(b => b.Name == name);
+            if(result == null)
+                return Errors.General.NotFound("Name");
+
+            return result;
+        }
+
+
         public void Update(SpeciesName name)
         {
             Name = name;

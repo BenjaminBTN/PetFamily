@@ -21,5 +21,25 @@ namespace PetFamily.Application.Validators
                 context.AddFailure(result.Error.Serialize());
             });
         }
+
+        public static IRuleBuilderOptionsConditions<T, TElement?> MustBeDate<T, TElement>(
+            this IRuleBuilder<T, TElement?> ruleBuilder,
+            Func<TElement, DateTime> factoryMethod)
+        {
+            return ruleBuilder.Custom((value, context) =>
+            {
+                if(value == null)
+                    return;
+
+                try
+                {
+                    factoryMethod(value);
+                }
+                catch(Exception)
+                {
+                    context.AddFailure(Errors.General.InvalidValue("Birth Date").Serialize());
+                }
+            });
+        }
     }
 }

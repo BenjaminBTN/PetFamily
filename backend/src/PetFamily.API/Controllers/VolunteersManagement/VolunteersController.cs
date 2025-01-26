@@ -42,7 +42,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] UpdateMainInfoHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = request.ToCommand(id);
+            var command = request.ToCommand(id); // to refact command
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -60,7 +60,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] UpdateRequsitesHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = request.ToCommand(id);
+            var command = request.ToCommand(id); // to refact command
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -78,7 +78,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] UpdateSocialNetworksHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = request.ToCommand(id);
+            var command = request.ToCommand(id); // to refact command
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -95,7 +95,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] SoftDeleteVolunteerHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = new SoftDeleteVolunteerCommand(VolunteerId.Create(id));
+            var command = new SoftDeleteVolunteerCommand(VolunteerId.Create(id)); // to refact command
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -112,7 +112,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] HardDeleteVolunteerHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = new HardDeleteVolunteerCommand(VolunteerId.Create(id));
+            var command = new HardDeleteVolunteerCommand(VolunteerId.Create(id)); // to refact command
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -130,7 +130,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] AddPetHandler handler,
             CancellationToken cancellationToken)
         {
-            var command = new AddPetCommand(request.Name);
+            var command = request.ToCommand(id);
 
             var result = await handler.Handle(command, cancellationToken);
             if(result.IsFailure)
@@ -179,7 +179,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
 
         [HttpDelete()]
         [Route("{volunteerId:guid}/pet/{petId:guid}")]
-        public async Task<ActionResult> DeletePet(
+        public async Task<ActionResult> DeletePetPhotos(
             [FromQuery] DeleteFilesRequest request,
             [FromServices] DeleteFilesHandler handler,
             CancellationToken cancellationToken)

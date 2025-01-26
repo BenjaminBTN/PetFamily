@@ -5,7 +5,7 @@ namespace PetFamily.API.Controllers.SpeciesManagement.Requests
 {
     public record AddBreedRequest(string Name)
     {
-        public AddBreedCommand ToCommand(SpeciesId id)
+        public AddBreedCommand ToCommand(Guid id)
         {
             return new AddBreedCommand(id, Name);
         }

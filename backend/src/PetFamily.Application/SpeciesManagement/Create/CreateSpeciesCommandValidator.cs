@@ -8,7 +8,7 @@ namespace PetFamily.Application.SpeciesManagement.Create
     {
         public CreateSpeciesCommandValidator()
         {
-            RuleFor(c => c.Name).MustBeValueObject(value => SpeciesName.Create(value));
+            RuleFor(c => c.Name).MustBeValueObject(SpeciesName.Create);
         }
     }
 }
