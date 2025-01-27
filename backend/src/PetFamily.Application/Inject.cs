@@ -11,6 +11,7 @@ using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Application.VolunteersManagement.HardDelete;
 using PetFamily.Application.VolunteersManagement.SoftDelete;
 using PetFamily.Application.VolunteersManagement.Update.MainInfo;
+using PetFamily.Application.VolunteersManagement.Update.Requsites;
 using PetFamily.Application.VolunteersManagement.Update.SocialNetworks;
 
 namespace PetFamily.Application
@@ -22,6 +23,7 @@ namespace PetFamily.Application
             services.AddScoped<CreateVolunteerHandler>();
             services.AddScoped<UpdateMainInfoHandler>();
             services.AddScoped<UpdateSocialNetworksHandler>();
+            services.AddScoped<UpdateRequsitesHandler>();
             services.AddScoped<SoftDeleteVolunteerHandler>();
             services.AddScoped<HardDeleteVolunteerHandler>();
             services.AddScoped<AddPetHandler>();

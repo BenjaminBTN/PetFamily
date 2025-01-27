@@ -12,7 +12,7 @@ namespace PetFamily.Application.VolunteersManagement.Update.SocialNetworks
             RuleFor(c => c.VolunteerId).NotEmpty()
                 .WithMessage(Errors.General.NullValue("{PropertyName}").Serialize());
 
-            RuleForEach(c => c.SocialNetworkDtos).MustBeValueObject(r => VolunteerRequisite.Create(r.Name, r.Url));
+            RuleForEach(c => c.SocialNetworksDto).MustBeValueObject(r => VolunteerRequisite.Create(r.Name, r.Url));
         }
     }
 }

@@ -45,7 +45,7 @@ namespace PetFamily.Domain.SpeciesManagement
         {
             var result = _breeds.FirstOrDefault(b => b.Name == name);
             if(result == null)
-                return Errors.General.NotFound("Name");
+                return Errors.General.NotFound("Breed Name");
 
             return result;
         }

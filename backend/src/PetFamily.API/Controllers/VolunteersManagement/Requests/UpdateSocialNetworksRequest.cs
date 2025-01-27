@@ -4,12 +4,12 @@ using PetFamily.Domain.VolunteersManagement.VO;
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests
 {
-    public record UpdateSocialNetworksRequest(List<SocialNetworkDto> SocialNetworkDtos)
+    public record UpdateSocialNetworksRequest(List<SocialNetworkDto> SocialNetworksDto)
     {
         public UpdateSocialNetworksCommand ToCommand(Guid id)
         {
             var volunteerId = VolunteerId.Create(id);
-            return new(volunteerId, SocialNetworkDtos);
+            return new(volunteerId, SocialNetworksDto);
         }
     }
 }

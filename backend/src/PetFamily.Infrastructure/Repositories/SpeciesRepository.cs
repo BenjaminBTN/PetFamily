@@ -49,7 +49,7 @@ namespace PetFamily.Infrastructure.Repositories
                 .FirstOrDefaultAsync(s => s.Name == name, cancellationToken);
 
             if(species == null)
-                return Errors.General.NotFound("Name");
+                return Errors.General.NotFound("Species Name");
 
             return species;
         }

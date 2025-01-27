@@ -61,7 +61,7 @@ namespace PetFamily.Application.VolunteersManagement.AddPet
 
             var breedResult = species.GetBreedByName(breedName);
             if(breedResult.IsFailure)
-                return speciesResult.Error.ToErrorList();
+                return breedResult.Error.ToErrorList();
 
             var breed = breedResult.Value;
 

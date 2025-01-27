@@ -4,5 +4,5 @@ using System.Collections.Generic;
 
 namespace PetFamily.Application.VolunteersManagement.Update.SocialNetworks
 {
-    public record UpdateSocialNetworksCommand(VolunteerId VolunteerId, List<SocialNetworkDto> SocialNetworkDtos);
+    public record UpdateSocialNetworksCommand(VolunteerId VolunteerId, List<SocialNetworkDto> SocialNetworksDto);
 }

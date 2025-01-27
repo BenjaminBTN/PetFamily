@@ -4,5 +4,5 @@ using System.Collections.Generic;
 
 namespace PetFamily.Application.VolunteersManagement.Update.Requsites
 {
-    public record UpdateRequsitesCommand(VolunteerId VolunteerId, List<RequsiteDto> RequsiteDtos);
+    public record UpdateRequsitesCommand(VolunteerId VolunteerId, List<RequsiteDto> RequsitesDto);
 }
