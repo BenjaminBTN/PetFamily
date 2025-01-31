@@ -9,20 +9,20 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.VolunteersManagement.AddFiles
+namespace PetFamily.Application.VolunteersManagement.AddPetPhotos
 {
-    public class AddFilesHandler
+    public class AddPetPhotosHandler
     {
         private readonly IVolunteersRepository _volunteersRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileProvider _fileProvider;
-        private readonly ILogger<AddFilesHandler> _logger;
+        private readonly ILogger<AddPetPhotosHandler> _logger;
 
-        public AddFilesHandler(
+        public AddPetPhotosHandler(
             IVolunteersRepository volunteersRepository,
             IUnitOfWork unitOfWork,
             IFileProvider fileProvider,
-            ILogger<AddFilesHandler> logger)
+            ILogger<AddPetPhotosHandler> logger)
         {
             _volunteersRepository = volunteersRepository;
             _unitOfWork = unitOfWork;
@@ -31,7 +31,7 @@ namespace PetFamily.Application.VolunteersManagement.AddFiles
         }
 
         public async Task<Result<string, ErrorList>> Handle(
-            AddFilesCommand command,
+            AddPetPhotosCommand command,
             CancellationToken cancellationToken)
         {
             var volunteerId = VolunteerId.Create(command.VolunteerId);
@@ -50,21 +50,25 @@ namespace PetFamily.Application.VolunteersManagement.AddFiles
                 return uploadResult.Error.ToErrorList();
 
             // add paths in repository
-            var photos = uploadResult.Value
+            var exitingPhotos = pet.Value.PetPhotos.Photos.AsEnumerable();
+
+            var newPhotos = uploadResult.Value
                 .Select(o => new Photo(o))
                 .ToList();
 
-            if(photos == null || photos.Count == 0)
+            if(newPhotos == null || newPhotos.Count == 0)
             {
                 _logger.LogError("Fail to add files in repository");
                 return Error.Failure("file.upload", "Error in placing files in the repository").ToErrorList();
             }
 
-            pet.Value.UpdatePetPhotos(new(photos));
+            var allPhotos = exitingPhotos.Concat(newPhotos).Select(p => p.PathToStorage);
+            pet.Value.UpdatePetPhotos(allPhotos);
 
+            // ending
             await _unitOfWork.SaveChanges(cancellationToken);
 
-            var paths = string.Join(", ", photos.Select(p => p.PathToStorage.Value));
+            var paths = string.Join(", ", newPhotos.Select(p => p.PathToStorage));
 
             _logger.LogInformation(
                 "New files was upload to MinIO with the names: {names}", paths);

@@ -3,10 +3,10 @@ using PetFamily.API.Controllers.VolunteersManagement.Requests;
 using PetFamily.API.Extensions;
 using PetFamily.API.Processors;
 using PetFamily.API.Response;
-using PetFamily.Application.VolunteersManagement.AddFiles;
 using PetFamily.Application.VolunteersManagement.AddPet;
+using PetFamily.Application.VolunteersManagement.AddPetPhotos;
 using PetFamily.Application.VolunteersManagement.Create;
-using PetFamily.Application.VolunteersManagement.DeleteFiles;
+using PetFamily.Application.VolunteersManagement.DeletePetPhotos;
 using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Application.VolunteersManagement.HardDelete;
 using PetFamily.Application.VolunteersManagement.SoftDelete;
@@ -147,13 +147,13 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromRoute] Guid petId,
             [FromQuery] string bucketName,
             IFormFileCollection files,
-            [FromServices] AddFilesHandler handler,
+            [FromServices] AddPetPhotosHandler handler,
             CancellationToken cancellationToken = default)
         {
             await using var processor = new FileProcessor();
             var filesDto = processor.Process(files, cancellationToken);
 
-            var command = new AddFilesCommand(volunteerId, petId, filesDto, bucketName);
+            var command = new AddPetPhotosCommand(volunteerId, petId, filesDto, bucketName);
 
             var result = await handler.Handle(command, cancellationToken);
             if(result.IsFailure)
@@ -181,11 +181,13 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         [HttpDelete()]
         [Route("{volunteerId:guid}/pet/{petId:guid}")]
         public async Task<ActionResult> DeletePetPhotos(
-            [FromQuery] DeleteFilesRequest request,
+            [FromRoute] Guid volunteerId,
+            [FromRoute] Guid petId,
+            [FromQuery] DeletePetPhotosRequest request,
             [FromServices] DeleteFilesHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = request.ToCommand();
+            var command = request.ToCommand(volunteerId, petId);
 
             var result = await handler.Handle(command, cancellationToken);
             if(result.IsFailure)

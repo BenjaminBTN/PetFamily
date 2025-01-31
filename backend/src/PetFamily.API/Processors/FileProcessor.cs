@@ -1,11 +1,11 @@
-﻿using PetFamily.Application.VolunteersManagement.Dtos;
+﻿using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Domain.VolunteersManagement.VO;
 
 namespace PetFamily.API.Processors
 {
     public class FileProcessor : IAsyncDisposable
     {
-        private readonly List<UploadFileDto> _filesDto = [];
+        private readonly List<UploadFileData> _filesDto = [];
 
         public async ValueTask DisposeAsync()
         {
@@ -15,7 +15,7 @@ namespace PetFamily.API.Processors
             }
         }
 
-        public List<UploadFileDto> Process(IFormFileCollection files, CancellationToken cancellationToken)
+        public List<UploadFileData> Process(IFormFileCollection files, CancellationToken cancellationToken)
         {
             foreach(var file in files)
             {
@@ -23,7 +23,7 @@ namespace PetFamily.API.Processors
                 var objectName = FilePath.Create(Guid.NewGuid(), ext);
                 var content = file.OpenReadStream();
 
-                var fileDto = new UploadFileDto(content, objectName.Value);
+                var fileDto = new UploadFileData(content, objectName.Value);
 
                 _filesDto.Add(fileDto);
             }
