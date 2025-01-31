@@ -4,12 +4,12 @@ using PetFamily.Domain.VolunteersManagement.VO;
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests
 {
-    public record UpdateRequsitesRequest(List<RequsiteDto> RequsiteDtos)
+    public record UpdateRequsitesRequest(List<RequsiteDto> RequsitesDto)
     {
         public UpdateRequsitesCommand ToCommand(Guid id)
         {
             var volunteerId = VolunteerId.Create(id);
-            return new(volunteerId, RequsiteDtos);
+            return new(volunteerId, RequsitesDto);
         }
     }
 }

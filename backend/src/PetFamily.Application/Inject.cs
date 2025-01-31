@@ -1,14 +1,17 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
-using PetFamily.Application.VolunteersManagement.AddFiles;
+using PetFamily.Application.SpeciesManagement.AddBreed;
+using PetFamily.Application.SpeciesManagement.Create;
 using PetFamily.Application.VolunteersManagement.AddPet;
+using PetFamily.Application.VolunteersManagement.AddPetPhotos;
 using PetFamily.Application.VolunteersManagement.Create;
-using PetFamily.Application.VolunteersManagement.DeleteFiles;
+using PetFamily.Application.VolunteersManagement.DeletePetPhotos;
 using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Application.VolunteersManagement.HardDelete;
 using PetFamily.Application.VolunteersManagement.SoftDelete;
 using PetFamily.Application.VolunteersManagement.Update.MainInfo;
+using PetFamily.Application.VolunteersManagement.Update.Requsites;
 using PetFamily.Application.VolunteersManagement.Update.SocialNetworks;
 
 namespace PetFamily.Application
@@ -20,13 +23,16 @@ namespace PetFamily.Application
             services.AddScoped<CreateVolunteerHandler>();
             services.AddScoped<UpdateMainInfoHandler>();
             services.AddScoped<UpdateSocialNetworksHandler>();
+            services.AddScoped<UpdateRequsitesHandler>();
             services.AddScoped<SoftDeleteVolunteerHandler>();
             services.AddScoped<HardDeleteVolunteerHandler>();
             services.AddScoped<AddPetHandler>();
-            services.AddScoped<AddFilesHandler>();
+            services.AddScoped<AddPetPhotosHandler>();
             services.AddScoped<GetFilesHandler>();
             services.AddScoped<DeleteFilesHandler>();
-            services.AddScoped<IValidator, CreateVolunteerCommandValidator>();
+            services.AddScoped<CreateSpeciesHandler>();
+            services.AddScoped<AddBreedHandler>();
+
             services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
             services.AddFluentValidationAutoValidation();
 

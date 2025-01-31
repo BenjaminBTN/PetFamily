@@ -19,9 +19,13 @@ namespace PetFamily.Infrastructure.Configurations
                 id => id.Value,
                 value => SpeciesId.Create(value));
 
-            builder.Property(s => s.Name)
+            builder.ComplexProperty(s => s.Name, nb =>
+            {
+                nb.Property(n => n.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
+                .HasColumnName("name");
+            });
 
             builder.HasMany(s => s.Breeds)
                 .WithOne()

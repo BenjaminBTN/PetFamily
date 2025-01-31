@@ -5,6 +5,8 @@ using PetFamily.Domain.Shared.VO;
 using PetFamily.Domain.VolunteersManagement.Enums;
 using PetFamily.Domain.VolunteersManagement.VO;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PetFamily.Domain.VolunteersManagement.Entities
 {
@@ -186,9 +188,12 @@ namespace PetFamily.Domain.VolunteersManagement.Entities
         }
 
 
-        public void UpdatePetPhotos(PhotoList photos)
+        public void UpdatePetPhotos(IEnumerable<FilePath> paths)
         {
-            PetPhotos = photos;
+            List<Photo> photos = new List<Photo>();
+            paths.ToList().ForEach(path => photos.Add(new Photo(path)));
+
+            PetPhotos = new PhotoList(photos);
         }
     }
 }

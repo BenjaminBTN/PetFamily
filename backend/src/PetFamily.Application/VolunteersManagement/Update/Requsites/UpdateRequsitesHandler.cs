@@ -46,7 +46,7 @@ namespace PetFamily.Application.VolunteersManagement.Update.Requsites
             // create VO
             List<VolunteerRequisite> list = [];
 
-            foreach(RequsiteDto dto in command.RequsiteDtos)
+            foreach(RequsiteDto dto in command.RequsitesDto)
             {
                 var requisite = VolunteerRequisite.Create(dto.Name, dto.Description).Value;
                 list.Add(requisite);

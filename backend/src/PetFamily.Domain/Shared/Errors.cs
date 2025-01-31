@@ -24,6 +24,12 @@ namespace PetFamily.Domain.Shared
                 return Error.NotFound("record.is.not.found", $"Record is not found{forId}");
             }
 
+            public static Error NotFound(string property = null)
+            {
+                var forProperty = $" for property: {property}." ?? "";
+                return Error.NotFound("record.is.not.found", $"Record is not found{forProperty}");
+            }
+
             public static Error NullValue(string? name = null)
             {
                 var value = name ?? "Value";
