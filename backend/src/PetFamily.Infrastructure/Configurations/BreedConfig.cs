@@ -24,7 +24,7 @@ namespace PetFamily.Infrastructure.Configurations
                 nb.Property(n => n.Value)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_LOW_TEXT_LENGTH)
-                .HasColumnType("name");
+                .HasColumnName("name");
             });
         }
     }

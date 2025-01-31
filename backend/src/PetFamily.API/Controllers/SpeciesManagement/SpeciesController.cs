@@ -4,7 +4,6 @@ using PetFamily.API.Extensions;
 using PetFamily.API.Response;
 using PetFamily.Application.SpeciesManagement.AddBreed;
 using PetFamily.Application.SpeciesManagement.Create;
-using PetFamily.Domain.SpeciesManagement.VO;
 
 namespace PetFamily.API.Controllers.SpeciesManagement
 {

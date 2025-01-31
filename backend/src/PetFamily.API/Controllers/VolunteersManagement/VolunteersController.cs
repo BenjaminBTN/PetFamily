@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Controllers.VolunteersManagement.Requests;
 using PetFamily.API.Extensions;
+using PetFamily.API.Processors;
 using PetFamily.API.Response;
 using PetFamily.Application.VolunteersManagement.AddFiles;
 using PetFamily.Application.VolunteersManagement.AddPet;
@@ -128,7 +129,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromRoute] Guid id,
             [FromBody] AddPetRequest request,
             [FromServices] AddPetHandler handler,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             var command = request.ToCommand(id);
 
@@ -140,25 +141,25 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         }
 
         [HttpPost]
-        [Route("{id:guid}/pet/{petId:guid}")]
+        [Route("{volunteerId:guid}/pet/{petId:guid}")]
         public async Task<ActionResult<string>> AddPetPhotos(
-            IFormFile file,
+            [FromRoute] Guid volunteerId,
+            [FromRoute] Guid petId,
+            [FromQuery] string bucketName,
+            IFormFileCollection files,
             [FromServices] AddFilesHandler handler,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
-            await using(var stream = file.OpenReadStream())
-            {
-                var extension = "." + file.FileName.Split('.').Last();
-                var objectName = Guid.NewGuid().ToString() + extension;
+            await using var processor = new FileProcessor();
+            var filesDto = processor.Process(files, cancellationToken);
 
-                var command = new AddFilesCommand(stream, "photos", objectName);
+            var command = new AddFilesCommand(volunteerId, petId, filesDto, bucketName);
 
-                var result = await handler.Handle(command, cancellationToken);
-                if(result.IsFailure)
-                    return result.Error.ToResponse();
+            var result = await handler.Handle(command, cancellationToken);
+            if(result.IsFailure)
+                return result.Error.ToResponse();
 
-                return new ObjectResult(Envelope.Ok(result.Value));
-            }
+            return new ObjectResult(Envelope.Ok(result.Value));
         }
 
         [HttpGet]
@@ -166,7 +167,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         public async Task<ActionResult> GetPetPhotos(
             [FromQuery] GetFilesRequest request,
             [FromServices] GetFilesHandler handler,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             var command = request.ToCommand();
 
@@ -182,7 +183,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         public async Task<ActionResult> DeletePetPhotos(
             [FromQuery] DeleteFilesRequest request,
             [FromServices] DeleteFilesHandler handler,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             var command = request.ToCommand();
 

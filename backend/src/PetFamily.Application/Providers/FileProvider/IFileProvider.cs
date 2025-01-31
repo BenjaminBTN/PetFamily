@@ -1,8 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Application.VolunteersManagement.AddFiles;
 using PetFamily.Application.VolunteersManagement.DeleteFiles;
+using PetFamily.Application.VolunteersManagement.Dtos;
 using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.VolunteersManagement.VO;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -10,7 +12,10 @@ namespace PetFamily.Application.Providers.FileProvider
 {
     public interface IFileProvider
     {
-        Task<Result<string, Error>> Upload(AddFilesCommand command, CancellationToken cancellationToken);
+        Task<Result<List<FilePath>, Error>> Upload(
+            IEnumerable<UploadFileDto> files,
+            string bucketName, 
+            CancellationToken cancellationToken);
 
         Task<Result<string, Error>> GetByName(
             GetFilesCommand command,

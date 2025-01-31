@@ -163,6 +163,9 @@ namespace PetFamily.Infrastructure.Configurations
                 ppb.OwnsMany(p => p.Photos, pb =>
                 {
                     pb.Property(r => r.PathToStorage)
+                    .HasConversion(
+                        p => p.Value,
+                        value => FilePath.Create(value).Value)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_HIGH_TEXT_LENGTH);
 
