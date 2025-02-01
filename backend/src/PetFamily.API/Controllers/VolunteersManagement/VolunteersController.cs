@@ -1,11 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.API.Controllers.VolunteersManagement.Requests;
 using PetFamily.API.Extensions;
+using PetFamily.API.Processors;
 using PetFamily.API.Response;
-using PetFamily.Application.VolunteersManagement.AddFiles;
 using PetFamily.Application.VolunteersManagement.AddPet;
+using PetFamily.Application.VolunteersManagement.AddPetPhotos;
 using PetFamily.Application.VolunteersManagement.Create;
-using PetFamily.Application.VolunteersManagement.DeleteFiles;
+using PetFamily.Application.VolunteersManagement.DeletePetPhotos;
 using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Application.VolunteersManagement.HardDelete;
 using PetFamily.Application.VolunteersManagement.SoftDelete;
@@ -42,7 +43,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] UpdateMainInfoHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = request.ToCommand(id);
+            var command = request.ToCommand(id); // to refact command
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -60,7 +61,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] UpdateRequsitesHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = request.ToCommand(id);
+            var command = request.ToCommand(id); // to refact command
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -78,7 +79,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] UpdateSocialNetworksHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = request.ToCommand(id);
+            var command = request.ToCommand(id); // to refact command
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -95,7 +96,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] SoftDeleteVolunteerHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = new SoftDeleteVolunteerCommand(VolunteerId.Create(id));
+            var command = new SoftDeleteVolunteerCommand(VolunteerId.Create(id)); // to refact command
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -112,7 +113,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] HardDeleteVolunteerHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = new HardDeleteVolunteerCommand(VolunteerId.Create(id));
+            var command = new HardDeleteVolunteerCommand(VolunteerId.Create(id)); // to refact command
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -126,13 +127,11 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         [Route("{id:guid}/pet")]
         public async Task<ActionResult> AddPet(
             [FromRoute] Guid id,
-            [FromForm] AddPetRequest request,
+            [FromBody] AddPetRequest request,
             [FromServices] AddPetHandler handler,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
-            var command = new AddPetCommand(request.Name);
-
-            // validation
+            var command = request.ToCommand(id);
 
             var result = await handler.Handle(command, cancellationToken);
             if(result.IsFailure)
@@ -142,27 +141,25 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         }
 
         [HttpPost]
-        [Route("{id:guid}/pet/{petId:guid}")]
+        [Route("{volunteerId:guid}/pet/{petId:guid}")]
         public async Task<ActionResult<string>> AddPetPhotos(
-            IFormFile file,
-            [FromServices] AddFilesHandler handler,
-            CancellationToken cancellationToken)
+            [FromRoute] Guid volunteerId,
+            [FromRoute] Guid petId,
+            [FromQuery] string bucketName,
+            IFormFileCollection files,
+            [FromServices] AddPetPhotosHandler handler,
+            CancellationToken cancellationToken = default)
         {
-            await using(var stream = file.OpenReadStream())
-            {
-                var extension = "." + file.FileName.Split('.').Last();
-                var objectName = Guid.NewGuid().ToString() + extension;
+            await using var processor = new FileProcessor();
+            var filesDto = processor.Process(files, cancellationToken);
 
-                var command = new AddFilesCommand(stream, "photos", objectName);
+            var command = new AddPetPhotosCommand(volunteerId, petId, filesDto, bucketName);
 
-                // validation
+            var result = await handler.Handle(command, cancellationToken);
+            if(result.IsFailure)
+                return result.Error.ToResponse();
 
-                var result = await handler.Handle(command, cancellationToken);
-                if(result.IsFailure)
-                    return result.Error.ToResponse();
-
-                return new ObjectResult(Envelope.Ok(result.Value));
-            }
+            return new ObjectResult(Envelope.Ok(result.Value));
         }
 
         [HttpGet]
@@ -170,11 +167,9 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         public async Task<ActionResult> GetPetPhotos(
             [FromQuery] GetFilesRequest request,
             [FromServices] GetFilesHandler handler,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
             var command = request.ToCommand();
-
-            // validation
 
             var result = await handler.Handle(command, cancellationToken);
             if(result.IsFailure)
@@ -185,14 +180,14 @@ namespace PetFamily.API.Controllers.VolunteersManagement
 
         [HttpDelete()]
         [Route("{volunteerId:guid}/pet/{petId:guid}")]
-        public async Task<ActionResult> DeletePet(
-            [FromQuery] DeleteFilesRequest request,
+        public async Task<ActionResult> DeletePetPhotos(
+            [FromRoute] Guid volunteerId,
+            [FromRoute] Guid petId,
+            [FromQuery] DeletePetPhotosRequest request,
             [FromServices] DeleteFilesHandler handler,
-            CancellationToken cancellationToken)
+            CancellationToken cancellationToken = default)
         {
-            var command = request.ToCommand();
-
-            // validation
+            var command = request.ToCommand(volunteerId, petId);
 
             var result = await handler.Handle(command, cancellationToken);
             if(result.IsFailure)

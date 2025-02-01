@@ -7,28 +7,17 @@ namespace PetFamily.Domain.SpeciesManagement.Entities
 {
     public class Breed : Shared.Entity<BreedId>
     {
-        public string Name { get; private set; } = default!;
+        public BreedName Name { get; private set; } = default!;
 
 
         private Breed(BreedId id) : base(id) { }
 
-        private Breed(BreedId id, string name) : base(id) => Name = name;
+        public Breed(BreedId id, BreedName name) : base(id) => Name = name;
 
 
-        public Result<Breed, Error> Create(BreedId id, string name)
+        public Result<Guid, Error> Update(Breed breed, BreedName name)
         {
-            if(string.IsNullOrWhiteSpace(name))
-                return Errors.General.InvalidValue("Name");
-
-            return new Breed(id, name);
-        }
-
-
-        public static Result<Guid, Error> Update(Breed breed, string name)
-        {
-            if(!string.IsNullOrWhiteSpace(name))
-                breed.Name = name;
-
+            Name = name;
             return breed.Id.Value;
         }
     }

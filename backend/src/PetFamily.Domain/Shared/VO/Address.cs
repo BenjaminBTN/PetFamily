@@ -24,7 +24,13 @@ namespace PetFamily.Domain.Shared.VO
             PostalCode = postalCode;
         }
 
-        public static Result<Address, Error> Create(string country, string region, string city, string street, int houseNumber, string postalCode)
+        public static Result<Address, Error> Create(
+            string country, 
+            string region, 
+            string city, 
+            string street, 
+            int houseNumber, 
+            string postalCode)
         {
             if(string.IsNullOrWhiteSpace(country))
                 return Errors.General.InvalidValue("Country");

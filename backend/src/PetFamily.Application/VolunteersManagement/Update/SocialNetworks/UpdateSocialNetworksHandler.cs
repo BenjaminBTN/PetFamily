@@ -46,7 +46,7 @@ namespace PetFamily.Application.VolunteersManagement.Update.SocialNetworks
             // create VO
             List<SocialNetwork> list = [];
 
-            foreach(SocialNetworkDto dto in command.SocialNetworkDtos)
+            foreach(SocialNetworkDto dto in command.SocialNetworksDto)
             {
                 var network = SocialNetwork.Create(dto.Name, dto.Url).Value;
                 list.Add(network);
