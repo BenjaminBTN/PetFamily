@@ -1,6 +1,5 @@
 ﻿using PetFamily.Application.VolunteersManagement.Dtos;
 using PetFamily.Application.VolunteersManagement.Update.MainInfo;
-using PetFamily.Domain.VolunteersManagement.VO;
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests
 {
@@ -15,14 +14,12 @@ namespace PetFamily.API.Controllers.VolunteersManagement.Requests
     {
         public UpdateMainInfoCommand ToCommand(Guid id)
         {
-            VolunteerId volunteerId = VolunteerId.Create(id);
-
             var fullName = new FullNameDto(
                 Name,
                 Surname,
                 Patronymic);
 
-            return new UpdateMainInfoCommand(volunteerId, fullName, Description, Email, Experience, PhoneNumber);
+            return new UpdateMainInfoCommand(id, fullName, Description, Email, Experience, PhoneNumber);
         }
     }
 }

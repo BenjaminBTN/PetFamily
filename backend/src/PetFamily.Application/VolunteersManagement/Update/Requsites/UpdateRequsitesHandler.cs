@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.VolunteersManagement.Dtos;
 using PetFamily.Domain.Shared;
@@ -15,15 +16,18 @@ namespace PetFamily.Application.VolunteersManagement.Update.Requsites
     public class UpdateRequsitesHandler
     {
         private readonly IVolunteersRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<UpdateRequsitesCommand> _validator;
         private readonly ILogger<UpdateRequsitesHandler> _logger;
 
         public UpdateRequsitesHandler(
             IVolunteersRepository repository,
+            IUnitOfWork unitOfWork,
             IValidator<UpdateRequsitesCommand> validator,
             ILogger<UpdateRequsitesHandler> logger)
         {
             _repository = repository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
@@ -32,12 +36,13 @@ namespace PetFamily.Application.VolunteersManagement.Update.Requsites
         {
             // validation
             var validationResult = await _validator.ValidateAsync(command, cancellationToken);
-
             if(validationResult.IsValid == false)
                 return validationResult.ToErrorList(_logger, "update", "volunteer");
 
             // try getting an entity
-            var volunteerResult = await _repository.GetById(command.VolunteerId, cancellationToken);
+            var volunteerId = VolunteerId.Create(command.VolunteerId);
+
+            var volunteerResult = await _repository.GetById(volunteerId, cancellationToken);
             if(volunteerResult.IsFailure)
                 return volunteerResult.Error.ToErrorList();
 
@@ -57,9 +62,10 @@ namespace PetFamily.Application.VolunteersManagement.Update.Requsites
             // update
             volunteer.UpdateRequisites(requisiteList);
 
-            await _repository.Save(volunteer, cancellationToken);
+            await _unitOfWork.SaveChanges(cancellationToken);
 
-            _logger.LogInformation("An existing volunteer record with ID: {id} has been successfully updated",
+            _logger.LogInformation(
+                "An existing volunteer record with ID '{id}' has been successfully updated",
                 volunteer.Id.Value);
 
             return volunteer.Id.Value;

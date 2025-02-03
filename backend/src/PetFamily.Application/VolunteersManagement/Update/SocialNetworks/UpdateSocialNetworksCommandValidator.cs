@@ -9,10 +9,12 @@ namespace PetFamily.Application.VolunteersManagement.Update.SocialNetworks
     {
         public UpdateSocialNetworksCommandValidator()
         {
-            RuleFor(c => c.VolunteerId).NotEmpty()
+            RuleFor(c => c.VolunteerId)
+                .NotEmpty()
                 .WithMessage(Errors.General.NullValue("{PropertyName}").Serialize());
 
-            RuleForEach(c => c.SocialNetworksDto).MustBeValueObject(r => VolunteerRequisite.Create(r.Name, r.Url));
+            RuleForEach(c => c.SocialNetworksDto)
+                .MustBeValueObject(r => VolunteerRequisite.Create(r.Name, r.Url));
         }
     }
 }

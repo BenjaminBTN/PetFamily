@@ -1,10 +1,10 @@
-﻿using PetFamily.Application.VolunteersManagement.DeletePetPhotos;
+﻿using PetFamily.Application.VolunteersManagement.DeleteFiles;
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests
 {
     public record DeletePetPhotosRequest(List<string> ObjectName, string BucketName)
     {
-        public DeletePetPhotosCommand ToCommand(Guid volunteerId, Guid petId) =>
-            new DeletePetPhotosCommand(volunteerId, petId, ObjectName, BucketName);
+        public DeleteFilesCommand ToCommand(Guid volunteerId, Guid petId) =>
+            new DeleteFilesCommand(volunteerId, petId, ObjectName, BucketName);
     }
 }

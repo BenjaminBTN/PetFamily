@@ -1,6 +1,5 @@
 ﻿using PetFamily.Application.VolunteersManagement.Dtos;
 using PetFamily.Application.VolunteersManagement.Update.Requsites;
-using PetFamily.Domain.VolunteersManagement.VO;
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests
 {
@@ -8,8 +7,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement.Requests
     {
         public UpdateRequsitesCommand ToCommand(Guid id)
         {
-            var volunteerId = VolunteerId.Create(id);
-            return new(volunteerId, RequsitesDto);
+            return new(id, RequsitesDto);
         }
     }
 }
