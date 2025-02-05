@@ -7,8 +7,9 @@ namespace PetFamily.Application.VolunteersManagement.HardDelete
     {
         public HardDeleteVolunteerCommandValidator()
         {
-            RuleFor(c => c.VolunteerId).NotEmpty()
-                .WithMessage(Errors.General.NullValue("{PropertyName}").Serialize());
+            RuleFor(c => c.VolunteerId)
+                .NotEmpty()
+                .WithMessage(Errors.General.InvalidValue("{PropertyName}").Serialize());
         }
     }
 }

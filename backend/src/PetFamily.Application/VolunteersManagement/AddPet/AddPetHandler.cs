@@ -1,10 +1,12 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.SpeciesManagement;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
+using PetFamily.Domain.SpeciesManagement;
 using PetFamily.Domain.SpeciesManagement.VO;
 using PetFamily.Domain.VolunteersManagement.Entities;
 using PetFamily.Domain.VolunteersManagement.Enums;
@@ -19,17 +21,20 @@ namespace PetFamily.Application.VolunteersManagement.AddPet
     {
         private readonly IVolunteersRepository _volunteersRepository;
         private readonly ISpeciesRepository _speciesRepository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<AddPetCommand> _validator;
         private readonly ILogger<AddPetHandler> _logger;
 
         public AddPetHandler(
             IVolunteersRepository volunteersRepository,
             ISpeciesRepository speciesRepository,
+            IUnitOfWork unitOfWork,
             IValidator<AddPetCommand> validator,
             ILogger<AddPetHandler> logger)
         {
             _volunteersRepository = volunteersRepository;
             _speciesRepository = speciesRepository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
@@ -61,7 +66,11 @@ namespace PetFamily.Application.VolunteersManagement.AddPet
 
             var breedResult = species.GetBreedByName(breedName);
             if(breedResult.IsFailure)
+            {
+                _logger.LogError("The breed record with name '{name}' was not found: {errorMessage}",
+                    breedName.Value, breedResult.Error.Message);
                 return breedResult.Error.ToErrorList();
+            }
 
             var breed = breedResult.Value;
 
@@ -92,24 +101,45 @@ namespace PetFamily.Application.VolunteersManagement.AddPet
 
             var phoneNumber = PhoneNumber.Create(command.PhoneNumber).Value;
 
-            DateTime? birthDate = null;
-            if(command.BirthDate != null)
-                birthDate = DateTime.Parse(command.BirthDate).ToLocalTime();
+            var birthDateResult = CreateBirthDate(command.BirthDate);
+            if(birthDateResult.IsFailure)
+                return birthDateResult.Error.ToErrorList();
 
             var status = (AssistanceStatus)command.Status;
 
             var pet = Pet.Create(petId, name, description, typeInfo, color, 
                 healthInfo, address, command.Weight, command.Height, phoneNumber,
-                command.IsCastrated, command.IsVaccinated, birthDate, status).Value;
+                command.IsCastrated, command.IsVaccinated, birthDateResult.Value, status).Value;
 
             volunteer.AddPet(pet);
 
-            await _volunteersRepository.Save(volunteer, cancellationToken);
+            await _unitOfWork.SaveChanges(cancellationToken);
 
-            _logger.LogInformation("New record of a pet created with ID: {id} and added to a volunteer", 
+            _logger.LogInformation("New record of a pet created with ID '{id}' and added to a volunteer", 
                 pet.Id.Value);
 
             return pet.Id.Value;
+        }
+
+        private Result<DateTime?, Error> CreateBirthDate(string? value)
+        {
+            DateTime? birthDate;
+            if(value == null)
+                birthDate = null;
+            else
+            {
+                try
+                {
+                    birthDate = DateTime.Parse(value).ToLocalTime();
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogError(ex, "Invalid date time format");
+                    return Errors.General.InvalidValue("Birth date");
+                }
+            }
+
+            return birthDate;
         }
     }
 }

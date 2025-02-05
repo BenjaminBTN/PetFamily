@@ -58,7 +58,7 @@ namespace PetFamily.Application.VolunteersManagement.Create
 
             await _repository.Add(volunteer, cancellationToken);
 
-            _logger.LogInformation("New record of volunteer created with ID: {id}", volunteer.Id.Value);
+            _logger.LogInformation("New record of volunteer created with ID '{id}'", volunteer.Id.Value);
 
             return volunteer.Id.Value;
         }

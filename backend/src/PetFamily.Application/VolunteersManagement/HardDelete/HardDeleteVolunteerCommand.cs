@@ -1,6 +1,6 @@
-﻿using PetFamily.Domain.VolunteersManagement.VO;
+﻿using System;
 
 namespace PetFamily.Application.VolunteersManagement.HardDelete
 {
-    public record HardDeleteVolunteerCommand(VolunteerId VolunteerId);
+    public record HardDeleteVolunteerCommand(Guid VolunteerId);
 }

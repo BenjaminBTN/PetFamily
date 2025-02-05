@@ -1,6 +1,6 @@
-﻿using PetFamily.Domain.VolunteersManagement.VO;
+﻿using System;
 
 namespace PetFamily.Application.VolunteersManagement.SoftDelete
 {
-    public record SoftDeleteVolunteerCommand(VolunteerId VolunteerId);
+    public record SoftDeleteVolunteerCommand(Guid VolunteerId);
 }

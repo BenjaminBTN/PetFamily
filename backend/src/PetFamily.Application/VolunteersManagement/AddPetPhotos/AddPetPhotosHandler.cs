@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Database;
+using PetFamily.Application.Extensions;
 using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
@@ -16,17 +18,20 @@ namespace PetFamily.Application.VolunteersManagement.AddPetPhotos
         private readonly IVolunteersRepository _volunteersRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileProvider _fileProvider;
+        private readonly IValidator<AddPetPhotosCommand> _validator;
         private readonly ILogger<AddPetPhotosHandler> _logger;
 
         public AddPetPhotosHandler(
             IVolunteersRepository volunteersRepository,
             IUnitOfWork unitOfWork,
             IFileProvider fileProvider,
+            IValidator<AddPetPhotosCommand> validator,
             ILogger<AddPetPhotosHandler> logger)
         {
             _volunteersRepository = volunteersRepository;
             _unitOfWork = unitOfWork;
             _fileProvider = fileProvider;
+            _validator = validator;
             _logger = logger;
         }
 
@@ -34,6 +39,12 @@ namespace PetFamily.Application.VolunteersManagement.AddPetPhotos
             AddPetPhotosCommand command,
             CancellationToken cancellationToken)
         {
+            // validation
+            var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+            if(validationResult.IsValid == false)
+                return validationResult.ToErrorList(_logger, "add", "pet photos");
+
+            // create VOs
             var volunteerId = VolunteerId.Create(command.VolunteerId);
             var volunteer = await _volunteersRepository.GetById(volunteerId, cancellationToken);
             if(volunteer.IsFailure)
@@ -68,7 +79,7 @@ namespace PetFamily.Application.VolunteersManagement.AddPetPhotos
             // ending
             await _unitOfWork.SaveChanges(cancellationToken);
 
-            var paths = string.Join(", ", newPhotos.Select(p => p.PathToStorage));
+            var paths = string.Join(", ", newPhotos.Select(p => p.PathToStorage.Value));
 
             _logger.LogInformation(
                 "New files was upload to MinIO with the names: {names}", paths);

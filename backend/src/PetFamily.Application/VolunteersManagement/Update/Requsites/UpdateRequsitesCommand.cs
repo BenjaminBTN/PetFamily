@@ -1,8 +1,8 @@
 ﻿using PetFamily.Application.VolunteersManagement.Dtos;
-using PetFamily.Domain.VolunteersManagement.VO;
+using System;
 using System.Collections.Generic;
 
 namespace PetFamily.Application.VolunteersManagement.Update.Requsites
 {
-    public record UpdateRequsitesCommand(VolunteerId VolunteerId, List<RequsiteDto> RequsitesDto);
+    public record UpdateRequsitesCommand(Guid VolunteerId, List<RequsiteDto> RequsitesDto);
 }

@@ -3,6 +3,7 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
+using PetFamily.Domain.VolunteersManagement.VO;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -34,7 +35,9 @@ namespace PetFamily.Application.VolunteersManagement.SoftDelete
                 return validationResult.ToErrorList(_logger, "delete", "volunteer");
 
             // try getting an entity
-            var volunteerResult = await _repository.GetById(command.VolunteerId, cancellationToken);
+            var volunteerId = VolunteerId.Create(command.VolunteerId);
+
+            var volunteerResult = await _repository.GetById(volunteerId, cancellationToken);
             if(volunteerResult.IsFailure)
                 return volunteerResult.Error.ToErrorList();
 
@@ -43,7 +46,8 @@ namespace PetFamily.Application.VolunteersManagement.SoftDelete
             // delete
             await _repository.SoftDelete(volunteer, cancellationToken);
 
-            _logger.LogInformation("An existing volunteer record with ID: {id} has been successfully soft deleted",
+            _logger.LogInformation(
+                "An existing volunteer record with ID '{id}' has been successfully soft deleted",
                 volunteer.Id.Value);
 
             return volunteer.Id.Value;

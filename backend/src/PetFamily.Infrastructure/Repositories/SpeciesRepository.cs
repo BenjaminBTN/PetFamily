@@ -1,19 +1,23 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PetFamily.Application.SpeciesManagement;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.SpeciesManagement;
 using PetFamily.Domain.SpeciesManagement.VO;
+using System.Xml.Linq;
 
 namespace PetFamily.Infrastructure.Repositories
 {
     public class SpeciesRepository : ISpeciesRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<SpeciesRepository> _logger;
 
-        public SpeciesRepository(ApplicationDbContext context)
+        public SpeciesRepository(ApplicationDbContext context, ILogger<SpeciesRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         public async Task<Guid> Add(Species species, CancellationToken cancellationToken)
@@ -37,7 +41,11 @@ namespace PetFamily.Infrastructure.Repositories
                 .FirstOrDefaultAsync(s => s.Id == speciesId, cancellationToken);
 
             if(species == null)
+            {
+                _logger.LogError("The species record with ID '{id}' was not found",
+                    speciesId.Value);
                 return Errors.General.NotFound(speciesId.Value);
+            }
 
             return species;
         }
@@ -49,16 +57,13 @@ namespace PetFamily.Infrastructure.Repositories
                 .FirstOrDefaultAsync(s => s.Name == name, cancellationToken);
 
             if(species == null)
+            {
+                _logger.LogError("The species record with name '{name}' was not found", 
+                    name.Value);
                 return Errors.General.NotFound("Species Name");
+            }
 
             return species;
-        }
-
-        public async Task<Guid> Save(Species species, CancellationToken cancellationToken)
-        {
-            _context.Species.Attach(species);
-            await _context.SaveChangesAsync(cancellationToken);
-            return species.Id.Value;
         }
     }
 }

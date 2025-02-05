@@ -7,7 +7,8 @@ namespace PetFamily.Application.VolunteersManagement.SoftDelete
     {
         public SoftDeleteVolunteerCommandValidator()
         {
-            RuleFor(c => c.VolunteerId).NotEmpty()
+            RuleFor(c => c.VolunteerId)
+                .NotEmpty()
                 .WithMessage(Errors.General.NullValue("{PropertyName}").Serialize());
         }
     }

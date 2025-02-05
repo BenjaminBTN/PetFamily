@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Application.VolunteersManagement.DeletePetPhotos;
+using PetFamily.Application.VolunteersManagement.DeleteFiles;
 using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.VolunteersManagement.VO;
@@ -21,7 +21,7 @@ namespace PetFamily.Application.Providers.FileProvider
             CancellationToken cancellationToken);
 
         Task<Result<List<string>, Error>> Delete(
-            DeletePetPhotosCommand command,
+            DeleteFilesCommand command,
             CancellationToken cancellationToken);
     }
 }

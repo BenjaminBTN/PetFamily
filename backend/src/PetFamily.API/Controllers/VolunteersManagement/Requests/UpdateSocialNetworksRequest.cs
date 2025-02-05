@@ -8,8 +8,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement.Requests
     {
         public UpdateSocialNetworksCommand ToCommand(Guid id)
         {
-            var volunteerId = VolunteerId.Create(id);
-            return new(volunteerId, SocialNetworksDto);
+            return new(id, SocialNetworksDto);
         }
     }
 }

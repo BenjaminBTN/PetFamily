@@ -9,10 +9,12 @@ namespace PetFamily.Application.VolunteersManagement.Update.Requsites
     {
         public UpdateRequsitesCommandValidator()
         {
-            RuleFor(c => c.VolunteerId).NotEmpty()
+            RuleFor(c => c.VolunteerId)
+                .NotEmpty()
                 .WithMessage(Errors.General.NullValue("{PropertyName}").Serialize());
 
-            RuleForEach(c => c.RequsitesDto).MustBeValueObject(r => VolunteerRequisite.Create(r.Name, r.Description));
+            RuleForEach(c => c.RequsitesDto)
+                .MustBeValueObject(r => VolunteerRequisite.Create(r.Name, r.Description));
         }
     }
 }

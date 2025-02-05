@@ -1,40 +1,48 @@
 ﻿using CSharpFunctionalExtensions;
+using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Database;
+using PetFamily.Application.Extensions;
 using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Domain.Shared;
-using PetFamily.Domain.Shared.VO;
 using PetFamily.Domain.VolunteersManagement.VO;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.VolunteersManagement.DeletePetPhotos
+namespace PetFamily.Application.VolunteersManagement.DeleteFiles
 {
     public class DeleteFilesHandler
     {
         private readonly IVolunteersRepository _volunteersRepository;
-        private readonly IFileProvider _fileProvider;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IFileProvider _fileProvider;
+        private readonly IValidator<DeleteFilesCommand> _validator;
         private readonly ILogger<DeleteFilesHandler> _logger;
 
         public DeleteFilesHandler(
-            IFileProvider fileProvider,
-            ILogger<DeleteFilesHandler> logger,
             IVolunteersRepository volunteersRepository,
-            IUnitOfWork unitOfWork)
+            IUnitOfWork unitOfWork,
+            IFileProvider fileProvider,
+            IValidator<DeleteFilesCommand> validator,
+            ILogger<DeleteFilesHandler> logger)
         {
-            _fileProvider = fileProvider;
-            _logger = logger;
             _volunteersRepository = volunteersRepository;
             _unitOfWork = unitOfWork;
+            _fileProvider = fileProvider;
+            _validator = validator;
+            _logger = logger;
         }
 
         public async Task<Result<string, ErrorList>> Handle(
-            DeletePetPhotosCommand command,
+            DeleteFilesCommand command,
             CancellationToken cancellationToken)
         {
+            var validationResult = await _validator.ValidateAsync(command, cancellationToken);
+            if(validationResult.IsValid == false)
+                return validationResult.ToErrorList(_logger, "delete", "pet files");
+
             var volunteerId = VolunteerId.Create(command.VolunteerId);
             var volunteer = await _volunteersRepository.GetById(volunteerId, cancellationToken);
             if(volunteer.IsFailure)
@@ -62,6 +70,7 @@ namespace PetFamily.Application.VolunteersManagement.DeletePetPhotos
                 }
                 catch(Exception)
                 {
+                    _logger.LogError("Pet photo with name '{name}' not found", name);
                     return Errors.General.NotFound("Pet photo with name: " + name).ToErrorList();
                 }
             }
@@ -73,7 +82,7 @@ namespace PetFamily.Application.VolunteersManagement.DeletePetPhotos
             var paths = string.Join(", ", deleteResult.Value);
 
             _logger.LogInformation(
-                "The file(s) named: {name} has been successfully deleted from MinIO ", paths);
+                "The file(s) named '{name}' has been successfully deleted from MinIO ", paths);
 
             return paths;
         }

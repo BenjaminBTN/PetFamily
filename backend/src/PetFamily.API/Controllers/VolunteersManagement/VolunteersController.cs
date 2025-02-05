@@ -6,14 +6,13 @@ using PetFamily.API.Response;
 using PetFamily.Application.VolunteersManagement.AddPet;
 using PetFamily.Application.VolunteersManagement.AddPetPhotos;
 using PetFamily.Application.VolunteersManagement.Create;
-using PetFamily.Application.VolunteersManagement.DeletePetPhotos;
+using PetFamily.Application.VolunteersManagement.DeleteFiles;
 using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Application.VolunteersManagement.HardDelete;
 using PetFamily.Application.VolunteersManagement.SoftDelete;
 using PetFamily.Application.VolunteersManagement.Update.MainInfo;
 using PetFamily.Application.VolunteersManagement.Update.Requsites;
 using PetFamily.Application.VolunteersManagement.Update.SocialNetworks;
-using PetFamily.Domain.VolunteersManagement.VO;
 
 namespace PetFamily.API.Controllers.VolunteersManagement
 {
@@ -43,7 +42,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] UpdateMainInfoHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = request.ToCommand(id); // to refact command
+            var command = request.ToCommand(id);
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -61,7 +60,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] UpdateRequsitesHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = request.ToCommand(id); // to refact command
+            var command = request.ToCommand(id);
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -79,7 +78,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] UpdateSocialNetworksHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = request.ToCommand(id); // to refact command
+            var command = request.ToCommand(id);
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -96,7 +95,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] SoftDeleteVolunteerHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = new SoftDeleteVolunteerCommand(VolunteerId.Create(id)); // to refact command
+            var command = new SoftDeleteVolunteerCommand(id);
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -113,7 +112,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             [FromServices] HardDeleteVolunteerHandler handler,
             CancellationToken cancellationToken = default)
         {
-            var command = new HardDeleteVolunteerCommand(VolunteerId.Create(id)); // to refact command
+            var command = new HardDeleteVolunteerCommand(id);
 
             var result = await handler.Handle(command, cancellationToken);
 
@@ -151,9 +150,11 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             CancellationToken cancellationToken = default)
         {
             await using var processor = new FileProcessor();
-            var filesDto = processor.Process(files, cancellationToken);
+            var filesDtoResult = processor.Process(files, cancellationToken);
+            if(filesDtoResult.IsFailure)
+                return filesDtoResult.Error.ToErrorList().ToResponse();
 
-            var command = new AddPetPhotosCommand(volunteerId, petId, filesDto, bucketName);
+            var command = new AddPetPhotosCommand(volunteerId, petId, filesDtoResult.Value, bucketName);
 
             var result = await handler.Handle(command, cancellationToken);
             if(result.IsFailure)

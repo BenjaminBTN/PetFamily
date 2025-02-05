@@ -6,7 +6,7 @@ using PetFamily.Application.SpeciesManagement.Create;
 using PetFamily.Application.VolunteersManagement.AddPet;
 using PetFamily.Application.VolunteersManagement.AddPetPhotos;
 using PetFamily.Application.VolunteersManagement.Create;
-using PetFamily.Application.VolunteersManagement.DeletePetPhotos;
+using PetFamily.Application.VolunteersManagement.DeleteFiles;
 using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Application.VolunteersManagement.HardDelete;
 using PetFamily.Application.VolunteersManagement.SoftDelete;

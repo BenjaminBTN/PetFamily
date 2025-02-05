@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
 using PetFamily.Application.Providers.FileProvider;
-using PetFamily.Application.VolunteersManagement.DeletePetPhotos;
+using PetFamily.Application.VolunteersManagement.DeleteFiles;
 using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.VolunteersManagement.VO;
@@ -34,18 +34,32 @@ namespace PetFamily.Infrastructure.Providers
             if(await IsBucketExtst(bucketName, cancellationToken) == false)
                 await CreateBucket(bucketName, cancellationToken);
 
-            List<FilePath> objectNames = [];
+            List<Task> taskList = [];
+            List<Result<FilePath, Error>> filePathsResult = [];
 
             foreach(var file in fileList)
             {
-                var task = await PutObject(file, bucketName, semaphore, cancellationToken);
-                if(task.IsFailure)
-                    return task.Error;
+                var task = Task.Run(async () =>
+                {
+                    var putObjectResult = await PutObject(file, bucketName, semaphore, cancellationToken);
+                    filePathsResult.Add(putObjectResult);
+                }, 
+                cancellationToken);
 
-                objectNames.Add(task.Value);
+                taskList.Add(task);
+            }
+            await Task.WhenAll(taskList);
+
+            if(filePathsResult.Any(r => r.IsFailure))
+                return filePathsResult.FirstOrDefault(r => r.IsFailure).Error;
+
+            List<FilePath> filePaths = [];
+            foreach(var result in filePathsResult)
+            {
+                filePaths.Add(result.Value);
             }
 
-            return objectNames;
+            return filePaths;
         }
 
 
@@ -59,7 +73,8 @@ namespace PetFamily.Infrastructure.Providers
 
                 if(resultBucketExist == false)
                 {
-                    _logger.LogError("Fail to get a file from MinIO due to missing bucket");
+                    _logger.LogError("Fail to get a file from MinIO due to missing bucket with name '{name}'",
+                        command.BucketName);
                     return Error.Failure("file.upload", "File getting error");
                 }
 
@@ -72,7 +87,7 @@ namespace PetFamily.Infrastructure.Providers
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex, "Fail to get a file from MinIO with name: {name}, bucket: {bucket}", 
+                _logger.LogError(ex, "Fail to get a file from MinIO with name '{name}', bucket '{bucket}'", 
                     command.ObjectName, command.BucketName);
 
                 return Error.Failure("file.upload", "File getting error");
@@ -81,7 +96,7 @@ namespace PetFamily.Infrastructure.Providers
 
 
         public async Task<Result<List<string>, Error>> Delete(
-            DeletePetPhotosCommand command,
+            DeleteFilesCommand command,
             CancellationToken cancellationToken)
         {
             if(await IsBucketExtst(command.BucketName, cancellationToken) == false)
@@ -142,13 +157,16 @@ namespace PetFamily.Infrastructure.Providers
                 await _minioClient.PutObjectAsync(objectArgs, cancellationToken);
                 return file.ObjectName;
             }
-
             catch(Exception ex)
             {
-                _logger.LogError(ex, "Fail to put a file with name: {name} in bucket: {bucket} in MinIO", 
+                _logger.LogError(ex, "Fail to put a file with name '{name}' in bucket '{bucket}' in MinIO",
                     file.ObjectName.Value, bucketName);
 
-                return Error.Failure("file.upload", "File upload error, check file name or bucket name");
+                return Error.Failure("file.upload", "File upload error, check the file name or the bucket name");
+            }
+            finally
+            {
+                semaphore.Release();
             }
         }
 
@@ -164,13 +182,13 @@ namespace PetFamily.Infrastructure.Providers
                 .WithBucket(bucketName)
                 .WithObject(objectName);
 
-                await _minioClient.RemoveObjectAsync(args);
+                await _minioClient.RemoveObjectAsync(args, cancellationToken);
 
                 return objectName;
             }
             catch(Exception ex)
             {
-                _logger.LogError(ex, "Fail to delete a file from MinIO with name: {name}, bucket: {bucket}",
+                _logger.LogError(ex, "Fail to delete a file from MinIO with name '{name}', bucket '{bucket}'",
                     objectName, bucketName);
 
                 return Error.Failure("file.delete", "File deleting error");

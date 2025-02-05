@@ -42,7 +42,7 @@ namespace PetFamily.Application.SpeciesManagement.Create
 
             await _repository.Add(species, cancellationToken);
 
-            _logger.LogInformation("New record of species created with ID: {id}", species.Id.Value);
+            _logger.LogInformation("New record of species created with ID '{id}'", species.Id.Value);
 
             return species.Id.Value;
         }

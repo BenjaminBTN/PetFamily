@@ -9,19 +9,25 @@ namespace PetFamily.Application.VolunteersManagement.Update.MainInfo
     {
         public UpdateMainInfoCommandValidator()
         {
-            RuleFor(c => c.VolunteerId).NotEmpty()
+            RuleFor(c => c.VolunteerId)
+                .NotEmpty()
                 .WithMessage(Errors.General.NullValue("{PropertyName}").Serialize());
 
-            RuleFor(c => c.FullNameDto).MustBeValueObject(f => FullName.Create(f.Name, f.Surname, f.Patronymic));
+            RuleFor(c => c.FullNameDto)
+                .MustBeValueObject(f => FullName.Create(f.Name, f.Surname, f.Patronymic));
 
-            RuleFor(c => c.Description).MustBeValueObject(Description.Create);
+            RuleFor(c => c.Description)
+                .MustBeValueObject(Description.Create);
 
-            RuleFor(c => c.Email).MustBeValueObject(value => Email.Create(value));
+            RuleFor(c => c.Email)
+                .MustBeValueObject(Email.Create);
 
-            RuleFor(c => c.Experience).GreaterThanOrEqualTo(0)
+            RuleFor(c => c.Experience)
+                .GreaterThanOrEqualTo(0)
                 .WithMessage(Errors.General.InvalidValue("{PropertyName}").Serialize());
 
-            RuleFor(c => c.PhoneNumber).MustBeValueObject(value => PhoneNumber.Create(value));
+            RuleFor(c => c.PhoneNumber)
+                .MustBeValueObject(PhoneNumber.Create);
         }
     }
 }

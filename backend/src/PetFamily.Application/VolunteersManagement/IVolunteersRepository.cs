@@ -11,7 +11,6 @@ namespace PetFamily.Application.VolunteersManagement
     public interface IVolunteersRepository
     {
         Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken);
-        Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken);
         Task<Guid> SoftDelete(Volunteer volunteer, CancellationToken cancellationToken);
         Task<Guid> Restore(Volunteer volunteer, CancellationToken cancellationToken);
         Task<Guid> HardDelete(Volunteer volunteer, CancellationToken cancellationToken);

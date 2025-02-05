@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.SpeciesManagement.Entities;
@@ -8,21 +9,26 @@ using PetFamily.Domain.SpeciesManagement.VO;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using static System.Collections.Specialized.BitVector32;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PetFamily.Application.SpeciesManagement.AddBreed
 {
     public class AddBreedHandler
     {
         private readonly ISpeciesRepository _repository;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IValidator<AddBreedCommand> _validator;
         private readonly ILogger<AddBreedHandler> _logger;
 
         public AddBreedHandler(
             ISpeciesRepository repository,
+            IUnitOfWork unitOfWork,
             IValidator<AddBreedCommand> validator,
             ILogger<AddBreedHandler> logger)
         {
             _repository = repository;
+            _unitOfWork = unitOfWork;
             _validator = validator;
             _logger = logger;
         }
@@ -39,7 +45,11 @@ namespace PetFamily.Application.SpeciesManagement.AddBreed
 
             var speciesResult = await _repository.GetById(speciesId, cancellationToken);
             if(speciesResult.IsFailure)
+            {
+                _logger.LogError("The species record with ID '{id}' was not found: {errorMessage}",
+                    speciesId, speciesResult.Error.Message);
                 return speciesResult.Error.ToErrorList();
+            }
 
             var species = speciesResult.Value;
             var id = BreedId.NewId();
@@ -48,9 +58,11 @@ namespace PetFamily.Application.SpeciesManagement.AddBreed
 
             species.AddBreed(newBreed);
 
-            await _repository.Save(species, cancellationToken);
+            await _unitOfWork.SaveChanges(cancellationToken);
 
-            _logger.LogInformation("New record of species created with ID: {id}", species.Id.Value);
+            _logger.LogInformation(
+                "New record of breed created with ID '{id}' for species '{spesiesName}'", 
+                newBreed.Id.Value, species.Name.Value);
 
             return species.Id.Value;
         }

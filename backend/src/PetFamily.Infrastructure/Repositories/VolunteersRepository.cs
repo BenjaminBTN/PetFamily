@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using PetFamily.Application.VolunteersManagement;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.VolunteersManagement;
@@ -10,25 +11,18 @@ namespace PetFamily.Infrastructure.Repositories
     public class VolunteersRepository : IVolunteersRepository
     {
         private readonly ApplicationDbContext _context;
+        private readonly ILogger<VolunteersRepository> _logger;
 
-        public VolunteersRepository(ApplicationDbContext context)
+        public VolunteersRepository(ApplicationDbContext context, ILogger<VolunteersRepository> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
 
         public async Task<Guid> Add(Volunteer volunteer, CancellationToken cancellationToken = default)
         {
             await _context.Volunteers.AddAsync(volunteer, cancellationToken);
-            await _context.SaveChangesAsync(cancellationToken);
-            return volunteer.Id.Value;
-        }
-
-
-        public async Task<Guid> Save(Volunteer volunteer, CancellationToken cancellationToken = default)
-        {
-            // метод на всякий случай включает отслежвание сущности
-            _context.Volunteers.Attach(volunteer);
             await _context.SaveChangesAsync(cancellationToken);
             return volunteer.Id.Value;
         }
@@ -65,7 +59,11 @@ namespace PetFamily.Infrastructure.Repositories
                 .FirstOrDefaultAsync(v => v.Id == volunteerId, cancellationToken);
 
             if(volunteer == null)
+            {
+                _logger.LogError("The volunteer record with ID '{id}' was not found",
+                    volunteerId.Value);
                 return Errors.General.NotFound(volunteerId.Value);
+            }
 
             return volunteer;
         }
