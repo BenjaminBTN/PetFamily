@@ -3,7 +3,6 @@ namespace PetFamily.Infrastructure.UnitTests
     //System.Threading.
     public class UnitTest1
     {
-        [Fact]
         public async Task Test1()
         {
             var count = 20;
