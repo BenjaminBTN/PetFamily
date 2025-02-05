@@ -34,17 +34,32 @@ namespace PetFamily.Infrastructure.Providers
             if(await IsBucketExtst(bucketName, cancellationToken) == false)
                 await CreateBucket(bucketName, cancellationToken);
 
-            List<FilePath> objectNames = [];
+            List<Task> taskList = [];
+            List<Result<FilePath, Error>> filePathsResult = [];
 
             foreach(var file in fileList)
             {
-                var task = await PutObject(file, bucketName, semaphore, cancellationToken);
-                if(task.IsFailure)
-                    return task.Error;
+                var task = Task.Run(async () =>
+                {
+                    var putObjectResult = await PutObject(file, bucketName, semaphore, cancellationToken);
+                    filePathsResult.Add(putObjectResult);
+                }, 
+                cancellationToken);
 
-                objectNames.Add(task.Value);
+                taskList.Add(task);
             }
-            return objectNames;
+            await Task.WhenAll(taskList);
+
+            if(filePathsResult.Any(r => r.IsFailure))
+                return filePathsResult.FirstOrDefault(r => r.IsFailure).Error;
+
+            List<FilePath> filePaths = [];
+            foreach(var result in filePathsResult)
+            {
+                filePaths.Add(result.Value);
+            }
+
+            return filePaths;
         }
 
 

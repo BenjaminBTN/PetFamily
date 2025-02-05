@@ -79,7 +79,7 @@ namespace PetFamily.Application.VolunteersManagement.AddPetPhotos
             // ending
             await _unitOfWork.SaveChanges(cancellationToken);
 
-            var paths = string.Join(", ", newPhotos.Select(p => p.PathToStorage));
+            var paths = string.Join(", ", newPhotos.Select(p => p.PathToStorage.Value));
 
             _logger.LogInformation(
                 "New files was upload to MinIO with the names: {names}", paths);
