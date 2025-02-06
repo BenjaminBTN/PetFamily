@@ -45,7 +45,6 @@ namespace PetFamily.Application.VolunteersManagement.Update.Requsites
             var volunteerResult = await _repository.GetById(volunteerId, cancellationToken);
             if(volunteerResult.IsFailure)
                 return volunteerResult.Error.ToErrorList();
-
             var volunteer = volunteerResult.Value;
 
             // create VO

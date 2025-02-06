@@ -9,6 +9,7 @@ using PetFamily.Application.VolunteersManagement.Create;
 using PetFamily.Application.VolunteersManagement.DeleteFiles;
 using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Application.VolunteersManagement.HardDelete;
+using PetFamily.Application.VolunteersManagement.MovePet;
 using PetFamily.Application.VolunteersManagement.SoftDelete;
 using PetFamily.Application.VolunteersManagement.Update.MainInfo;
 using PetFamily.Application.VolunteersManagement.Update.Requsites;
@@ -123,7 +124,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         }
 
         [HttpPost]
-        [Route("{id:guid}/pet")]
+        [Route("{id:guid}/pets")]
         public async Task<ActionResult> AddPet(
             [FromRoute] Guid id,
             [FromBody] AddPetRequest request,
@@ -140,7 +141,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         }
 
         [HttpPost]
-        [Route("{volunteerId:guid}/pet/{petId:guid}")]
+        [Route("{volunteerId:guid}/pets/{petId:guid}")]
         public async Task<ActionResult<string>> AddPetPhotos(
             [FromRoute] Guid volunteerId,
             [FromRoute] Guid petId,
@@ -164,7 +165,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         }
 
         [HttpGet]
-        [Route("{volunteerId}/pet/{petId:guid}")]
+        [Route("{volunteerId}/pets/{petId:guid}")]
         public async Task<ActionResult> GetPetPhotos(
             [FromQuery] GetFilesRequest request,
             [FromServices] GetFilesHandler handler,
@@ -179,8 +180,8 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             return new ObjectResult(Envelope.Ok(result.Value));
         }
 
-        [HttpDelete()]
-        [Route("{volunteerId:guid}/pet/{petId:guid}")]
+        [HttpDelete]
+        [Route("{volunteerId:guid}/pets/{petId:guid}")]
         public async Task<ActionResult> DeletePetPhotos(
             [FromRoute] Guid volunteerId,
             [FromRoute] Guid petId,
@@ -191,6 +192,23 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             var command = request.ToCommand(volunteerId, petId);
 
             var result = await handler.Handle(command, cancellationToken);
+            if(result.IsFailure)
+                return result.Error.ToResponse();
+
+            return new ObjectResult(Envelope.Ok(result.Value));
+        }
+
+        [HttpPut]
+        [Route("{volunteerId:guid}/pets/")]
+        public async Task<ActionResult> MovePet(
+            [FromRoute] Guid volunteerId,
+            [FromQuery] MovePetRequest request,
+            [FromServices] MovePetHandler handler,
+            CancellationToken ct = default)
+        {
+            var command = request.ToCommand(volunteerId);
+
+            var result = await handler.Handle(command, ct);
             if(result.IsFailure)
                 return result.Error.ToResponse();
 

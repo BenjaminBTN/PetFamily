@@ -90,6 +90,9 @@ namespace PetFamily.Domain.VolunteersManagement
 
         public UnitResult<Error> AddPet(Pet pet)
         {
+            if(_isDeleted == true)
+                return Error.Failure("entity.is.deleted", "Can not add a pet to a deleted volunteer");
+
             var ordinalNumberResult = OrdinalNumber.Create(_pets.Count + 1);
             if(ordinalNumberResult.IsFailure)
                 return ordinalNumberResult.Error;
@@ -114,7 +117,9 @@ namespace PetFamily.Domain.VolunteersManagement
 
         public UnitResult<Error> MovePet(Pet pet, OrdinalNumber newOrdinalNumber)
         {
-            if(pet.OrdinalNumber == newOrdinalNumber || _pets.Count == 1)
+            var currentOrdinalNumber = pet.OrdinalNumber;
+
+            if(currentOrdinalNumber == newOrdinalNumber || _pets.Count == 1)
                 return UnitResult.Success<Error>();
 
             if(newOrdinalNumber.Value > _pets.Count)
@@ -124,11 +129,9 @@ namespace PetFamily.Domain.VolunteersManagement
                     return lastPositionResult.Error;
 
                 newOrdinalNumber = lastPositionResult.Value;
-            }
+            }            
 
-            var currentOrdinalNumber = pet.OrdinalNumber;
-
-            var result = ChangePetPositions(currentOrdinalNumber, newOrdinalNumber);
+            var result = ChangeOtherPetPositions(currentOrdinalNumber, newOrdinalNumber);
             if(result.IsFailure)
                 return result.Error;
 
@@ -138,7 +141,7 @@ namespace PetFamily.Domain.VolunteersManagement
         }
 
 
-        private UnitResult<Error> ChangePetPositions(
+        private UnitResult<Error> ChangeOtherPetPositions(
             OrdinalNumber currentOrdinalNumber,
             OrdinalNumber newOrdinalNumber)
         {

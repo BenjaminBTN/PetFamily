@@ -9,6 +9,7 @@ using PetFamily.Application.VolunteersManagement.Create;
 using PetFamily.Application.VolunteersManagement.DeleteFiles;
 using PetFamily.Application.VolunteersManagement.GetFiles;
 using PetFamily.Application.VolunteersManagement.HardDelete;
+using PetFamily.Application.VolunteersManagement.MovePet;
 using PetFamily.Application.VolunteersManagement.SoftDelete;
 using PetFamily.Application.VolunteersManagement.Update.MainInfo;
 using PetFamily.Application.VolunteersManagement.Update.Requsites;
@@ -32,6 +33,7 @@ namespace PetFamily.Application
             services.AddScoped<DeleteFilesHandler>();
             services.AddScoped<CreateSpeciesHandler>();
             services.AddScoped<AddBreedHandler>();
+            services.AddScoped<MovePetHandler>();
 
             services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
             services.AddFluentValidationAutoValidation();
