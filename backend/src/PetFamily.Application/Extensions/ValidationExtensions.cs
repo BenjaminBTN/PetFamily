@@ -20,7 +20,8 @@ namespace PetFamily.Application.Extensions
                 var error = Error.Deserialise(validationError.ErrorMessage);
                 errors.Add(Error.Validation(error.Code, error.Message, validationError.PropertyName));
 
-                logger.LogError("Can not {action} {propertyName} record: {errorMessage}", 
+                logger.LogError(
+                    "Can not {action} the {propertyName} record due to a validation error: {errorMessage}", 
                     action, propertyName, error.Message);
             }
 

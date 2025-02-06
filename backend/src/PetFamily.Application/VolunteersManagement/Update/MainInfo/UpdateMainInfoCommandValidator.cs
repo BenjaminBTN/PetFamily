@@ -11,7 +11,7 @@ namespace PetFamily.Application.VolunteersManagement.Update.MainInfo
         {
             RuleFor(c => c.VolunteerId)
                 .NotEmpty()
-                .WithMessage(Errors.General.NullValue("{PropertyName}").Serialize());
+                .WithMessage(Errors.General.InvalidValue("{PropertyName}").Serialize());
 
             RuleFor(c => c.FullNameDto)
                 .MustBeValueObject(f => FullName.Create(f.Name, f.Surname, f.Patronymic));

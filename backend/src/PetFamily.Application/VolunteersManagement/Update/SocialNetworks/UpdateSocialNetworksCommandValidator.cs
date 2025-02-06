@@ -11,7 +11,7 @@ namespace PetFamily.Application.VolunteersManagement.Update.SocialNetworks
         {
             RuleFor(c => c.VolunteerId)
                 .NotEmpty()
-                .WithMessage(Errors.General.NullValue("{PropertyName}").Serialize());
+                .WithMessage(Errors.General.InvalidValue("{PropertyName}").Serialize());
 
             RuleForEach(c => c.SocialNetworksDto)
                 .MustBeValueObject(r => VolunteerRequisite.Create(r.Name, r.Url));
