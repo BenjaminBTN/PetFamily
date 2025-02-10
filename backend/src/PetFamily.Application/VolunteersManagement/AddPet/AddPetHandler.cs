@@ -111,7 +111,9 @@ namespace PetFamily.Application.VolunteersManagement.AddPet
                 healthInfo, address, command.Weight, command.Height, phoneNumber,
                 command.IsCastrated, command.IsVaccinated, birthDateResult.Value, status).Value;
 
-            volunteer.AddPet(pet);
+            var addPetResult = volunteer.AddPet(pet);
+            if(addPetResult.IsFailure)
+                return addPetResult.Error.ToErrorList();
 
             await _unitOfWork.SaveChanges(cancellationToken);
 

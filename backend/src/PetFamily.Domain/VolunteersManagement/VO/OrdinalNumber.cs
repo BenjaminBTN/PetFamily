@@ -22,10 +22,10 @@ namespace PetFamily.Domain.VolunteersManagement.VO
         }
 
 
-        public Result<OrdinalNumber, Error> Forward() =>
+        internal Result<OrdinalNumber, Error> Forward() =>
             Create(Value + 1);
 
-        public Result<OrdinalNumber, Error> Back() =>
+        internal Result<OrdinalNumber, Error> Back() =>
             Create(Value - 1);
     }
 }

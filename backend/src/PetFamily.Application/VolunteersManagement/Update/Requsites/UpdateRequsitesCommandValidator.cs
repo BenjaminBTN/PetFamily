@@ -11,7 +11,7 @@ namespace PetFamily.Application.VolunteersManagement.Update.Requsites
         {
             RuleFor(c => c.VolunteerId)
                 .NotEmpty()
-                .WithMessage(Errors.General.NullValue("{PropertyName}").Serialize());
+                .WithMessage(Errors.General.InvalidValue("{PropertyName}").Serialize());
 
             RuleForEach(c => c.RequsitesDto)
                 .MustBeValueObject(r => VolunteerRequisite.Create(r.Name, r.Description));
