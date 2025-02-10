@@ -55,7 +55,9 @@ namespace PetFamily.Application.VolunteersManagement.DeleteFiles
 
             var pet = petResult.Value;
 
-            var deleteResult = await _fileProvider.Delete(command, cancellationToken);
+            var filesToDelete = command.ObjectNames.Select(o => new FileInfo(o, command.BucketName));
+
+            var deleteResult = await _fileProvider.Delete(filesToDelete, cancellationToken);
             if(deleteResult.IsFailure)
                 return deleteResult.Error.ToErrorList();
 
@@ -82,7 +84,7 @@ namespace PetFamily.Application.VolunteersManagement.DeleteFiles
             var paths = string.Join(", ", deleteResult.Value);
 
             _logger.LogInformation(
-                "The file(s) named '{name}' has been successfully deleted from MinIO ", paths);
+                "The file(s) named '{name}' has been successfully deleted from MinIO", paths);
 
             return paths;
         }

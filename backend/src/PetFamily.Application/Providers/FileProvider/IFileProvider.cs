@@ -11,7 +11,7 @@ namespace PetFamily.Application.Providers.FileProvider
 {
     public interface IFileProvider
     {
-        Task<Result<List<FilePath>, Error>> Upload(
+        Task<Result<List<FilePath>, Error>> UploadObjects(
             IEnumerable<UploadFileData> files,
             string bucketName, 
             CancellationToken cancellationToken);
@@ -21,7 +21,7 @@ namespace PetFamily.Application.Providers.FileProvider
             CancellationToken cancellationToken);
 
         Task<Result<List<string>, Error>> Delete(
-            DeleteFilesCommand command,
+            IEnumerable<FileInfo> files,
             CancellationToken cancellationToken);
     }
 }

@@ -3,10 +3,12 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
+using PetFamily.Application.Messaging;
 using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
 using PetFamily.Domain.VolunteersManagement.VO;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -18,6 +20,7 @@ namespace PetFamily.Application.VolunteersManagement.AddPetPhotos
         private readonly IVolunteersRepository _volunteersRepository;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IFileProvider _fileProvider;
+        private readonly IMessageQueue<IEnumerable<FileInfo>> _messageQueue;
         private readonly IValidator<AddPetPhotosCommand> _validator;
         private readonly ILogger<AddPetPhotosHandler> _logger;
 
@@ -25,12 +28,14 @@ namespace PetFamily.Application.VolunteersManagement.AddPetPhotos
             IVolunteersRepository volunteersRepository,
             IUnitOfWork unitOfWork,
             IFileProvider fileProvider,
+            IMessageQueue<IEnumerable<FileInfo>> messageQueue,
             IValidator<AddPetPhotosCommand> validator,
             ILogger<AddPetPhotosHandler> logger)
         {
             _volunteersRepository = volunteersRepository;
             _unitOfWork = unitOfWork;
             _fileProvider = fileProvider;
+            _messageQueue = messageQueue;
             _validator = validator;
             _logger = logger;
         }
@@ -56,9 +61,13 @@ namespace PetFamily.Application.VolunteersManagement.AddPetPhotos
                 return pet.Error.ToErrorList();
 
             // upload files
-            var uploadResult = await _fileProvider.Upload(command.Files, command.BucketName, cancellationToken);
+            var uploadResult = await _fileProvider.UploadObjects(command.Files, command.BucketName, cancellationToken);
             if(uploadResult.IsFailure)
+            {
+                await _messageQueue.WriteAsync(command.Files
+                    .Select(f => new FileInfo(f.ObjectName.Value, command.BucketName)), cancellationToken);
                 return uploadResult.Error.ToErrorList();
+            }
 
             // add paths in repository
             var exitingPhotos = pet.Value.PetPhotos.Photos.AsEnumerable();
