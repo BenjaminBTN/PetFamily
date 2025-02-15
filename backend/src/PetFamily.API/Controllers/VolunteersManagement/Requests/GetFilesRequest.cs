@@ -1,4 +1,4 @@
-﻿using PetFamily.Application.VolunteersManagement.GetFiles;
+﻿using PetFamily.Application.VolunteersManagement.Commands.GetFiles;
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests
 {

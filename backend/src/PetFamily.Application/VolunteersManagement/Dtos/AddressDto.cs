@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace PetFamily.Application.VolunteersManagement.Dtos
+﻿namespace PetFamily.Application.VolunteersManagement.Dtos
 {
-    public record class AddressDto(
-        string Country,
-        string Region,
-        string City,
-        string Street,
-        int HouseNumber,
-        string PostalCode);
+    public class AddressDto(string country, string region, string city, string street, int houseNumber, string postalCode)
+    {
+        public string Country { get; init; } = country;
+        public string Region { get; init; } = region;
+        public string City { get; init; } = city;
+        public string Street { get; init; } = street;
+        public int HouseNumber { get; init; } = houseNumber;
+        public string PostalCode { get; init; } = postalCode;
+    }
 }

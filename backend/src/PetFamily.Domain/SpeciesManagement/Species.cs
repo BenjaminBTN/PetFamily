@@ -2,8 +2,6 @@
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.SpeciesManagement.Entities;
 using PetFamily.Domain.SpeciesManagement.VO;
-using PetFamily.Domain.VolunteersManagement.Entities;
-using PetFamily.Domain.VolunteersManagement.VO;
 using System.Collections.Generic;
 using System.Linq;
 

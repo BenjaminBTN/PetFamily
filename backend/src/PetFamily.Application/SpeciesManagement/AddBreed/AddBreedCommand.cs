@@ -1,5 +1,4 @@
-﻿using PetFamily.Domain.SpeciesManagement.VO;
-using System;
+﻿using System;
 
 namespace PetFamily.Application.SpeciesManagement.AddBreed
 {

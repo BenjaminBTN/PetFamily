@@ -1,6 +1,5 @@
-﻿using PetFamily.Application.VolunteersManagement.Dtos;
-using PetFamily.Application.VolunteersManagement.Update.SocialNetworks;
-using PetFamily.Domain.VolunteersManagement.VO;
+﻿using PetFamily.Application.VolunteersManagement.Commands.Update.SocialNetworks;
+using PetFamily.Application.VolunteersManagement.Dtos;
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests
 {

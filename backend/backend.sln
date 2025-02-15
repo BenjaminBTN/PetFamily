@@ -11,21 +11,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Infrastructure", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Domain", "src\PetFamily.Domain\PetFamily.Domain.csproj", "{DE2CF5CF-EEBA-4412-897C-1C9CDC080B19}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Элементы решения", "Элементы решения", "{49AB66B9-5B5E-4B52-BB09-EED441FA96AC}"
-	ProjectSection(SolutionItems) = preProject
-		.gitignore = .gitignore
-		docker-compose.yml = docker-compose.yml
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{A5681692-9CA2-400B-AE37-721CDAE161DC}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7D21108E-73C8-4850-A80F-4D78F427D014}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Domain.UnitTests", "tests\PetFamily.Domain.UnitTests\PetFamily.Domain.UnitTests.csproj", "{8A50A4D8-CAB6-479C-A0CB-8F4BEA82775D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Infrastructure.UnitTests", "PetFamily.Infrastructure.UnitTests\PetFamily.Infrastructure.UnitTests.csproj", "{41E0AD2B-F3EF-420C-9F9F-38DA9609A57D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Infrastructure.UnitTests", "tests\PetFamily.Infrastructure.UnitTests\PetFamily.Infrastructure.UnitTests.csproj", "{41E0AD2B-F3EF-420C-9F9F-38DA9609A57D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Application.UnitTests", "PetFamily.Application.UnitTests\PetFamily.Application.UnitTests.csproj", "{17B8D0B0-07C4-4D7D-87D7-706C21F59696}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetFamily.Application.UnitTests", "tests\PetFamily.Application.UnitTests\PetFamily.Application.UnitTests.csproj", "{17B8D0B0-07C4-4D7D-87D7-706C21F59696}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

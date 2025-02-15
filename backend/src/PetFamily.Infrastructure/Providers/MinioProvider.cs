@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Minio;
 using Minio.DataModel.Args;
 using PetFamily.Application.Providers.FileProvider;
-using PetFamily.Application.VolunteersManagement.GetFiles;
+using PetFamily.Application.VolunteersManagement.Commands.GetFiles;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.VolunteersManagement.VO;
 using FileInfo = PetFamily.Application.Providers.FileProvider.FileInfo;

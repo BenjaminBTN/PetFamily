@@ -9,8 +9,6 @@ using PetFamily.Domain.SpeciesManagement.VO;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using static System.Collections.Specialized.BitVector32;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PetFamily.Application.SpeciesManagement.AddBreed
 {

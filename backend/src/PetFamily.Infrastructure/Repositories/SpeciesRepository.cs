@@ -5,16 +5,16 @@ using PetFamily.Application.SpeciesManagement;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.SpeciesManagement;
 using PetFamily.Domain.SpeciesManagement.VO;
-using System.Xml.Linq;
+using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Repositories
 {
     public class SpeciesRepository : ISpeciesRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly WriteDbContext _context;
         private readonly ILogger<SpeciesRepository> _logger;
 
-        public SpeciesRepository(ApplicationDbContext context, ILogger<SpeciesRepository> logger)
+        public SpeciesRepository(WriteDbContext context, ILogger<SpeciesRepository> logger)
         {
             _context = context;
             _logger = logger;
