@@ -1,4 +1,5 @@
-﻿using PetFamily.Application.VolunteersManagement.Dtos;
+﻿using PetFamily.Application.Abstractions;
+using PetFamily.Application.Dtos;
 
 namespace PetFamily.Application.VolunteersManagement.Commands.Create
 {
@@ -7,5 +8,5 @@ namespace PetFamily.Application.VolunteersManagement.Commands.Create
         string Description,
         string Email,
         double Experience,
-        string PhoneNumber);
+        string PhoneNumber) : ICommand;
 }

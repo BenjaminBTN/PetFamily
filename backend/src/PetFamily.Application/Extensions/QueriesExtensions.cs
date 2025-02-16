@@ -1,8 +1,8 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PetFamily.Application.Models;
 
 namespace PetFamily.Application.Extensions;
 
@@ -19,18 +19,8 @@ public static class QueriesExtensions
         {
             Items = items,
             TotalCount = totalCount,
-            Page = page,
+            PageNumber = page,
             PageSize = size
         };
     }
-}
-
-public class PagedList<T>
-{
-    public IReadOnlyList<T> Items { get; set; } = [];
-    public int TotalCount { get; init; }
-    public int Page { get; init; }
-    public int PageSize { get; init; }
-    public bool HasNextPage => Page * PageSize > TotalCount;
-    public bool HasPreviousPage => Page > 1;
 }

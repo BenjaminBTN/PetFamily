@@ -1,15 +1,17 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Domain.Shared;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace PetFamily.Application.VolunteersManagement.Commands.GetFiles
 {
-    public class GetFilesHandler
+    public class GetFilesHandler : ICommandHandler<string, GetFilesCommand>
     {
         private readonly IFileProvider _fileProvider;
         private readonly IValidator<GetFilesCommand> _validator;

@@ -1,12 +1,15 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
+using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
-using PetFamily.Application.VolunteersManagement.Dtos;
+using PetFamily.Application.Models;
 
 namespace PetFamily.Application.VolunteersManagement.Queries.GetAllVolunteersWithPagination;
 
-public class GetAllVolunteersWithPaginationHandler
+public class GetAllVolunteersWithPaginationHandler : 
+    IQueryHandler<PagedList<VolunteerDto>, GetAllVolunteersWithPaginationQuery>
 {
     private readonly IReadDbContext _readDbContext;
 
@@ -19,8 +22,8 @@ public class GetAllVolunteersWithPaginationHandler
         GetAllVolunteersWithPaginationQuery query,
         CancellationToken ct)
     {
-        var volunteersQuery = _readDbContext.Volunteers.AsQueryable();
+        var volunteersQuery = _readDbContext.Volunteers;
 
-        return await volunteersQuery.ToPagedList(query.Page, query.Size, ct);
+        return await volunteersQuery.ToPagedList(query.PageNumber, query.PageSize, ct);
     }
 }

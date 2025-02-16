@@ -2,14 +2,14 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetFamily.Application.Database;
-using PetFamily.Application.VolunteersManagement.Dtos;
+using PetFamily.Application.Dtos;
 
 namespace PetFamily.Infrastructure.DbContexts
 {
     public class ReadDbContext(IConfiguration configuration) : DbContext, IReadDbContext
     {
-        public DbSet<VolunteerDto> Volunteers => Set<VolunteerDto>();
-        public DbSet<PetDto> Species => Set<PetDto>();
+        public IQueryable<VolunteerDto> Volunteers => Set<VolunteerDto>();
+        public IQueryable<PetDto> Species => Set<PetDto>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

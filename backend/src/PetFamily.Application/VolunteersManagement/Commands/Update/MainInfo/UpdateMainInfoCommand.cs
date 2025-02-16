@@ -1,4 +1,5 @@
-﻿using PetFamily.Application.VolunteersManagement.Dtos;
+﻿using PetFamily.Application.Abstractions;
+using PetFamily.Application.Dtos;
 using System;
 
 namespace PetFamily.Application.VolunteersManagement.Commands.Update.MainInfo
@@ -9,5 +10,5 @@ namespace PetFamily.Application.VolunteersManagement.Commands.Update.MainInfo
         string Description,
         string Email,
         double Experience,
-        string PhoneNumber);
+        string PhoneNumber) : ICommand;
 }

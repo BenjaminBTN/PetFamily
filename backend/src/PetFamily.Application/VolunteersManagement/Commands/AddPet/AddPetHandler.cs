@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.SpeciesManagement;
@@ -16,7 +17,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.VolunteersManagement.Commands.AddPet
 {
-    public class AddPetHandler
+    public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
     {
         private readonly IVolunteersRepository _volunteersRepository;
         private readonly ISpeciesRepository _speciesRepository;

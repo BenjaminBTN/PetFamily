@@ -1,4 +1,5 @@
-﻿using PetFamily.Application.Providers.FileProvider;
+﻿using PetFamily.Application.Abstractions;
+using PetFamily.Application.Providers.FileProvider;
 using System;
 using System.Collections.Generic;
 
@@ -8,5 +9,5 @@ namespace PetFamily.Application.VolunteersManagement.Commands.AddPetPhotos
         Guid VolunteerId,
         Guid PetId,
         IEnumerable<UploadFileData> Files,
-        string BucketName);
+        string BucketName) : ICommand;
 }

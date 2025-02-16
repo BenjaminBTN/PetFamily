@@ -1,5 +1,5 @@
-﻿using PetFamily.Application.VolunteersManagement.Commands.Create;
-using PetFamily.Application.VolunteersManagement.Dtos;
+﻿using PetFamily.Application.Dtos;
+using PetFamily.Application.VolunteersManagement.Commands.Create;
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests
 {

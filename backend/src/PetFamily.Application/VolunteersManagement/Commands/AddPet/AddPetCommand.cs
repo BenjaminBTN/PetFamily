@@ -1,4 +1,5 @@
-﻿using PetFamily.Application.VolunteersManagement.Dtos;
+﻿using PetFamily.Application.Abstractions;
+using PetFamily.Application.Dtos;
 using System;
 
 namespace PetFamily.Application.VolunteersManagement.Commands.AddPet
@@ -17,5 +18,5 @@ namespace PetFamily.Application.VolunteersManagement.Commands.AddPet
         bool IsCastrated,
         bool IsVaccinated,
         string? BirthDate,
-        int Status);
+        int Status) : ICommand;
 }

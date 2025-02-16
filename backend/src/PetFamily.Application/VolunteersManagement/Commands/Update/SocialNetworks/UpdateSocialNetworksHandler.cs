@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
+using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
-using PetFamily.Application.VolunteersManagement.Dtos;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
 using PetFamily.Domain.VolunteersManagement.VO;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.VolunteersManagement.Commands.Update.SocialNetworks
 {
-    public class UpdateSocialNetworksHandler
+    public class UpdateSocialNetworksHandler : ICommandHandler<Guid, UpdateSocialNetworksCommand>
     {
         private readonly IVolunteersRepository _repository;
         private readonly IUnitOfWork _unitOfWork;

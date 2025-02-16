@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.SpeciesManagement;
@@ -11,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.SpeciesManagement.Create
 {
-    public class CreateSpeciesHandler
+    public class CreateSpeciesHandler : ICommandHandler<Guid, CreateSpeciesCommand>
     {
         private readonly ISpeciesRepository _repository;
         private readonly IValidator<CreateSpeciesCommand> _validator;

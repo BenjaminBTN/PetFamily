@@ -1,6 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
+using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.Shared.VO;
@@ -12,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.VolunteersManagement.Commands.Create
 {
-    public class CreateVolunteerHandler
+    public class CreateVolunteerHandler : ICommandHandler<Guid, CreateVolunteerCommand>
     {
         private readonly IVolunteersRepository _repository;
         private readonly IValidator<CreateVolunteerCommand> _validator;
@@ -28,7 +30,9 @@ namespace PetFamily.Application.VolunteersManagement.Commands.Create
             _logger = logger;
         }
 
-        public async Task<Result<Guid, ErrorList>> Handle(CreateVolunteerCommand command, CancellationToken cancellationToken)
+        public async Task<Result<Guid, ErrorList>> Handle(
+            CreateVolunteerCommand command,
+            CancellationToken cancellationToken)
         {
             var validationResult = await _validator.ValidateAsync(command, cancellationToken);
 

@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
@@ -12,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace PetFamily.Application.SpeciesManagement.AddBreed
 {
-    public class AddBreedHandler
+    public class AddBreedHandler : ICommandHandler<Guid, AddBreedCommand>
     {
         private readonly ISpeciesRepository _repository;
         private readonly IUnitOfWork _unitOfWork;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using PetFamily.Application.Abstractions;
 
 namespace PetFamily.Application.VolunteersManagement.Commands.DeleteFiles
 {
@@ -7,5 +8,5 @@ namespace PetFamily.Application.VolunteersManagement.Commands.DeleteFiles
         Guid VolunteerId,
         Guid PetId,
         IEnumerable<string> ObjectNames,
-        string BucketName);
+        string BucketName) : ICommand;
 }

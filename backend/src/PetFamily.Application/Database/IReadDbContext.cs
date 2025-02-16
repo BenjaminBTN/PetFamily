@@ -1,11 +1,11 @@
-using Microsoft.EntityFrameworkCore;
-using PetFamily.Application.VolunteersManagement.Dtos;
+using System.Linq;
+using PetFamily.Application.Dtos;
 
 namespace PetFamily.Application.Database
 {
     public interface IReadDbContext
     {
-        DbSet<VolunteerDto> Volunteers { get; }
-        DbSet<PetDto> Species { get; }
+        IQueryable<VolunteerDto> Volunteers { get; }
+        IQueryable<PetDto> Species { get; }
     }
 }
