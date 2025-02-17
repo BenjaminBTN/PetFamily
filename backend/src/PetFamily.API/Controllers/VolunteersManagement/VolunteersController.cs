@@ -217,7 +217,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         }
 
         [HttpGet]
-        public async Task<ActionResult> GetPet(
+        public async Task<ActionResult> GetAllVolunteers(
             [FromQuery] GetAllVolunteersWithPaginationRequest request,
             [FromServices] GetAllVolunteersWithPaginationHandler handler,
             CancellationToken ct)

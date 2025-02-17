@@ -2,8 +2,14 @@ using PetFamily.Application.VolunteersManagement.Queries.GetAllVolunteersWithPag
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests;
 
-public record class GetAllVolunteersWithPaginationRequest(int Page, int Size)
+public record class GetAllVolunteersWithPaginationRequest(
+    int Page,
+    int PageSize,
+    Guid? Id,
+    string? Title,
+    int? PageFrom,
+    int? PageTo)
 {
     public GetAllVolunteersWithPaginationQuery ToQuery() =>
-        new (Page, Size);
+        new (Page, PageSize, Id, Title, PageFrom, PageTo);
 }

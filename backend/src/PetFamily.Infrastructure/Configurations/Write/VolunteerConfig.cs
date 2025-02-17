@@ -1,6 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Application.Dtos;
 using PetFamily.Domain.Shared.VO;
@@ -74,13 +75,20 @@ public class VolunteerConfig : IEntityTypeConfiguration<Volunteer>
             .HasConversion(
                 requisites => JsonSerializer
                     .Serialize(requisites
-                        .Select(r => new VolunteerRequsiteDto(r.Name, r.Description)),
+                        .Select(r => new VolunteerRequisiteDto(r.Name, r.Description)),
                     JsonSerializerOptions.Default),
 
                 json => JsonSerializer
-                    .Deserialize<IEnumerable<VolunteerRequsiteDto>>(json, JsonSerializerOptions.Default)!
-                    .Select(dto => VolunteerRequisite.Create(dto.Name, dto.Description).Value).ToList());
-                    
+                    .Deserialize<List<VolunteerRequisiteDto>>(json, JsonSerializerOptions.Default)!
+                    .Select(dto => VolunteerRequisite.Create(dto.Name, dto.Description).Value).ToList(),
+
+                new ValueComparer<IReadOnlyList<VolunteerRequisite>>(
+                    (c1, c2) => c1!.SequenceEqual(c2!),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c.ToList()))
+            .HasColumnType("jsonb")
+            .HasColumnName("requisites");
+
 
         builder.Property(v => v.Networks)
             .HasConversion(
@@ -90,8 +98,15 @@ public class VolunteerConfig : IEntityTypeConfiguration<Volunteer>
                     JsonSerializerOptions.Default),
 
                 json => JsonSerializer
-                    .Deserialize<IEnumerable<SocialNetworkDto>>(json, JsonSerializerOptions.Default)!
-                    .Select(dto => SocialNetwork.Create(dto.Name, dto.Url).Value).ToList());
+                    .Deserialize<List<SocialNetworkDto>>(json, JsonSerializerOptions.Default)!
+                    .Select(dto => SocialNetwork.Create(dto.Name, dto.Url).Value).ToList(),
+
+                new ValueComparer<IReadOnlyList<SocialNetwork>>(
+                    (c1, c2) => c1!.SequenceEqual(c2!),
+                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                    c => c.ToList()))
+            .HasColumnType("jsonb")
+            .HasColumnName("networks");
 
 
         builder.Property(v => v.CreationDate)

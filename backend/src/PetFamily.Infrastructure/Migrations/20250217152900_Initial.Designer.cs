@@ -13,7 +13,7 @@ using PetFamily.Infrastructure.DbContexts;
 namespace PetFamily.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20250217082931_Initial")]
+    [Migration("20250217152900_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -252,12 +252,12 @@ namespace PetFamily.Infrastructure.Migrations
 
                     b.Property<string>("Networks")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("jsonb")
                         .HasColumnName("networks");
 
                     b.Property<string>("Requisites")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("jsonb")
                         .HasColumnName("requisites");
 
                     b.Property<bool>("_isDeleted")

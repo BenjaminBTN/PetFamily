@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
@@ -23,6 +24,8 @@ public class GetAllVolunteersWithPaginationHandler :
         CancellationToken ct)
     {
         var volunteersQuery = _readDbContext.Volunteers;
+
+        volunteersQuery = volunteersQuery.WhereIf(query.Id, t => t.Id == query.Id);
 
         return await volunteersQuery.ToPagedList(query.PageNumber, query.PageSize, ct);
     }

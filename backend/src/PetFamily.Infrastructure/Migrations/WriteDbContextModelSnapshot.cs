@@ -249,12 +249,12 @@ namespace PetFamily.Infrastructure.Migrations
 
                     b.Property<string>("Networks")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("jsonb")
                         .HasColumnName("networks");
 
                     b.Property<string>("Requisites")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasColumnType("jsonb")
                         .HasColumnName("requisites");
 
                     b.Property<bool>("_isDeleted")

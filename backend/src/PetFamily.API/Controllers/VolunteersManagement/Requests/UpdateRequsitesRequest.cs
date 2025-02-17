@@ -3,7 +3,7 @@ using PetFamily.Application.VolunteersManagement.Commands.Update.Requsites;
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests
 {
-    public record UpdateRequsitesRequest(List<VolunteerRequsiteDto> RequsitesDto)
+    public record UpdateRequsitesRequest(List<VolunteerRequisiteDto> RequsitesDto)
     {
         public UpdateRequsitesCommand ToCommand(Guid id)
         {
