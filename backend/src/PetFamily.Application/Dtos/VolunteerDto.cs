@@ -10,6 +10,6 @@ public class VolunteerDto
     public string Email { get; init; } = string.Empty;
     public double Experience { get; init; }
     public string PhoneNumber { get; init; } = string.Empty;
-    public RequsiteDto[] Requisites { get; init; } = null!;
+    public VolunteerRequsiteDto[] Requisites { get; init; } = null!;
     public SocialNetworkDto[] Networks { get; init; } = null!;
 }

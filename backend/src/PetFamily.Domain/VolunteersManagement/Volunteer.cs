@@ -14,6 +14,8 @@ namespace PetFamily.Domain.VolunteersManagement
     public class Volunteer : Shared.Entity<VolunteerId>, IDeletable
     {
         private readonly List<Pet> _pets = new();
+        private List<VolunteerRequisite> _requisites = [];
+        private List<SocialNetwork> _networks = [];
         private bool _isDeleted = false;
 
         public FullName FullName { get; private set; } = default!;
@@ -24,8 +26,8 @@ namespace PetFamily.Domain.VolunteersManagement
 
         public DateTime CreationDate { get; } = DateTime.Now.ToLocalTime();
 
-        public VolunteerRequisiteList Requisites { get; private set; } = new();
-        public SocialNetworkList Networks { get; private set; } = new();
+        public IReadOnlyList<VolunteerRequisite> Requisites => _requisites;
+        public IReadOnlyList<SocialNetwork> Networks => _networks;
         public IReadOnlyList<Pet> Pets => _pets;
 
 
@@ -190,15 +192,15 @@ namespace PetFamily.Domain.VolunteersManagement
         }
 
 
-        public void UpdateRequisites(VolunteerRequisiteList requisites)
+        public void UpdateRequisites(IEnumerable<VolunteerRequisite> requisites)
         {
-            Requisites = requisites;
+            _requisites = [.. requisites];
         }
 
 
-        public void UpdateSocialNetworks(SocialNetworkList networks)
+        public void UpdateSocialNetworks(IEnumerable<SocialNetwork> networks)
         {
-            Networks = networks;
+            _networks = [..networks];
         }
     }
 }

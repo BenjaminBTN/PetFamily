@@ -1,5 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PetFamily.Application.Dtos;
+using PetFamily.Domain.Shared.VO;
 using PetFamily.Domain.VolunteersManagement;
 using PetFamily.Domain.VolunteersManagement.VO;
 
@@ -66,37 +70,28 @@ public class VolunteerConfig : IEntityTypeConfiguration<Volunteer>
         });
 
 
-        builder.OwnsOne(v => v.Requisites, vrb =>
-        {
-            vrb.ToJson("requisites");
+        builder.Property(v => v.Requisites)
+            .HasConversion(
+                requisites => JsonSerializer
+                    .Serialize(requisites
+                        .Select(r => new VolunteerRequsiteDto(r.Name, r.Description)),
+                    JsonSerializerOptions.Default),
 
-            vrb.OwnsMany(vr => vr.Requisites, rb =>
-            {
-                rb.Property(r => r.Name)
-                .IsRequired(false)
-                .HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
+                json => JsonSerializer
+                    .Deserialize<IEnumerable<VolunteerRequsiteDto>>(json, JsonSerializerOptions.Default)!
+                    .Select(dto => VolunteerRequisite.Create(dto.Name, dto.Description).Value).ToList());
+                    
 
-                rb.Property(r => r.Description)
-                .IsRequired(false)
-                .HasMaxLength(Domain.Shared.Constants.MAX_HIGH_TEXT_LENGTH);
-            });
-        });
+        builder.Property(v => v.Networks)
+            .HasConversion(
+                networks => JsonSerializer
+                    .Serialize(networks
+                        .Select(n => new SocialNetworkDto(n.Name, n.Url)),
+                    JsonSerializerOptions.Default),
 
-
-        builder.OwnsOne(v => v.Networks, vnb =>
-        {
-            vnb.ToJson("networks");
-
-            vnb.OwnsMany(vn => vn.Networks, nb =>
-            {
-                nb.Property(n => n.Name)
-                .IsRequired(false)
-                .HasMaxLength(Domain.Shared.Constants.MAX_LOW_TEXT_LENGTH);
-
-                nb.Property(n => n.Url)
-                .IsRequired(false);
-            });
-        });
+                json => JsonSerializer
+                    .Deserialize<IEnumerable<SocialNetworkDto>>(json, JsonSerializerOptions.Default)!
+                    .Select(dto => SocialNetwork.Create(dto.Name, dto.Url).Value).ToList());
 
 
         builder.Property(v => v.CreationDate)

@@ -53,15 +53,13 @@ namespace PetFamily.Application.VolunteersManagement.Commands.Update.SocialNetwo
             var volunteer = volunteerResult.Value;
 
             // create VO
-            List<SocialNetwork> list = [];
+            List<SocialNetwork> socialNetworkList = [];
 
             foreach(SocialNetworkDto dto in command.SocialNetworksDto)
             {
                 var network = SocialNetwork.Create(dto.Name, dto.Url).Value;
-                list.Add(network);
+                socialNetworkList.Add(network);
             }
-
-            var socialNetworkList = new SocialNetworkList(list);
 
             // update
             volunteer.UpdateSocialNetworks(socialNetworkList);
