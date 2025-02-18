@@ -7,6 +7,7 @@ using PetFamily.Application.Dtos;
 using PetFamily.Domain.Shared.VO;
 using PetFamily.Domain.VolunteersManagement;
 using PetFamily.Domain.VolunteersManagement.VO;
+using PetFamily.Infrastructure.Extensions;
 
 namespace PetFamily.Infrastructure.Configurations.Write;
 
@@ -72,40 +73,16 @@ public class VolunteerConfig : IEntityTypeConfiguration<Volunteer>
 
 
         builder.Property(v => v.Requisites)
-            .HasConversion(
-                requisites => JsonSerializer
-                    .Serialize(requisites
-                        .Select(r => new VolunteerRequisiteDto(r.Name, r.Description)),
-                    JsonSerializerOptions.Default),
-
-                json => JsonSerializer
-                    .Deserialize<List<VolunteerRequisiteDto>>(json, JsonSerializerOptions.Default)!
-                    .Select(dto => VolunteerRequisite.Create(dto.Name, dto.Description).Value).ToList(),
-
-                new ValueComparer<IReadOnlyList<VolunteerRequisite>>(
-                    (c1, c2) => c1!.SequenceEqual(c2!),
-                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                    c => c.ToList()))
-            .HasColumnType("jsonb")
+            .HasVOCollectionToJsonConversion(
+                r => new VolunteerRequisiteDto(r.Name, r.Description),
+                dto => VolunteerRequisite.Create(dto.Name, dto.Description).Value)
             .HasColumnName("requisites");
 
 
         builder.Property(v => v.Networks)
-            .HasConversion(
-                networks => JsonSerializer
-                    .Serialize(networks
-                        .Select(n => new SocialNetworkDto(n.Name, n.Url)),
-                    JsonSerializerOptions.Default),
-
-                json => JsonSerializer
-                    .Deserialize<List<SocialNetworkDto>>(json, JsonSerializerOptions.Default)!
-                    .Select(dto => SocialNetwork.Create(dto.Name, dto.Url).Value).ToList(),
-
-                new ValueComparer<IReadOnlyList<SocialNetwork>>(
-                    (c1, c2) => c1!.SequenceEqual(c2!),
-                    c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
-                    c => c.ToList()))
-            .HasColumnType("jsonb")
+            .HasVOCollectionToJsonConversion(
+                n => new SocialNetworkDto(n.Name, n.Url),
+                dto => SocialNetwork.Create(dto.Name, dto.Url).Value)
             .HasColumnName("networks");
 
 
