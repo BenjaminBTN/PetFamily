@@ -1,4 +1,5 @@
-﻿using PetFamily.Domain.Shared;
+﻿using Microsoft.AspNetCore.Mvc;
+using PetFamily.Domain.Shared;
 
 namespace PetFamily.API.Response
 {
@@ -15,9 +16,9 @@ namespace PetFamily.API.Response
             TimeGenerated = DateTime.Now.ToLocalTime();
         }
 
-        public static Envelope Ok(object? result = null)
+        public static ObjectResult Ok(object? result = null)
         {
-            return new(result, null);
+            return new(new Envelope(result, null));
         }
 
         public static Envelope Error(ErrorList? errors = null)

@@ -1,23 +1,19 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.Web">
-
+<Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UserSecretsId>8567c286-cbdd-4148-94a7-1ebb76294c2c</UserSecretsId>
   </PropertyGroup>
-
   <ItemGroup>
     <Compile Remove="logs\**" />
     <Content Remove="logs\**" />
     <EmbeddedResource Remove="logs\**" />
     <None Remove="logs\**" />
   </ItemGroup>
-
   <ItemGroup>
     <Compile Remove="AssistanceStatus.cs" />
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
       <PrivateAssets>all</PrivateAssets>
@@ -32,11 +28,9 @@
     <PackageReference Include="Serilog.Sinks.Trace" Version="4.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.2.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\PetFamily.Application\PetFamily.Application.csproj" />
     <ProjectReference Include="..\PetFamily.Domain\PetFamily.Domain.csproj" />
     <ProjectReference Include="..\PetFamily.Infrastructure\PetFamily.Infrastructure.csproj" />
   </ItemGroup>
-
 </Project>

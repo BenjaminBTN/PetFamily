@@ -15,6 +15,7 @@ using PetFamily.Application.VolunteersManagement.Commands.Update.MainInfo;
 using PetFamily.Application.VolunteersManagement.Commands.Update.Requsites;
 using PetFamily.Application.VolunteersManagement.Commands.Update.SocialNetworks;
 using PetFamily.Application.VolunteersManagement.Queries.GetAllVolunteersWithPagination;
+using PetFamily.Application.VolunteersManagement.Queries.GetVolunteerById;
 
 namespace PetFamily.API.Controllers.VolunteersManagement
 {
@@ -33,7 +34,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPut]
@@ -51,7 +52,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPut]
@@ -69,7 +70,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPut]
@@ -87,7 +88,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpDelete]
@@ -104,7 +105,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpDelete]
@@ -121,7 +122,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPost]
@@ -138,7 +139,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPost]
@@ -162,7 +163,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpGet]
@@ -178,7 +179,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpDelete]
@@ -196,7 +197,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPut]
@@ -213,7 +214,7 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpGet]
@@ -226,7 +227,21 @@ namespace PetFamily.API.Controllers.VolunteersManagement
 
             var result = await handler.Handle(query, ct);
 
-            return new ObjectResult(result);
+            return Envelope.Ok(result);
+        }
+
+        [HttpGet]
+        [Route("by-id")]
+        public async Task<ActionResult> GetVolunteerById(
+            [FromQuery] GetVolunteerByIdRequest request,
+            [FromServices] GetVolunteerByIdHandlerDapper handler,
+            CancellationToken ct)
+        {
+            var query = request.ToQuery();
+
+            var result = await handler.Handle(query, ct);
+
+            return Envelope.Ok(result);
         }
     }
 }

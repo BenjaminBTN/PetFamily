@@ -5,9 +5,9 @@ namespace PetFamily.Application.Models;
 public class PagedList<T>
 {
     public IReadOnlyList<T> Items { get; set; } = [];
-    public int TotalCount { get; init; }
-    public int PageNumber { get; init; }
-    public int PageSize { get; init; }
+    public long TotalCount { get; init; } = 1;
+    public int PageNumber { get; init; } = 1;
+    public int PageSize { get; init; } = 8;
     public bool HasNextPage => PageNumber * PageSize < TotalCount;
     public bool HasPreviousPage => PageNumber > 1;
 }

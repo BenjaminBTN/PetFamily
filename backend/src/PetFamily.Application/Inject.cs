@@ -2,6 +2,7 @@
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.Abstractions;
+using PetFamily.Application.Database;
 using PetFamily.Application.SpeciesManagement.AddBreed;
 using PetFamily.Application.SpeciesManagement.Create;
 using PetFamily.Application.VolunteersManagement.Commands.AddPet;
@@ -23,21 +24,6 @@ namespace PetFamily.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            // services.AddScoped<CreateVolunteerHandler>();
-            // services.AddScoped<UpdateMainInfoHandler>();
-            // services.AddScoped<UpdateSocialNetworksHandler>();
-            // services.AddScoped<UpdateRequsitesHandler>();
-            // services.AddScoped<SoftDeleteVolunteerHandler>();
-            // services.AddScoped<HardDeleteVolunteerHandler>();
-            // services.AddScoped<AddPetHandler>();
-            // services.AddScoped<AddPetPhotosHandler>();
-            // services.AddScoped<GetFilesHandler>();
-            // services.AddScoped<DeleteFilesHandler>();
-            // services.AddScoped<CreateSpeciesHandler>();
-            // services.AddScoped<AddBreedHandler>();
-            // services.AddScoped<MovePetHandler>();
-            // services.AddScoped<GetAllVolunteersWithPaginationHandler>();
-
             services.Scan(scan => scan.FromAssemblies(typeof(Inject).Assembly)
                 .AddClasses(classes => classes
                     .AssignableToAny(typeof(ICommandHandler<,>), typeof(ICommandHandler<>)))
@@ -45,10 +31,10 @@ namespace PetFamily.Application
                 .WithScopedLifetime());
 
             services.Scan(scan => scan.FromAssemblies(typeof(Inject).Assembly)
-            .AddClasses(classes => classes
-                .AssignableTo(typeof(IQueryHandler<,>)))
-            .AsSelfWithInterfaces()
-            .WithScopedLifetime());
+                .AddClasses(classes => classes
+                    .AssignableTo(typeof(IQueryHandler<,>)))
+                .AsSelfWithInterfaces()
+                .WithScopedLifetime());
 
             services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
             services.AddFluentValidationAutoValidation();

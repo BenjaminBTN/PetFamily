@@ -32,7 +32,6 @@ public class VolunteerDtoConfig : IEntityTypeConfiguration<VolunteerDto>
             .HasConversion(
                 requisites => JsonSerializer
                     .Serialize(string.Empty, JsonSerializerOptions.Default),
-
                 json => JsonSerializer
                     .Deserialize<VolunteerRequisiteDto[]>(json, JsonSerializerOptions.Default)!);
 
@@ -40,7 +39,6 @@ public class VolunteerDtoConfig : IEntityTypeConfiguration<VolunteerDto>
             .HasConversion(
                 networks => JsonSerializer
                     .Serialize(string.Empty, JsonSerializerOptions.Default),
-
                 json => JsonSerializer
                     .Deserialize<SocialNetworkDto[]>(json, JsonSerializerOptions.Default)!);
     }

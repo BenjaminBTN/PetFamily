@@ -29,7 +29,13 @@ namespace PetFamily.Infrastructure
 
             services.AddHostedService<FilesCleanerBackgroundService>();
 
-            services.AddSingleton<IMessageQueue<IEnumerable<FileInfo>>, MemoryMessageQueue<IEnumerable<FileInfo>>>();
+            services.AddSingleton<
+                IMessageQueue<IEnumerable<FileInfo>>,
+                MemoryMessageQueue<IEnumerable<FileInfo>>>();
+
+            services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
+
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
             return services;
         }
