@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 using System;
-using System.Linq;
 
 namespace PetFamily.Domain.VolunteersManagement.VO
 {

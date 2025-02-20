@@ -1,4 +1,4 @@
-﻿using PetFamily.Application.VolunteersManagement.DeleteFiles;
+﻿using PetFamily.Application.VolunteersManagement.Commands.DeleteFiles;
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests
 {

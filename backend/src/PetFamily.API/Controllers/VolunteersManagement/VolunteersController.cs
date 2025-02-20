@@ -3,17 +3,19 @@ using PetFamily.API.Controllers.VolunteersManagement.Requests;
 using PetFamily.API.Extensions;
 using PetFamily.API.Processors;
 using PetFamily.API.Response;
-using PetFamily.Application.VolunteersManagement.AddPet;
-using PetFamily.Application.VolunteersManagement.AddPetPhotos;
-using PetFamily.Application.VolunteersManagement.Create;
-using PetFamily.Application.VolunteersManagement.DeleteFiles;
-using PetFamily.Application.VolunteersManagement.GetFiles;
-using PetFamily.Application.VolunteersManagement.HardDelete;
-using PetFamily.Application.VolunteersManagement.MovePet;
-using PetFamily.Application.VolunteersManagement.SoftDelete;
-using PetFamily.Application.VolunteersManagement.Update.MainInfo;
-using PetFamily.Application.VolunteersManagement.Update.Requsites;
-using PetFamily.Application.VolunteersManagement.Update.SocialNetworks;
+using PetFamily.Application.VolunteersManagement.Commands.AddPet;
+using PetFamily.Application.VolunteersManagement.Commands.AddPetPhotos;
+using PetFamily.Application.VolunteersManagement.Commands.Create;
+using PetFamily.Application.VolunteersManagement.Commands.DeleteFiles;
+using PetFamily.Application.VolunteersManagement.Commands.GetFiles;
+using PetFamily.Application.VolunteersManagement.Commands.HardDelete;
+using PetFamily.Application.VolunteersManagement.Commands.MovePet;
+using PetFamily.Application.VolunteersManagement.Commands.SoftDelete;
+using PetFamily.Application.VolunteersManagement.Commands.Update.MainInfo;
+using PetFamily.Application.VolunteersManagement.Commands.Update.Requsites;
+using PetFamily.Application.VolunteersManagement.Commands.Update.SocialNetworks;
+using PetFamily.Application.VolunteersManagement.Queries.GetAllVolunteersWithPagination;
+using PetFamily.Application.VolunteersManagement.Queries.GetVolunteerById;
 
 namespace PetFamily.API.Controllers.VolunteersManagement
 {
@@ -29,10 +31,10 @@ namespace PetFamily.API.Controllers.VolunteersManagement
 
             var result = await handler.Handle(command, cancellationToken);
 
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPut]
@@ -47,10 +49,10 @@ namespace PetFamily.API.Controllers.VolunteersManagement
 
             var result = await handler.Handle(command, cancellationToken);
 
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPut]
@@ -65,10 +67,10 @@ namespace PetFamily.API.Controllers.VolunteersManagement
 
             var result = await handler.Handle(command, cancellationToken);
 
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPut]
@@ -83,10 +85,10 @@ namespace PetFamily.API.Controllers.VolunteersManagement
 
             var result = await handler.Handle(command, cancellationToken);
 
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpDelete]
@@ -100,10 +102,10 @@ namespace PetFamily.API.Controllers.VolunteersManagement
 
             var result = await handler.Handle(command, cancellationToken);
 
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpDelete]
@@ -117,10 +119,10 @@ namespace PetFamily.API.Controllers.VolunteersManagement
 
             var result = await handler.Handle(command, cancellationToken);
 
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPost]
@@ -134,10 +136,10 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             var command = request.ToCommand(id);
 
             var result = await handler.Handle(command, cancellationToken);
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPost]
@@ -152,16 +154,16 @@ namespace PetFamily.API.Controllers.VolunteersManagement
         {
             await using var processor = new FileProcessor();
             var filesDtoResult = processor.Process(files, cancellationToken);
-            if(filesDtoResult.IsFailure)
+            if (filesDtoResult.IsFailure)
                 return filesDtoResult.Error.ToErrorList().ToResponse();
 
             var command = new AddPetPhotosCommand(volunteerId, petId, filesDtoResult.Value, bucketName);
 
             var result = await handler.Handle(command, cancellationToken);
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpGet]
@@ -174,10 +176,10 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             var command = request.ToCommand();
 
             var result = await handler.Handle(command, cancellationToken);
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpDelete]
@@ -192,10 +194,10 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             var command = request.ToCommand(volunteerId, petId);
 
             var result = await handler.Handle(command, cancellationToken);
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
         }
 
         [HttpPut]
@@ -209,10 +211,37 @@ namespace PetFamily.API.Controllers.VolunteersManagement
             var command = request.ToCommand(volunteerId);
 
             var result = await handler.Handle(command, ct);
-            if(result.IsFailure)
+            if (result.IsFailure)
                 return result.Error.ToResponse();
 
-            return new ObjectResult(Envelope.Ok(result.Value));
+            return Envelope.Ok(result.Value);
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> GetAllVolunteers(
+            [FromQuery] GetAllVolunteersWithPaginationRequest request,
+            [FromServices] GetAllVolunteersWithPaginationHandler handler,
+            CancellationToken ct)
+        {
+            var query = request.ToQuery();
+
+            var result = await handler.Handle(query, ct);
+
+            return Envelope.Ok(result);
+        }
+
+        [HttpGet]
+        [Route("by-id")]
+        public async Task<ActionResult> GetVolunteerById(
+            [FromQuery] GetVolunteerByIdRequest request,
+            [FromServices] GetVolunteerByIdHandlerDapper handler,
+            CancellationToken ct)
+        {
+            var query = request.ToQuery();
+
+            var result = await handler.Handle(query, ct);
+
+            return Envelope.Ok(result);
         }
     }
 }

@@ -1,9 +1,9 @@
-﻿using PetFamily.Application.VolunteersManagement.Dtos;
-using PetFamily.Application.VolunteersManagement.Update.Requsites;
+﻿using PetFamily.Application.Dtos;
+using PetFamily.Application.VolunteersManagement.Commands.Update.Requsites;
 
 namespace PetFamily.API.Controllers.VolunteersManagement.Requests
 {
-    public record UpdateRequsitesRequest(List<RequsiteDto> RequsitesDto)
+    public record UpdateRequsitesRequest(List<VolunteerRequisiteDto> RequsitesDto)
     {
         public UpdateRequsitesCommand ToCommand(Guid id)
         {

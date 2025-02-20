@@ -1,19 +1,20 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using PetFamily.Application.VolunteersManagement;
+using PetFamily.Application.Database;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.VolunteersManagement;
 using PetFamily.Domain.VolunteersManagement.VO;
+using PetFamily.Infrastructure.DbContexts;
 
 namespace PetFamily.Infrastructure.Repositories
 {
     public class VolunteersRepository : IVolunteersRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly WriteDbContext _context;
         private readonly ILogger<VolunteersRepository> _logger;
 
-        public VolunteersRepository(ApplicationDbContext context, ILogger<VolunteersRepository> logger)
+        public VolunteersRepository(WriteDbContext context, ILogger<VolunteersRepository> logger)
         {
             _context = context;
             _logger = logger;

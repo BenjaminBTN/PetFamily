@@ -1,6 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using PetFamily.Application.VolunteersManagement.DeleteFiles;
-using PetFamily.Application.VolunteersManagement.GetFiles;
+using PetFamily.Application.VolunteersManagement.Commands.GetFiles;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.VolunteersManagement.VO;
 using System.Collections.Generic;
