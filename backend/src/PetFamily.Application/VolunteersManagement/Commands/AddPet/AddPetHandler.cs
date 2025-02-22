@@ -50,8 +50,7 @@ namespace PetFamily.Application.VolunteersManagement.Commands.AddPet
 
             // search species by name
             var speciesNameString = command.TypeInfo.Species;
-            var speciesName = SpeciesName.Create(speciesNameString[..1].ToUpper()
-                + speciesNameString[1..].ToLower()).Value;
+            var speciesName = SpeciesName.Create(speciesNameString.ToLower()).Value;
 
             var speciesResult = await _speciesRepository.GetByName(speciesName, cancellationToken);
             if(speciesResult.IsFailure)
@@ -61,8 +60,7 @@ namespace PetFamily.Application.VolunteersManagement.Commands.AddPet
 
             // search breed by name
             var breedNameString = command.TypeInfo.Breed;
-            var breedName = BreedName.Create(breedNameString[..1].ToUpper()
-                + breedNameString[1..].ToLower()).Value;
+            var breedName = BreedName.Create(breedNameString.ToLower()).Value;
 
             var breedResult = species.GetBreedByName(breedName);
             if(breedResult.IsFailure)

@@ -6,7 +6,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.Database;
+namespace PetFamily.Application.VolunteersManagement;
 
 public interface IVolunteersRepository
 {

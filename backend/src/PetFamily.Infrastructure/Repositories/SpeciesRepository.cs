@@ -27,11 +27,10 @@ namespace PetFamily.Infrastructure.Repositories
             return species.Id.Value;
         }
 
-        public async Task<Guid> Delete(Species species, CancellationToken cancellationToken)
+        public async Task Delete(Species species, CancellationToken cancellationToken)
         {
             _context.Species.Remove(species);
             await _context.SaveChangesAsync(cancellationToken);
-            return species.Id.Value;
         }
 
         public async Task<Result<Species, Error>> GetById(SpeciesId speciesId, CancellationToken cancellationToken)

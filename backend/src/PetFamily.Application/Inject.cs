@@ -2,21 +2,6 @@
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using PetFamily.Application.Abstractions;
-using PetFamily.Application.Database;
-using PetFamily.Application.SpeciesManagement.AddBreed;
-using PetFamily.Application.SpeciesManagement.Create;
-using PetFamily.Application.VolunteersManagement.Commands.AddPet;
-using PetFamily.Application.VolunteersManagement.Commands.AddPetPhotos;
-using PetFamily.Application.VolunteersManagement.Commands.Create;
-using PetFamily.Application.VolunteersManagement.Commands.DeleteFiles;
-using PetFamily.Application.VolunteersManagement.Commands.GetFiles;
-using PetFamily.Application.VolunteersManagement.Commands.HardDelete;
-using PetFamily.Application.VolunteersManagement.Commands.MovePet;
-using PetFamily.Application.VolunteersManagement.Commands.SoftDelete;
-using PetFamily.Application.VolunteersManagement.Commands.Update.MainInfo;
-using PetFamily.Application.VolunteersManagement.Commands.Update.Requsites;
-using PetFamily.Application.VolunteersManagement.Commands.Update.SocialNetworks;
-using PetFamily.Application.VolunteersManagement.Queries.GetAllVolunteersWithPagination;
 
 namespace PetFamily.Application
 {

@@ -7,7 +7,6 @@ using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Domain.Shared;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Input;
 
 namespace PetFamily.Application.VolunteersManagement.Commands.GetFiles
 {

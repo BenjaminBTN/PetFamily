@@ -29,10 +29,16 @@ namespace PetFamily.Domain.SpeciesManagement
         }
 
 
+        public void DeleteBreed(Breed breed)
+        {
+            _breeds.Remove(breed);
+        }
+
+
         public Result<Breed, Error> GetBreedById(BreedId id)
         {
             var result = _breeds.FirstOrDefault(b => b.Id == id);
-            if(result == null)
+            if (result == null)
                 return Errors.General.NotFound(id.Value);
 
             return result;

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading;
@@ -35,7 +34,7 @@ public class GetVolunteerByIdHandlerDapper : IQueryHandler<PagedList<VolunteerDt
 
         var sql =
         """
-        SELECT id, description, email, experience, phone_number, name, surname, patronymic, requisites, networks FROM volonteers WHERE id = @VolunteerId
+        SELECT id, description, email, experience, phone_number, name, surname, patronymic, requisites, networks FROM volunteers WHERE id = @VolunteerId
         """;
 
         var volunteerDto = await connection.QueryAsync<
