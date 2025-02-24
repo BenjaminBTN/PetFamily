@@ -13,5 +13,8 @@ public class BreedConfiguration : IEntityTypeConfiguration<BreedDto>
         builder.HasKey(b => b.Id);
 
         builder.Property(b => b.Name);
+        
+        builder.Property(b => b.SpeciesId)
+            .HasColumnName("species_id");
     }
 }

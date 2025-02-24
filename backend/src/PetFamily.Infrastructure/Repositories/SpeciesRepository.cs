@@ -41,7 +41,7 @@ namespace PetFamily.Infrastructure.Repositories
 
             if(species == null)
             {
-                _logger.LogError("The species record with ID '{id}' was not found",
+                _logger.LogError("The species record with the ID '{id}' was not found",
                     speciesId.Value);
                 return Errors.General.NotFound(speciesId.Value);
             }
@@ -57,7 +57,7 @@ namespace PetFamily.Infrastructure.Repositories
 
             if(species == null)
             {
-                _logger.LogError("The species record with name '{name}' was not found", 
+                _logger.LogError("The species record with the name '{name}' was not found", 
                     name.Value);
                 return Errors.General.NotFound("Species Name");
             }

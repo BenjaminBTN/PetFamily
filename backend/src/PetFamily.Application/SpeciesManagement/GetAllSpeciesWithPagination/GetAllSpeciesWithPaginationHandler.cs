@@ -7,7 +7,7 @@ using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.Models;
 
-namespace PetFamily.Application.VolunteersManagement.Queries.GetAllSpeciesWithPagination;
+namespace PetFamily.Application.SpeciesManagement.GetAllSpeciesWithPagination;
 
 public class GetAllSpeciesWithPaginationHandler
     : IQueryHandler<PagedList<SpeciesDto>, GetAllSpeciesWithPaginationQuery>

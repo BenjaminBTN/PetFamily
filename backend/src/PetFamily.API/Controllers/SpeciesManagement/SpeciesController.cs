@@ -6,7 +6,8 @@ using PetFamily.Application.SpeciesManagement.AddBreed;
 using PetFamily.Application.SpeciesManagement.Create;
 using PetFamily.Application.SpeciesManagement.DeleteBreed;
 using PetFamily.Application.SpeciesManagement.DeleteSpecies;
-using PetFamily.Application.VolunteersManagement.Queries.GetAllSpeciesWithPagination;
+using PetFamily.Application.SpeciesManagement.GetAllBreedsWithPagination;
+using PetFamily.Application.SpeciesManagement.GetAllSpeciesWithPagination;
 
 namespace PetFamily.API.Controllers.SpeciesManagement;
 
@@ -29,7 +30,7 @@ public class SpeciesController : ApplicationController
     }
 
     [HttpPost]
-    [Route("{id:guid}/breed")]
+    [Route("{id:guid}/breeds")]
     public async Task<ActionResult<Guid>> AddBreed(
         [FromRoute] Guid id,
         [FromForm] AddBreedRequest request,
@@ -64,14 +65,14 @@ public class SpeciesController : ApplicationController
     }
 
     [HttpDelete]
-    [Route("{speciesId:guid}/{breedId:guid}")]
+    [Route("{id:guid}/breeds/{breedId:guid}")]
     public async Task<ActionResult> DeleteBreed(
-    [FromRoute] Guid speciesId,
-    [FromRoute] Guid breedId,
-    [FromServices] DeleteBreedHandler handler,
-    CancellationToken ct = default)
+        [FromRoute] Guid id,
+        [FromRoute] Guid breedId,
+        [FromServices] DeleteBreedHandler handler,
+        CancellationToken ct = default)
     {
-        var command = new DeleteBreedCommand(speciesId, breedId);
+        var command = new DeleteBreedCommand(id, breedId);
 
         var result = await handler.Handle(command, ct);
 
@@ -83,11 +84,26 @@ public class SpeciesController : ApplicationController
 
     [HttpGet]
     public async Task<ActionResult> GetAllSpecies(
-    [FromQuery] GetAllSpeciesWithPaginationRequest request,
-    [FromServices] GetAllSpeciesWithPaginationHandler handler,
-    CancellationToken ct)
+        [FromQuery] GetAllSpeciesWithPaginationRequest request,
+        [FromServices] GetAllSpeciesWithPaginationHandler handler,
+        CancellationToken ct)
     {
         var query = request.ToQuery();
+
+        var result = await handler.Handle(query, ct);
+
+        return Envelope.Ok(result);
+    }
+
+    [HttpGet]
+    [Route("{id:guid}/breeds")]
+    public async Task<ActionResult> GetAllBreeds(
+        [FromRoute] Guid id,
+        [FromQuery] GetAllBreedsWithPaginationRequest request,
+        [FromServices] GetAllBreedsWithPaginationHandler handler,
+        CancellationToken ct)
+    {
+        var query = request.ToQuery(id);
 
         var result = await handler.Handle(query, ct);
 
