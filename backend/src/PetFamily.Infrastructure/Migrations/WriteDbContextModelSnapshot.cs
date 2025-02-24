@@ -18,7 +18,7 @@ namespace PetFamily.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.0")
+                .HasAnnotation("ProductVersion", "9.0.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
@@ -29,7 +29,7 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<Guid?>("species_id")
+                    b.Property<Guid>("species_id")
                         .HasColumnType("uuid")
                         .HasColumnName("species_id");
 
@@ -115,7 +115,7 @@ namespace PetFamily.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted");
 
-                    b.Property<Guid?>("volunteer_id")
+                    b.Property<Guid>("volunteer_id")
                         .HasColumnType("uuid")
                         .HasColumnName("volunteer_id");
 
@@ -318,9 +318,9 @@ namespace PetFamily.Infrastructure.Migrations
                         });
 
                     b.HasKey("Id")
-                        .HasName("pk_volonteers");
+                        .HasName("pk_volunteers");
 
-                    b.ToTable("volonteers", (string)null);
+                    b.ToTable("volunteers", (string)null);
                 });
 
             modelBuilder.Entity("PetFamily.Domain.SpeciesManagement.Entities.Breed", b =>
@@ -328,6 +328,8 @@ namespace PetFamily.Infrastructure.Migrations
                     b.HasOne("PetFamily.Domain.SpeciesManagement.Species", null)
                         .WithMany("Breeds")
                         .HasForeignKey("species_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
                         .HasConstraintName("fk_breeds_species_species_id");
                 });
 
@@ -336,7 +338,9 @@ namespace PetFamily.Infrastructure.Migrations
                     b.HasOne("PetFamily.Domain.VolunteersManagement.Volunteer", null)
                         .WithMany("Pets")
                         .HasForeignKey("volunteer_id")
-                        .HasConstraintName("fk_pets_volonteers_volunteer_id");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_pets_volunteers_volunteer_id");
 
                     b.OwnsOne("PetFamily.Domain.Shared.VO.PhoneNumber", "PhoneNumber", b1 =>
                         {

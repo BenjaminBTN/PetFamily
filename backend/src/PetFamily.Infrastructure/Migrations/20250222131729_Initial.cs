@@ -24,7 +24,7 @@ namespace PetFamily.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "volonteers",
+                name: "volunteers",
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -42,7 +42,7 @@ namespace PetFamily.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_volonteers", x => x.id);
+                    table.PrimaryKey("pk_volunteers", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -50,7 +50,7 @@ namespace PetFamily.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    species_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    species_id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
@@ -60,7 +60,8 @@ namespace PetFamily.Infrastructure.Migrations
                         name: "fk_breeds_species_species_id",
                         column: x => x.species_id,
                         principalTable: "species",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,7 +78,7 @@ namespace PetFamily.Infrastructure.Migrations
                     status = table.Column<string>(type: "text", nullable: false),
                     creation_date = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     is_deleted = table.Column<bool>(type: "boolean", nullable: false),
-                    volunteer_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    volunteer_id = table.Column<Guid>(type: "uuid", nullable: false),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     country = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     house_number = table.Column<int>(type: "integer", nullable: false),
@@ -98,10 +99,11 @@ namespace PetFamily.Infrastructure.Migrations
                 {
                     table.PrimaryKey("pk_pets", x => x.id);
                     table.ForeignKey(
-                        name: "fk_pets_volonteers_volunteer_id",
+                        name: "fk_pets_volunteers_volunteer_id",
                         column: x => x.volunteer_id,
-                        principalTable: "volonteers",
-                        principalColumn: "id");
+                        principalTable: "volunteers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -128,7 +130,7 @@ namespace PetFamily.Infrastructure.Migrations
                 name: "species");
 
             migrationBuilder.DropTable(
-                name: "volonteers");
+                name: "volunteers");
         }
     }
 }

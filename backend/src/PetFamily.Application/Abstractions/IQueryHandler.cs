@@ -1,7 +1,5 @@
 using System.Threading;
 using System.Threading.Tasks;
-using CSharpFunctionalExtensions;
-using PetFamily.Domain.Shared;
 
 namespace PetFamily.Application.Abstractions;
 

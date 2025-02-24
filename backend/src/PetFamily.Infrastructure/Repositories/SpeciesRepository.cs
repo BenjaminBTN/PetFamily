@@ -27,11 +27,10 @@ namespace PetFamily.Infrastructure.Repositories
             return species.Id.Value;
         }
 
-        public async Task<Guid> Delete(Species species, CancellationToken cancellationToken)
+        public async Task Delete(Species species, CancellationToken cancellationToken)
         {
             _context.Species.Remove(species);
             await _context.SaveChangesAsync(cancellationToken);
-            return species.Id.Value;
         }
 
         public async Task<Result<Species, Error>> GetById(SpeciesId speciesId, CancellationToken cancellationToken)
@@ -42,7 +41,7 @@ namespace PetFamily.Infrastructure.Repositories
 
             if(species == null)
             {
-                _logger.LogError("The species record with ID '{id}' was not found",
+                _logger.LogError("The species record with the ID '{id}' was not found",
                     speciesId.Value);
                 return Errors.General.NotFound(speciesId.Value);
             }
@@ -58,7 +57,7 @@ namespace PetFamily.Infrastructure.Repositories
 
             if(species == null)
             {
-                _logger.LogError("The species record with name '{name}' was not found", 
+                _logger.LogError("The species record with the name '{name}' was not found", 
                     name.Value);
                 return Errors.General.NotFound("Species Name");
             }

@@ -1,7 +1,4 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Application.Dtos;
 using PetFamily.Domain.Shared.VO;
@@ -15,7 +12,7 @@ public class VolunteerConfig : IEntityTypeConfiguration<Volunteer>
 {
     public void Configure(EntityTypeBuilder<Volunteer> builder)
     {
-        builder.ToTable("volonteers");
+        builder.ToTable("volunteers");
 
         builder.HasKey(v => v.Id);
 
@@ -91,7 +88,8 @@ public class VolunteerConfig : IEntityTypeConfiguration<Volunteer>
 
         builder.HasMany(v => v.Pets)
             .WithOne()
-            .HasForeignKey("volunteer_id");
+            .HasForeignKey("volunteer_id")
+            .IsRequired();
 
         builder.Property<bool>("_isDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)

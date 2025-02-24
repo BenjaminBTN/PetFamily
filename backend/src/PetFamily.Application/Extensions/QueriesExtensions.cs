@@ -15,10 +15,10 @@ public static class QueriesExtensions
     {
         var totalCount = await source.CountAsync(ct);
 
-        if (page == 0)
+        if (page <= 0)
             page = 1;
 
-        if (size == 0)
+        if (size <= 0)
             size = 8;
 
         var items = await source.Skip((page - 1) * size).Take(size).ToListAsync(ct);
