@@ -1,9 +1,9 @@
 using System;
 using PetFamily.Application.Abstractions;
 
-namespace PetFamily.Application.VolunteersManagement.Queries.GetAllVolunteersWithPagination;
+namespace PetFamily.Application.VolunteersManagement.Queries.GetAllSpeciesWithPagination;
 
-public record class GetAllVolunteersWithPaginationQuery(
+public record class GetAllSpeciesWithPaginationQuery(
     int PageNumber,
     int PageSize,
     Guid? Id,

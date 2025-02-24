@@ -6,6 +6,7 @@ using PetFamily.Application.SpeciesManagement.AddBreed;
 using PetFamily.Application.SpeciesManagement.Create;
 using PetFamily.Application.SpeciesManagement.DeleteBreed;
 using PetFamily.Application.SpeciesManagement.DeleteSpecies;
+using PetFamily.Application.VolunteersManagement.Queries.GetAllSpeciesWithPagination;
 
 namespace PetFamily.API.Controllers.SpeciesManagement;
 
@@ -64,7 +65,7 @@ public class SpeciesController : ApplicationController
 
     [HttpDelete]
     [Route("{speciesId:guid}/{breedId:guid}")]
-    public async Task<ActionResult> Delete(
+    public async Task<ActionResult> DeleteBreed(
     [FromRoute] Guid speciesId,
     [FromRoute] Guid breedId,
     [FromServices] DeleteBreedHandler handler,
@@ -78,5 +79,18 @@ public class SpeciesController : ApplicationController
             return result.Error.ToResponse();
 
         return Envelope.Ok();
+    }
+
+    [HttpGet]
+    public async Task<ActionResult> GetAllSpecies(
+    [FromQuery] GetAllSpeciesWithPaginationRequest request,
+    [FromServices] GetAllSpeciesWithPaginationHandler handler,
+    CancellationToken ct)
+    {
+        var query = request.ToQuery();
+
+        var result = await handler.Handle(query, ct);
+
+        return Envelope.Ok(result);
     }
 }
