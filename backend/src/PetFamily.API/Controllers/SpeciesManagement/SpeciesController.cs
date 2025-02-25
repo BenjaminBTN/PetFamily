@@ -2,12 +2,12 @@
 using PetFamily.API.Controllers.SpeciesManagement.Requests;
 using PetFamily.API.Extensions;
 using PetFamily.API.Response;
-using PetFamily.Application.SpeciesManagement.AddBreed;
-using PetFamily.Application.SpeciesManagement.Create;
-using PetFamily.Application.SpeciesManagement.DeleteBreed;
-using PetFamily.Application.SpeciesManagement.DeleteSpecies;
-using PetFamily.Application.SpeciesManagement.GetAllBreedsWithPagination;
-using PetFamily.Application.SpeciesManagement.GetAllSpeciesWithPagination;
+using PetFamily.Application.SpeciesManagement.Commands.AddBreed;
+using PetFamily.Application.SpeciesManagement.Commands.Create;
+using PetFamily.Application.SpeciesManagement.Commands.DeleteBreed;
+using PetFamily.Application.SpeciesManagement.Commands.DeleteSpecies;
+using PetFamily.Application.SpeciesManagement.Queries.GetAllBreedsWithPagination;
+using PetFamily.Application.SpeciesManagement.Queries.GetAllSpeciesWithPagination;
 
 namespace PetFamily.API.Controllers.SpeciesManagement;
 

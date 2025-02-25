@@ -1,7 +1,7 @@
 using FluentValidation;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.SpeciesManagement.DeleteSpecies;
+namespace PetFamily.Application.SpeciesManagement.Commands.DeleteSpecies;
 
 public class DeleteSpeciesCommandValidator : AbstractValidator<DeleteSpeciesCommand>
 {

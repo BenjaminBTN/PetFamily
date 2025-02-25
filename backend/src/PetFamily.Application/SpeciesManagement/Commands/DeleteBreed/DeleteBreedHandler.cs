@@ -10,7 +10,7 @@ using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.SpeciesManagement.VO;
 
-namespace PetFamily.Application.SpeciesManagement.DeleteBreed;
+namespace PetFamily.Application.SpeciesManagement.Commands.DeleteBreed;
 
 public class DeleteBreedHandler : ICommandHandler<DeleteBreedCommand>
 {

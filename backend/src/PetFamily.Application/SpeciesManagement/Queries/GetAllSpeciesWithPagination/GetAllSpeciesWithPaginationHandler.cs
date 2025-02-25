@@ -7,7 +7,7 @@ using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.Models;
 
-namespace PetFamily.Application.SpeciesManagement.GetAllSpeciesWithPagination;
+namespace PetFamily.Application.SpeciesManagement.Queries.GetAllSpeciesWithPagination;
 
 public class GetAllSpeciesWithPaginationHandler
     : IQueryHandler<PagedList<SpeciesDto>, GetAllSpeciesWithPaginationQuery>
@@ -27,7 +27,7 @@ public class GetAllSpeciesWithPaginationHandler
 
         speciesQuery = speciesQuery
             .WhereIf(query.Id, s => s.Id == query.Id)
-            .WhereIf(query.Name, s => s.Name.Contains(query.Name!));
+            .WhereIf(query.Name, s => s.Name.Contains(query.Name!.ToLower()));
 
         _logger.LogInformation("The requestes collection of items 'Species' has been successfully compiled");
 

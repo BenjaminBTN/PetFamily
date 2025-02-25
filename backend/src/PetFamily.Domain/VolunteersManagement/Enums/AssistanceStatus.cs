@@ -1,7 +1,6 @@
-﻿namespace PetFamily.Domain.VolunteersManagement.Enums
+﻿namespace PetFamily.Domain.VolunteersManagement.Enums;
+
+public enum AssistanceStatus
 {
-    public enum AssistanceStatus
-    {
-        NeedsHelp, SearchHome, FoundHome
-    }
+    NeedsHelp, SearchHome, FoundHome
 }

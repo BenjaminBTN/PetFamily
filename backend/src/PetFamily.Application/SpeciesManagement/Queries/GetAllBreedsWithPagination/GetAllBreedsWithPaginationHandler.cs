@@ -7,8 +7,9 @@ using PetFamily.Application.Database;
 using PetFamily.Application.Dtos;
 using PetFamily.Application.Extensions;
 using PetFamily.Application.Models;
+using PetFamily.Application.SpeciesManagement.GetAllBreedsWithPagination;
 
-namespace PetFamily.Application.SpeciesManagement.GetAllBreedsWithPagination;
+namespace PetFamily.Application.SpeciesManagement.Queries.GetAllBreedsWithPagination;
 
 public class GetAllBreedsWithPaginationHandler
     : IQueryHandler<PagedList<BreedDto>, GetAllBreedsWithPaginationQuery>
@@ -29,7 +30,7 @@ public class GetAllBreedsWithPaginationHandler
         breedsQuery = breedsQuery
             .Where(b => b.SpeciesId == query.SpeciesId)
             .WhereIf(query.BreedId, b => b.Id == query.BreedId)
-            .WhereIf(query.Name, b => b.Name.Contains(query.Name!));
+            .WhereIf(query.Name, b => b.Name.Contains(query.Name!.ToLower()));
 
         _logger.LogInformation("The requestes collection of items 'Breeds' has been successfully compiled");
 

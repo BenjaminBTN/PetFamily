@@ -1,7 +1,7 @@
 using System;
 using PetFamily.Application.Abstractions;
 
-namespace PetFamily.Application.SpeciesManagement.GetAllSpeciesWithPagination;
+namespace PetFamily.Application.SpeciesManagement.Queries.GetAllSpeciesWithPagination;
 
 public record class GetAllSpeciesWithPaginationQuery(
     int PageNumber,

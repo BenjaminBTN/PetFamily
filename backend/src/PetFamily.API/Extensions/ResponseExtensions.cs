@@ -2,45 +2,44 @@
 using PetFamily.API.Response;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.API.Extensions
+namespace PetFamily.API.Extensions;
+
+public static class ResponseExtensions
 {
-    public static class ResponseExtensions
+    public static ActionResult ToResponse(this ErrorList errors)
     {
-        public static ActionResult ToResponse(this ErrorList errors)
+        if(errors.Any() == false)
         {
-            if(errors.Any() == false)
-            {
-                return new ObjectResult(Envelope.Error(errors))
-                {
-                    StatusCode = StatusCodes.Status500InternalServerError
-                };
-            }
-
-            //check there is only one type of error
-            var distinctErrorTypes = errors.Select(e => e.Type).Distinct().ToList();
-
-            if(distinctErrorTypes.Count > 1)
-            {
-                return new ObjectResult(Envelope.Error(errors))
-                {
-                    StatusCode = StatusCodes.Status500InternalServerError
-                };
-            }
-
-
-            var code = distinctErrorTypes.First() switch
-            {
-                ErrorType.Validation => StatusCodes.Status400BadRequest,
-                ErrorType.NotFound => StatusCodes.Status404NotFound,
-                ErrorType.Conflict => StatusCodes.Status409Conflict,
-                ErrorType.Failure => StatusCodes.Status500InternalServerError,
-                _ => StatusCodes.Status500InternalServerError
-            };
-
             return new ObjectResult(Envelope.Error(errors))
             {
-                StatusCode = code
+                StatusCode = StatusCodes.Status500InternalServerError
             };
         }
+
+        //check there is only one type of error
+        var distinctErrorTypes = errors.Select(e => e.Type).Distinct().ToList();
+
+        if(distinctErrorTypes.Count > 1)
+        {
+            return new ObjectResult(Envelope.Error(errors))
+            {
+                StatusCode = StatusCodes.Status500InternalServerError
+            };
+        }
+
+
+        var code = distinctErrorTypes.First() switch
+        {
+            ErrorType.Validation => StatusCodes.Status400BadRequest,
+            ErrorType.NotFound => StatusCodes.Status404NotFound,
+            ErrorType.Conflict => StatusCodes.Status409Conflict,
+            ErrorType.Failure => StatusCodes.Status500InternalServerError,
+            _ => StatusCodes.Status500InternalServerError
+        };
+
+        return new ObjectResult(Envelope.Error(errors))
+        {
+            StatusCode = code
+        };
     }
 }

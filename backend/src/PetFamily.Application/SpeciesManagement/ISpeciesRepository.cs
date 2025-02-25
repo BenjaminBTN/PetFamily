@@ -6,14 +6,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.SpeciesManagement
-{
-    public interface ISpeciesRepository
-    {
-        Task<Guid> Add(Species species, CancellationToken cancellationToken);
-        Task Delete(Species species, CancellationToken cancellationToken);
+namespace PetFamily.Application.SpeciesManagement;
 
-        Task<Result<Species, Error>> GetById(SpeciesId speciesId, CancellationToken cancellationToken);
-        Task<Result<Species, Error>> GetByName(SpeciesName name, CancellationToken cancellationToken);
-    }
+public interface ISpeciesRepository
+{
+    Task<Guid> Add(Species species, CancellationToken cancellationToken);
+    Task Delete(Species species, CancellationToken cancellationToken);
+
+    Task<Result<Species, Error>> GetById(SpeciesId speciesId, CancellationToken cancellationToken);
+    Task<Result<Species, Error>> GetByName(SpeciesName name, CancellationToken cancellationToken);
 }

@@ -24,13 +24,12 @@ public class GetVolunteerByIdHandlerDapper : IQueryHandler<PagedList<VolunteerDt
         _connectionFactory = connectionFactory;
     }
 
-
     public async Task<PagedList<VolunteerDto>> Handle(GetVolunteerByIdQuery query, CancellationToken ct)
     {
         var connection = _connectionFactory.Create();
 
         var parameters = new DynamicParameters();
-        parameters.Add("@VolunteerId", query.VolunteerId);
+        parameters.Add("@VolunteerId", query.Id);
 
         var sql =
         """
@@ -40,7 +39,6 @@ public class GetVolunteerByIdHandlerDapper : IQueryHandler<PagedList<VolunteerDt
         var volunteerDto = await connection.QueryAsync<
             VolunteerDto, string, string, string, string, string, VolunteerDto>(
                 sql,
-
                 (volunteerDto, name, surname, patronymic, jsonRequisites, jsonNetworks) =>
                 {
                     var fullName = new FullNameDto(name, surname, patronymic);
@@ -57,9 +55,7 @@ public class GetVolunteerByIdHandlerDapper : IQueryHandler<PagedList<VolunteerDt
 
                     return volunteerDto;
                 },
-
                 splitOn: "name,surname,patronymic,requisites,networks",
-
                 param: parameters);
 
         return new PagedList<VolunteerDto>

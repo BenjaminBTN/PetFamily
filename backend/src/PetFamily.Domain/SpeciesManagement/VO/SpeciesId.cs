@@ -1,15 +1,14 @@
 ﻿using System;
 
-namespace PetFamily.Domain.SpeciesManagement.VO
+namespace PetFamily.Domain.SpeciesManagement.VO;
+
+public record SpeciesId
 {
-    public record SpeciesId
-    {
-        public Guid Value { get; }
+    public Guid Value { get; }
 
-        private SpeciesId(Guid value) => Value = value;
+    private SpeciesId(Guid value) => Value = value;
 
-        public static SpeciesId NewId() => new(Guid.NewGuid());
-        public static SpeciesId Empty() => new(Guid.Empty);
-        public static SpeciesId Create(Guid id) => new(id);
-    }
+    public static SpeciesId NewId() => new(Guid.NewGuid());
+    public static SpeciesId Empty() => new(Guid.Empty);
+    public static SpeciesId Create(Guid id) => new(id);
 }

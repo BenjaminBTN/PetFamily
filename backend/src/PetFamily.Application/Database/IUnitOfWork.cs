@@ -2,11 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PetFamily.Application.Database
+namespace PetFamily.Application.Database;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        Task<IDbTransaction> BeginTransaction(CancellationToken cancellationToken);
-        Task SaveChanges(CancellationToken cancellationToken);
-    }
+    Task<IDbTransaction> BeginTransaction(CancellationToken cancellationToken);
+    Task SaveChanges(CancellationToken cancellationToken);
 }

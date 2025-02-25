@@ -1,9 +1,8 @@
-﻿namespace PetFamily.Domain.Shared.Interfaces
-{
-    public interface IDeletable
-    {
-        void Delete();
+﻿namespace PetFamily.Domain.Shared.Interfaces;
 
-        void Restore();
-    }
+public interface IDeletable
+{
+    void Delete();
+
+    void Restore();
 }

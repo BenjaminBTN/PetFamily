@@ -1,11 +1,10 @@
-namespace PetFamily.Infrastructure.UnitTests
+namespace PetFamily.Infrastructure.UnitTests;
+
+//System.Threading.
+public class UnitTest1
 {
-    //System.Threading.
-    public class UnitTest1
+    public void Test1()
     {
-        public void Test1()
-        {
-            
-        }
+        
     }
 }
