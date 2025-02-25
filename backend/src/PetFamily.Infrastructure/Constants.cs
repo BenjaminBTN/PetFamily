@@ -1,7 +1,6 @@
-﻿namespace PetFamily.Infrastructure
+﻿namespace PetFamily.Infrastructure;
+
+internal static class Constants
 {
-    internal static class Constants
-    {
-        public const string DATABASE = "Database";
-    }
+    public const string DATABASE = "Database";
 }

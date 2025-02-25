@@ -30,8 +30,8 @@ public class GetAllVolunteersWithPaginationHandler :
 
         volunteersQuery = volunteersQuery
             .WhereIf(query.Id, v => v.Id == query.Id)
-            .WhereIf(query.Name, v => v.FullName.Name.Contains(query.Name!)
-                                   || v.FullName.Surname.Contains(query.Name!));
+            .WhereIf(query.Name, v => v.FullName.Name.Contains(query.Name!.ToLower())
+                                   || v.FullName.Surname.Contains(query.Name!.ToLower()));
 
         _logger.LogInformation("The requestes collection of items 'Species' has been successfully compiled");
 

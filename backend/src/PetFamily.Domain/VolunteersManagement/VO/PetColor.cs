@@ -1,23 +1,22 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.VolunteersManagement.VO
+namespace PetFamily.Domain.VolunteersManagement.VO;
+
+public record PetColor
 {
-    public record PetColor
+    public string Value { get; }
+
+    private PetColor(string value) => Value = value;
+
+    public static Result<PetColor, Error> Create(string value)
     {
-        public string Value { get; }
+        if(string.IsNullOrWhiteSpace(value))
+            return Errors.General.InvalidValue("PetColor");
 
-        private PetColor(string value) => Value = value;
+        if(value.Length > Constants.MAX_LOW_TEXT_LENGTH)
+            return Errors.General.OverMaxLength("PetColor");
 
-        public static Result<PetColor, Error> Create(string value)
-        {
-            if(string.IsNullOrWhiteSpace(value))
-                return Errors.General.InvalidValue("PetColor");
-
-            if(value.Length > Constants.MAX_LOW_TEXT_LENGTH)
-                return Errors.General.OverMaxLength("PetColor");
-
-            return new PetColor(value);
-        }
+        return new PetColor(value);
     }
 }

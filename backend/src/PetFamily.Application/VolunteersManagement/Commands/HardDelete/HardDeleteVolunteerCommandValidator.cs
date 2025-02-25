@@ -1,15 +1,14 @@
 ﻿using FluentValidation;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Application.VolunteersManagement.Commands.HardDelete
+namespace PetFamily.Application.VolunteersManagement.Commands.HardDelete;
+
+public class HardDeleteVolunteerCommandValidator : AbstractValidator<HardDeleteVolunteerCommand>
 {
-    public class HardDeleteVolunteerCommandValidator : AbstractValidator<HardDeleteVolunteerCommand>
+    public HardDeleteVolunteerCommandValidator()
     {
-        public HardDeleteVolunteerCommandValidator()
-        {
-            RuleFor(c => c.VolunteerId)
-                .NotEmpty()
-                .WithMessage(Errors.General.InvalidValue("{PropertyName}").Serialize());
-        }
+        RuleFor(c => c.VolunteerId)
+            .NotEmpty()
+            .WithMessage(Errors.General.InvalidValue("{PropertyName}").Serialize());
     }
 }

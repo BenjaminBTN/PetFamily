@@ -1,28 +1,27 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.Domain.Shared;
 
-namespace PetFamily.Domain.VolunteersManagement.VO
+namespace PetFamily.Domain.VolunteersManagement.VO;
+
+public class VolunteerRequisite
 {
-    public class VolunteerRequisite
+    public string Name { get; }
+    public string Description { get; }
+
+    private VolunteerRequisite(string name, string description)
     {
-        public string Name { get; }
-        public string Description { get; }
+        Name = name;
+        Description = description;
+    }
 
-        private VolunteerRequisite(string name, string description)
-        {
-            Name = name;
-            Description = description;
-        }
+    public static Result<VolunteerRequisite, Error> Create(string name, string description)
+    {
+        if(string.IsNullOrWhiteSpace(name))
+            return Errors.General.InvalidValue("Name");
 
-        public static Result<VolunteerRequisite, Error> Create(string name, string description)
-        {
-            if(string.IsNullOrWhiteSpace(name))
-                return Errors.General.InvalidValue("Name");
+        if(string.IsNullOrWhiteSpace(description))
+            return Errors.General.InvalidValue("Description");
 
-            if(string.IsNullOrWhiteSpace(description))
-                return Errors.General.InvalidValue("Description");
-
-            return new VolunteerRequisite(name, description);
-        }
+        return new VolunteerRequisite(name, description);
     }
 }

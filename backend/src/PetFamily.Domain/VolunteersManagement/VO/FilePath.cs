@@ -2,33 +2,32 @@
 using PetFamily.Domain.Shared;
 using System;
 
-namespace PetFamily.Domain.VolunteersManagement.VO
+namespace PetFamily.Domain.VolunteersManagement.VO;
+
+public class FilePath
 {
-    public class FilePath
+    public string Value { get; }
+
+
+    private FilePath(string path)
     {
-        public string Value { get; }
+        Value = path.ToLower();
+    }
 
 
-        private FilePath(string path)
-        {
-            Value = path;
-        }
+    public static Result<FilePath, Error> Create(Guid name, string ext)
+    {
+        // validation
 
+        var fullName = name + ext;
 
-        public static Result<FilePath, Error> Create(Guid name, string ext)
-        {
-            // validation
+        return new FilePath(fullName);
+    }
+    
+    public static Result<FilePath, Error> Create(string fullName)
+    {
+        // validation
 
-            var fullName = name + ext;
-
-            return new FilePath(fullName);
-        }
-        
-        public static Result<FilePath, Error> Create(string fullName)
-        {
-            // validation
-
-            return new FilePath(fullName);
-        }
+        return new FilePath(fullName);
     }
 }

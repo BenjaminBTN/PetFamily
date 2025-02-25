@@ -1,12 +1,11 @@
-﻿using PetFamily.Application.SpeciesManagement.Create;
+﻿using PetFamily.Application.SpeciesManagement.Commands.Create;
 
-namespace PetFamily.API.Controllers.SpeciesManagement.Requests
+namespace PetFamily.API.Controllers.SpeciesManagement.Requests;
+
+public record CreateSpeciesRequest(string Name)
 {
-    public record CreateSpeciesRequest(string Name)
+    public CreateSpeciesCommand ToCommand()
     {
-        public CreateSpeciesCommand ToCommand()
-        {
-            return new CreateSpeciesCommand(Name);
-        }
+        return new CreateSpeciesCommand(Name);
     }
 }

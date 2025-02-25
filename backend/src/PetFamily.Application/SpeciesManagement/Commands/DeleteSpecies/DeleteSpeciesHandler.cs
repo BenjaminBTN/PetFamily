@@ -11,7 +11,7 @@ using PetFamily.Application.Extensions;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.SpeciesManagement.VO;
 
-namespace PetFamily.Application.SpeciesManagement.DeleteSpecies;
+namespace PetFamily.Application.SpeciesManagement.Commands.DeleteSpecies;
 
 public class DeleteSpeciesHandler : ICommandHandler<DeleteSpeciesCommand>
 {
