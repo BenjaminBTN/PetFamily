@@ -99,9 +99,12 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
 
         var phoneNumber = PhoneNumber.Create(command.PhoneNumber).Value;
 
-        var birthDateResult = CreateBirthDate(command.BirthDate);
-        if(birthDateResult.IsFailure)
+        var birthDateResult = NullableDateTimeParser.CreateDateTime(command.BirthDate);
+        if (birthDateResult.IsFailure)
+        {
+            _logger.LogError("Invalid date time format");
             return birthDateResult.Error.ToErrorList();
+        }
 
         var status = (AssistanceStatus)command.Status;
 
@@ -119,26 +122,5 @@ public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
             pet.Id.Value);
 
         return pet.Id.Value;
-    }
-
-    private Result<DateTime?, Error> CreateBirthDate(string? value)
-    {
-        DateTime? birthDate;
-        if(value == null)
-            birthDate = null;
-        else
-        {
-            try
-            {
-                birthDate = DateTime.Parse(value).ToLocalTime();
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex, "Invalid date time format");
-                return Errors.General.InvalidValue("Birth date");
-            }
-        }
-
-        return birthDate;
     }
 }
