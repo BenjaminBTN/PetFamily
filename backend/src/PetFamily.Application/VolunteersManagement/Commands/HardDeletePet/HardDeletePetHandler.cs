@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -7,32 +8,36 @@ using Microsoft.Extensions.Logging;
 using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
+using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Domain.Shared;
 using PetFamily.Domain.VolunteersManagement.VO;
 
-namespace PetFamily.Application.VolunteersManagement.Commands.SoftDeletePet;
+namespace PetFamily.Application.VolunteersManagement.Commands.HardDeletePet;
 
-public class SoftDeletePetHandler : ICommandHandler<Guid, SoftDeletePetCommand>
+public class HardDeletePetHandler : ICommandHandler<Guid, HardDeletePetCommand>
 {
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IValidator<SoftDeletePetCommand> _validator;
-    private readonly ILogger<SoftDeletePetHandler> _logger;
+    private readonly IFileProvider _fileProvider;
+    private readonly IValidator<HardDeletePetCommand> _validator;
+    private readonly ILogger<HardDeletePetHandler> _logger;
 
-    public SoftDeletePetHandler(
+    public HardDeletePetHandler(
         IVolunteersRepository volunteersRepository,
         IUnitOfWork unitOfWork,
-        IValidator<SoftDeletePetCommand> validator,
-        ILogger<SoftDeletePetHandler> logger)
+        IFileProvider fileProvider,
+        IValidator<HardDeletePetCommand> validator,
+        ILogger<HardDeletePetHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
         _unitOfWork = unitOfWork;
+        _fileProvider = fileProvider;
         _validator = validator;
         _logger = logger;
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
-        SoftDeletePetCommand command,
+        HardDeletePetCommand command,
         CancellationToken ct)
     {
         // validation
@@ -56,12 +61,18 @@ public class SoftDeletePetHandler : ICommandHandler<Guid, SoftDeletePetCommand>
 
         var pet = petResult.Value;
 
-        // soft-delete pet
-        pet.Delete();
+        // hard-delete pet
+        volunteer.DeletePet(pet);
+
+        var filesToDelete = pet.PetPhotos.Photos.Select(p => new FileInfo(p.PathToStorage.Value, Buckets.PHOTOS));
+
+        var deleteResult = await _fileProvider.Delete(filesToDelete, ct);
+        if (deleteResult.IsFailure)
+            return deleteResult.Error.ToErrorList();
 
         await _unitOfWork.SaveChanges(ct);
 
-        _logger.LogInformation("An existing pet record with  ID '{id}' has been successfully soft deleted",
+        _logger.LogInformation("An existing pet record with ID '{id}' has been successfully hard deleted",
             pet.Id.Value);
 
         return pet.Id.Value;

@@ -3,6 +3,7 @@ using PetFamily.API.Controllers.VolunteersManagement.Requests;
 using PetFamily.API.Extensions;
 using PetFamily.API.Processors;
 using PetFamily.API.Response;
+using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Application.VolunteersManagement.Commands.AddPet;
 using PetFamily.Application.VolunteersManagement.Commands.AddPetPhotos;
 using PetFamily.Application.VolunteersManagement.Commands.ChangePetStatus;
@@ -10,6 +11,7 @@ using PetFamily.Application.VolunteersManagement.Commands.Create;
 using PetFamily.Application.VolunteersManagement.Commands.DeleteFiles;
 using PetFamily.Application.VolunteersManagement.Commands.GetFiles;
 using PetFamily.Application.VolunteersManagement.Commands.HardDelete;
+using PetFamily.Application.VolunteersManagement.Commands.HardDeletePet;
 using PetFamily.Application.VolunteersManagement.Commands.MovePet;
 using PetFamily.Application.VolunteersManagement.Commands.RestorePet;
 using PetFamily.Application.VolunteersManagement.Commands.SoftDelete;
@@ -151,7 +153,6 @@ public class VolunteersController : ApplicationController
     public async Task<ActionResult<string>> AddPetPhotos(
         [FromRoute] Guid id,
         [FromRoute] Guid petId,
-        [FromQuery] string bucketName,
         IFormFileCollection files,
         [FromServices] AddPetPhotosHandler handler,
         CancellationToken cancellationToken = default)
@@ -161,7 +162,7 @@ public class VolunteersController : ApplicationController
         if (filesDtoResult.IsFailure)
             return filesDtoResult.Error.ToErrorList().ToResponse();
 
-        var command = new AddPetPhotosCommand(id, petId, filesDtoResult.Value, bucketName);
+        var command = new AddPetPhotosCommand(id, petId, filesDtoResult.Value, Buckets.PHOTOS);
 
         var result = await handler.Handle(command, cancellationToken);
         if (result.IsFailure)
@@ -310,6 +311,23 @@ public class VolunteersController : ApplicationController
     CancellationToken ct)
     {
         var command = new RestorePetCommand(id, petId);
+
+        var result = await handler.Handle(command, ct);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Envelope.Ok(result.Value);
+    }
+
+    [HttpDelete]
+    [Route("{id:guid}/pets/{petId:guid}/hard")]
+    public async Task<ActionResult> HardDeletePet(
+    [FromRoute] Guid id,
+    [FromRoute] Guid petId,
+    [FromServices] HardDeletePetHandler handler,
+    CancellationToken ct)
+    {
+        var command = new HardDeletePetCommand(id, petId);
 
         var result = await handler.Handle(command, ct);
         if (result.IsFailure)
