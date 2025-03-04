@@ -5,6 +5,7 @@ using PetFamily.API.Processors;
 using PetFamily.API.Response;
 using PetFamily.Application.VolunteersManagement.Commands.AddPet;
 using PetFamily.Application.VolunteersManagement.Commands.AddPetPhotos;
+using PetFamily.Application.VolunteersManagement.Commands.ChangePetStatus;
 using PetFamily.Application.VolunteersManagement.Commands.Create;
 using PetFamily.Application.VolunteersManagement.Commands.DeleteFiles;
 using PetFamily.Application.VolunteersManagement.Commands.GetFiles;
@@ -144,7 +145,7 @@ public class VolunteersController : ApplicationController
     }
 
     [HttpPost]
-    [Route("{id:guid}/pets/{petId:guid}")]
+    [Route("{id:guid}/pets/{petId:guid}/photos")]
     public async Task<ActionResult<string>> AddPetPhotos(
         [FromRoute] Guid id,
         [FromRoute] Guid petId,
@@ -168,7 +169,7 @@ public class VolunteersController : ApplicationController
     }
 
     [HttpGet]
-    [Route("{id}/pets/{petId:guid}")]
+    [Route("{id:guid}/pets/{petId:guid}/photos")]
     public async Task<ActionResult> GetPetPhotos(
         [FromQuery] GetFilesRequest request,
         [FromServices] GetFilesHandler handler,
@@ -184,7 +185,7 @@ public class VolunteersController : ApplicationController
     }
 
     [HttpDelete]
-    [Route("{id:guid}/pets/{petId:guid}")]
+    [Route("{id:guid}/pets/{petId:guid}/photos")]
     public async Task<ActionResult> DeletePetPhotos(
         [FromRoute] Guid id,
         [FromRoute] Guid petId,
@@ -246,12 +247,30 @@ public class VolunteersController : ApplicationController
     }
 
     [HttpPut]
-    [Route("{id:guid}/pets/{petId:guid}")]
+    [Route("{id:guid}/pets/{petId:guid}/info")]
     public async Task<ActionResult> UpdatePet(
         [FromRoute] Guid id,
         [FromRoute] Guid petId,
         [FromBody] UpdatePetRequest request,
         [FromServices] UpdatePetHandler handler,
+        CancellationToken ct)
+    {
+        var command = request.ToCommand(id, petId);
+
+        var result = await handler.Handle(command, ct);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Envelope.Ok(result.Value);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/pets/{petId:guid}/status")]
+    public async Task<ActionResult> ChangePetStatus(
+        [FromRoute] Guid id,
+        [FromRoute] Guid petId,
+        [FromBody] ChangePetStatusRequest request,
+        [FromServices] ChangePetStatusHandler handler,
         CancellationToken ct)
     {
         var command = request.ToCommand(id, petId);

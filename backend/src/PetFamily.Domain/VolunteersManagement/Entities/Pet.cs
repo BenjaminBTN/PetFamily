@@ -123,7 +123,11 @@ public class Pet : Shared.Entity<PetId>, IDeletable
     }
 
 
-    public void SetOrdinalNumber(OrdinalNumber ordinalNumber) => 
+    public void ChangeStatus(AssistanceStatus status) =>
+        Status = status;
+
+
+    public void SetOrdinalNumber(OrdinalNumber ordinalNumber) =>
         OrdinalNumber = ordinalNumber;
 
 
