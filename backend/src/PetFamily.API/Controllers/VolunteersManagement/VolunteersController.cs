@@ -11,7 +11,9 @@ using PetFamily.Application.VolunteersManagement.Commands.DeleteFiles;
 using PetFamily.Application.VolunteersManagement.Commands.GetFiles;
 using PetFamily.Application.VolunteersManagement.Commands.HardDelete;
 using PetFamily.Application.VolunteersManagement.Commands.MovePet;
+using PetFamily.Application.VolunteersManagement.Commands.RestorePet;
 using PetFamily.Application.VolunteersManagement.Commands.SoftDelete;
+using PetFamily.Application.VolunteersManagement.Commands.SoftDeletePet;
 using PetFamily.Application.VolunteersManagement.Commands.Update.MainInfo;
 using PetFamily.Application.VolunteersManagement.Commands.Update.Requsites;
 using PetFamily.Application.VolunteersManagement.Commands.Update.SocialNetworks;
@@ -274,6 +276,40 @@ public class VolunteersController : ApplicationController
         CancellationToken ct)
     {
         var command = request.ToCommand(id, petId);
+
+        var result = await handler.Handle(command, ct);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Envelope.Ok(result.Value);
+    }
+
+    [HttpDelete]
+    [Route("{id:guid}/pets/{petId:guid}/soft")]
+    public async Task<ActionResult> SoftDeletePet(
+    [FromRoute] Guid id,
+    [FromRoute] Guid petId,
+    [FromServices] SoftDeletePetHandler handler,
+    CancellationToken ct)
+    {
+        var command = new SoftDeletePetCommand(id, petId);
+
+        var result = await handler.Handle(command, ct);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Envelope.Ok(result.Value);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/pets/{petId:guid}/restore")]
+    public async Task<ActionResult> RestorePet(
+    [FromRoute] Guid id,
+    [FromRoute] Guid petId,
+    [FromServices] RestorePetHandler handler,
+    CancellationToken ct)
+    {
+        var command = new RestorePetCommand(id, petId);
 
         var result = await handler.Handle(command, ct);
         if (result.IsFailure)

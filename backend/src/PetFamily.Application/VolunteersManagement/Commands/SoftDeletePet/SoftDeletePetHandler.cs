@@ -1,5 +1,4 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
@@ -8,27 +7,23 @@ using Microsoft.Extensions.Logging;
 using PetFamily.Application.Abstractions;
 using PetFamily.Application.Database;
 using PetFamily.Application.Extensions;
-using PetFamily.Application.SpeciesManagement;
 using PetFamily.Domain.Shared;
-using PetFamily.Domain.Shared.VO;
-using PetFamily.Domain.SpeciesManagement.VO;
-using PetFamily.Domain.VolunteersManagement.Enums;
 using PetFamily.Domain.VolunteersManagement.VO;
 
-namespace PetFamily.Application.VolunteersManagement.Commands.ChangePetStatus;
+namespace PetFamily.Application.VolunteersManagement.Commands.SoftDeletePet;
 
-public class ChangePetStatusHandler : ICommandHandler<Guid, ChangePetStatusCommand>
+public class SoftDeletePetHandler : ICommandHandler<Guid, SoftDeletePetCommand>
 {
     private readonly IVolunteersRepository _volunteersRepository;
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IValidator<ChangePetStatusCommand> _validator;
-    private readonly ILogger<ChangePetStatusHandler> _logger;
+    private readonly IValidator<SoftDeletePetCommand> _validator;
+    private readonly ILogger<SoftDeletePetHandler> _logger;
 
-    public ChangePetStatusHandler(
+    public SoftDeletePetHandler(
         IVolunteersRepository volunteersRepository,
         IUnitOfWork unitOfWork,
-        IValidator<ChangePetStatusCommand> validator,
-        ILogger<ChangePetStatusHandler> logger)
+        IValidator<SoftDeletePetCommand> validator,
+        ILogger<SoftDeletePetHandler> logger)
     {
         _volunteersRepository = volunteersRepository;
         _unitOfWork = unitOfWork;
@@ -37,13 +32,13 @@ public class ChangePetStatusHandler : ICommandHandler<Guid, ChangePetStatusComma
     }
 
     public async Task<Result<Guid, ErrorList>> Handle(
-        ChangePetStatusCommand command,
+        SoftDeletePetCommand command,
         CancellationToken ct)
     {
         // validation
         var validationResult = await _validator.ValidateAsync(command, ct);
         if (validationResult.IsValid == false)
-            return validationResult.ToErrorList(_logger, "update", "pet status");
+            return validationResult.ToErrorList(_logger, "delete", "pet");
 
         // get a volunteer
         var volunteerId = VolunteerId.Create(command.VolunteerId);
@@ -61,14 +56,12 @@ public class ChangePetStatusHandler : ICommandHandler<Guid, ChangePetStatusComma
 
         var pet = petResult.Value;
 
-        // update pet status
-        var status = (AssistanceStatus)command.Status;
-
-        pet.ChangeStatus(status);
+        // soft-delete pet
+        pet.Delete();
 
         await _unitOfWork.SaveChanges(ct);
 
-        _logger.LogInformation("The status of a pet record with ID '{id}' has been successfully updated",
+        _logger.LogInformation("The pet record with ID '{id}' has been successfully soft-deleted",
             pet.Id.Value);
 
         return pet.Id.Value;

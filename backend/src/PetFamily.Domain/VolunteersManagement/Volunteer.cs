@@ -107,10 +107,16 @@ public class Volunteer : Shared.Entity<VolunteerId>, IDeletable
     }
 
 
+    public void DeletePet(Pet pet)
+    {
+        _pets.Remove(pet);
+    }
+
+
     public Result<Pet, Error> GetPetById(PetId id)
     {
         var result = _pets.FirstOrDefault(p => p.Id == id);
-        if(result == null)
+        if (result == null)
             return Errors.General.NotFound(id.Value);
 
         return result;

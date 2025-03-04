@@ -10,9 +10,9 @@ var builder = WebApplication.CreateBuilder(args);
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
 Log.Logger = new LoggerConfiguration()
-    .WriteTo.Console()
+    // .WriteTo.Console()
     .WriteTo.Debug()
-    .WriteTo.File("logs/logs_by_serilog.txt")
+    // .WriteTo.File("logs/logs_by_serilog.txt")
     .WriteTo.Seq(builder.Configuration.GetConnectionString("Seq")
              ?? throw new ArgumentNullException("Seq"))
     .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
