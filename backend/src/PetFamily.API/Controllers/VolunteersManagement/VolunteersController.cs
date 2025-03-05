@@ -14,6 +14,7 @@ using PetFamily.Application.VolunteersManagement.Commands.HardDelete;
 using PetFamily.Application.VolunteersManagement.Commands.HardDeletePet;
 using PetFamily.Application.VolunteersManagement.Commands.MovePet;
 using PetFamily.Application.VolunteersManagement.Commands.RestorePet;
+using PetFamily.Application.VolunteersManagement.Commands.SelectMainPetPhoto;
 using PetFamily.Application.VolunteersManagement.Commands.SoftDelete;
 using PetFamily.Application.VolunteersManagement.Commands.SoftDeletePet;
 using PetFamily.Application.VolunteersManagement.Commands.Update.MainInfo;
@@ -334,5 +335,23 @@ public class VolunteersController : ApplicationController
             return result.Error.ToResponse();
 
         return Envelope.Ok(result.Value);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/pets/{petId:guid}/photos")]
+    public async Task<ActionResult> SelectMainPetPhoto(
+    [FromRoute] Guid id,
+    [FromRoute] Guid petId,
+    [FromQuery] SelectMainPetPhotoRequest request,
+    [FromServices] SelectMainPetPhotoHandler handler,
+    CancellationToken ct)
+    {
+        var command = request.ToCommand(id, petId);
+
+        var result = await handler.Handle(command, ct);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Envelope.Ok();
     }
 }

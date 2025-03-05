@@ -123,7 +123,7 @@ public class UpdatePetHandler : ICommandHandler<Guid, UpdatePetCommand>
 
         await _unitOfWork.SaveChanges(ct);
 
-        _logger.LogInformation("The record of a pet with ID '{id}' has been successfully updated",
+        _logger.LogInformation("The pet record with ID '{id}' has been successfully updated",
             pet.Id.Value);
 
         return pet.Id.Value;

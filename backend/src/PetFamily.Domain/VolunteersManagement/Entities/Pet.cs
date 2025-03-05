@@ -186,10 +186,12 @@ public class Pet : Shared.Entity<PetId>, IDeletable
     }
 
 
-    public void UpdatePetPhotos(IEnumerable<FilePath> paths)
+    public void UpdatePetPhotos(IEnumerable<Photo> newPhotoList)
     {
         List<Photo> photos = [];
-        paths.ToList().ForEach(path => photos.Add(new Photo(path)));
+        
+        newPhotoList.ToList()
+            .ForEach(photo => photos.Add(new Photo(photo.PathToStorage, photo.IsMain)));
 
         PetPhotos = new PhotoList(photos);
     }
