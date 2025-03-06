@@ -123,7 +123,11 @@ public class Pet : Shared.Entity<PetId>, IDeletable
     }
 
 
-    public void SetOrdinalNumber(OrdinalNumber ordinalNumber) => 
+    public void ChangeStatus(AssistanceStatus status) =>
+        Status = status;
+
+
+    public void SetOrdinalNumber(OrdinalNumber ordinalNumber) =>
         OrdinalNumber = ordinalNumber;
 
 
@@ -157,14 +161,14 @@ public class Pet : Shared.Entity<PetId>, IDeletable
         PetType typeInfo,
         PetColor color,
         PetHealthInfo? healthInfo,
-        Address? address,
+        Address address,
         double weight,
         double height,
         PhoneNumber phoneNumber,
         bool isCastrated,
         bool isVaccinated,
         DateTime? birthDate,
-        AssistanceStatus status)
+        RequisiteForHelpList requisitesForHelp)
     {
         Name = name;
         Description = description;
@@ -178,20 +182,16 @@ public class Pet : Shared.Entity<PetId>, IDeletable
         IsCastrated = isCastrated;
         IsVaccinated = isVaccinated;
         BirthDate = birthDate;
-        Status = status;
+        RequisitesForHelp = requisitesForHelp;
     }
 
 
-    public void UpdateRequisitesForHelp(RequisiteForHelpList requisites)
+    public void UpdatePetPhotos(IEnumerable<Photo> newPhotoList)
     {
-        RequisitesForHelp = requisites;
-    }
-
-
-    public void UpdatePetPhotos(IEnumerable<FilePath> paths)
-    {
-        List<Photo> photos = new List<Photo>();
-        paths.ToList().ForEach(path => photos.Add(new Photo(path)));
+        List<Photo> photos = [];
+        
+        newPhotoList.ToList()
+            .ForEach(photo => photos.Add(new Photo(photo.PathToStorage, photo.IsMain)));
 
         PetPhotos = new PhotoList(photos);
     }

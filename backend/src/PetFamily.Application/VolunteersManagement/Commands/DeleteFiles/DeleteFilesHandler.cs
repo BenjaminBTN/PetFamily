@@ -64,14 +64,14 @@ public class DeleteFilesHandler : ICommandHandler<string, DeleteFilesCommand>
         if(deleteResult.IsFailure)
             return deleteResult.Error.ToErrorList();
 
-        var petPhotos = pet.PetPhotos.Photos.Select(p => p.PathToStorage).ToList();
+        var petPhotos = pet.PetPhotos.Photos.ToList();
 
         foreach(var name in command.ObjectNames)
         {
             try
             {
-                var filePath = petPhotos.Single(p => p.Value == name);
-                petPhotos.Remove(filePath);
+                var photo = petPhotos.Single(p => p.PathToStorage.Value == name);
+                petPhotos.Remove(photo);
             }
             catch(Exception)
             {

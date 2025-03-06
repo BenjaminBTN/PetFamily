@@ -3,17 +3,24 @@ using PetFamily.API.Controllers.VolunteersManagement.Requests;
 using PetFamily.API.Extensions;
 using PetFamily.API.Processors;
 using PetFamily.API.Response;
+using PetFamily.Application.Providers.FileProvider;
 using PetFamily.Application.VolunteersManagement.Commands.AddPet;
 using PetFamily.Application.VolunteersManagement.Commands.AddPetPhotos;
+using PetFamily.Application.VolunteersManagement.Commands.ChangePetStatus;
 using PetFamily.Application.VolunteersManagement.Commands.Create;
 using PetFamily.Application.VolunteersManagement.Commands.DeleteFiles;
 using PetFamily.Application.VolunteersManagement.Commands.GetFiles;
 using PetFamily.Application.VolunteersManagement.Commands.HardDelete;
+using PetFamily.Application.VolunteersManagement.Commands.HardDeletePet;
 using PetFamily.Application.VolunteersManagement.Commands.MovePet;
+using PetFamily.Application.VolunteersManagement.Commands.RestorePet;
+using PetFamily.Application.VolunteersManagement.Commands.SelectMainPetPhoto;
 using PetFamily.Application.VolunteersManagement.Commands.SoftDelete;
+using PetFamily.Application.VolunteersManagement.Commands.SoftDeletePet;
 using PetFamily.Application.VolunteersManagement.Commands.Update.MainInfo;
 using PetFamily.Application.VolunteersManagement.Commands.Update.Requsites;
 using PetFamily.Application.VolunteersManagement.Commands.Update.SocialNetworks;
+using PetFamily.Application.VolunteersManagement.Commands.UpdatePet;
 using PetFamily.Application.VolunteersManagement.Queries.GetAllVolunteersWithPagination;
 using PetFamily.Application.VolunteersManagement.Queries.GetVolunteerById;
 
@@ -143,11 +150,10 @@ public class VolunteersController : ApplicationController
     }
 
     [HttpPost]
-    [Route("{volunteerId:guid}/pets/{petId:guid}")]
+    [Route("{id:guid}/pets/{petId:guid}/photos")]
     public async Task<ActionResult<string>> AddPetPhotos(
-        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid id,
         [FromRoute] Guid petId,
-        [FromQuery] string bucketName,
         IFormFileCollection files,
         [FromServices] AddPetPhotosHandler handler,
         CancellationToken cancellationToken = default)
@@ -157,7 +163,7 @@ public class VolunteersController : ApplicationController
         if (filesDtoResult.IsFailure)
             return filesDtoResult.Error.ToErrorList().ToResponse();
 
-        var command = new AddPetPhotosCommand(volunteerId, petId, filesDtoResult.Value, bucketName);
+        var command = new AddPetPhotosCommand(id, petId, filesDtoResult.Value, Buckets.PHOTOS);
 
         var result = await handler.Handle(command, cancellationToken);
         if (result.IsFailure)
@@ -167,7 +173,7 @@ public class VolunteersController : ApplicationController
     }
 
     [HttpGet]
-    [Route("{volunteerId}/pets/{petId:guid}")]
+    [Route("{id:guid}/pets/{petId:guid}/photos")]
     public async Task<ActionResult> GetPetPhotos(
         [FromQuery] GetFilesRequest request,
         [FromServices] GetFilesHandler handler,
@@ -183,15 +189,15 @@ public class VolunteersController : ApplicationController
     }
 
     [HttpDelete]
-    [Route("{volunteerId:guid}/pets/{petId:guid}")]
+    [Route("{id:guid}/pets/{petId:guid}/photos")]
     public async Task<ActionResult> DeletePetPhotos(
-        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid id,
         [FromRoute] Guid petId,
         [FromQuery] DeletePetPhotosRequest request,
         [FromServices] DeleteFilesHandler handler,
         CancellationToken cancellationToken = default)
     {
-        var command = request.ToCommand(volunteerId, petId);
+        var command = request.ToCommand(id, petId);
 
         var result = await handler.Handle(command, cancellationToken);
         if (result.IsFailure)
@@ -201,14 +207,14 @@ public class VolunteersController : ApplicationController
     }
 
     [HttpPut]
-    [Route("{volunteerId:guid}/pets/")]
+    [Route("{id:guid}/pets/")]
     public async Task<ActionResult> MovePet(
-        [FromRoute] Guid volunteerId,
+        [FromRoute] Guid id,
         [FromQuery] MovePetRequest request,
         [FromServices] MovePetHandler handler,
         CancellationToken ct = default)
     {
-        var command = request.ToCommand(volunteerId);
+        var command = request.ToCommand(id);
 
         var result = await handler.Handle(command, ct);
         if (result.IsFailure)
@@ -242,5 +248,110 @@ public class VolunteersController : ApplicationController
         var result = await handler.Handle(query, ct);
 
         return Envelope.Ok(result);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/pets/{petId:guid}/info")]
+    public async Task<ActionResult> UpdatePet(
+        [FromRoute] Guid id,
+        [FromRoute] Guid petId,
+        [FromBody] UpdatePetRequest request,
+        [FromServices] UpdatePetHandler handler,
+        CancellationToken ct)
+    {
+        var command = request.ToCommand(id, petId);
+
+        var result = await handler.Handle(command, ct);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Envelope.Ok(result.Value);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/pets/{petId:guid}/status")]
+    public async Task<ActionResult> ChangePetStatus(
+        [FromRoute] Guid id,
+        [FromRoute] Guid petId,
+        [FromBody] ChangePetStatusRequest request,
+        [FromServices] ChangePetStatusHandler handler,
+        CancellationToken ct)
+    {
+        var command = request.ToCommand(id, petId);
+
+        var result = await handler.Handle(command, ct);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Envelope.Ok(result.Value);
+    }
+
+    [HttpDelete]
+    [Route("{id:guid}/pets/{petId:guid}/soft")]
+    public async Task<ActionResult> SoftDeletePet(
+    [FromRoute] Guid id,
+    [FromRoute] Guid petId,
+    [FromServices] SoftDeletePetHandler handler,
+    CancellationToken ct)
+    {
+        var command = new SoftDeletePetCommand(id, petId);
+
+        var result = await handler.Handle(command, ct);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Envelope.Ok(result.Value);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/pets/{petId:guid}/restore")]
+    public async Task<ActionResult> RestorePet(
+    [FromRoute] Guid id,
+    [FromRoute] Guid petId,
+    [FromServices] RestorePetHandler handler,
+    CancellationToken ct)
+    {
+        var command = new RestorePetCommand(id, petId);
+
+        var result = await handler.Handle(command, ct);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Envelope.Ok(result.Value);
+    }
+
+    [HttpDelete]
+    [Route("{id:guid}/pets/{petId:guid}/hard")]
+    public async Task<ActionResult> HardDeletePet(
+    [FromRoute] Guid id,
+    [FromRoute] Guid petId,
+    [FromServices] HardDeletePetHandler handler,
+    CancellationToken ct)
+    {
+        var command = new HardDeletePetCommand(id, petId);
+
+        var result = await handler.Handle(command, ct);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Envelope.Ok(result.Value);
+    }
+
+    [HttpPut]
+    [Route("{id:guid}/pets/{petId:guid}/photos")]
+    public async Task<ActionResult> SelectMainPetPhoto(
+    [FromRoute] Guid id,
+    [FromRoute] Guid petId,
+    [FromQuery] SelectMainPetPhotoRequest request,
+    [FromServices] SelectMainPetPhotoHandler handler,
+    CancellationToken ct)
+    {
+        var command = request.ToCommand(id, petId);
+
+        var result = await handler.Handle(command, ct);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Envelope.Ok();
     }
 }

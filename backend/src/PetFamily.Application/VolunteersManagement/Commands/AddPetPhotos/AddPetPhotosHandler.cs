@@ -71,7 +71,7 @@ public class AddPetPhotosHandler : ICommandHandler<string, AddPetPhotosCommand>
         }
 
         // add paths in repository
-        var exitingPhotos = pet.Value.PetPhotos.Photos.AsEnumerable();
+        var exitingPhotos = pet.Value.PetPhotos.Photos.ToList();
 
         var newPhotos = uploadResult.Value
             .Select(p => new Photo(p))
@@ -83,7 +83,7 @@ public class AddPetPhotosHandler : ICommandHandler<string, AddPetPhotosCommand>
             return Error.Failure("file.upload", "Error in placing files in the repository").ToErrorList();
         }
 
-        var allPhotos = exitingPhotos.Concat(newPhotos).Select(p => p.PathToStorage);
+        var allPhotos = exitingPhotos.Concat(newPhotos);
         pet.Value.UpdatePetPhotos(allPhotos);
 
         // ending
