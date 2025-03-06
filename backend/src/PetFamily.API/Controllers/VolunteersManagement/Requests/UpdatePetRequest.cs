@@ -31,8 +31,20 @@ public record class UpdatePetRequest(
         var address = new AddressDto(Country, Region, City, Street, HouseNumber, PostalCode);
 
         return new UpdatePetCommand(
-            id, petId, Name, Description, typeInfo, Color, HealthInfo,
-            address, Weight, Height, PhoneNumber, IsCastrated,
-            IsVaccinated, BirthDate, RequisitesForHelp);
+            id,
+            petId,
+            Name,
+            Description,
+            typeInfo,
+            Color,
+            HealthInfo,
+            address,
+            Weight,
+            Height,
+            PhoneNumber,
+            IsCastrated,
+            IsVaccinated,
+            BirthDate,
+            RequisitesForHelp);
     }
 }

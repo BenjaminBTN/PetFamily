@@ -119,7 +119,20 @@ public class UpdatePetHandler : ICommandHandler<Guid, UpdatePetCommand>
         var requisites = new RequisiteForHelpList(
             command.RequisitesForHelp.Select(dto => RequisiteForHelp.Create(dto.Name, dto.Description).Value));
 
-        pet.UpdateMainInfo(name, description, typeInfo, color, healthInfo, address, command.Weight, command.Height, phoneNumber, command.IsCastrated, command.IsVaccinated, birthDate, requisites);
+        pet.UpdateMainInfo(
+            name,
+            description,
+            typeInfo,
+            color,
+            healthInfo,
+            address,
+            command.Weight,
+            command.Height,
+            phoneNumber,
+            command.IsCastrated,
+            command.IsVaccinated,
+            birthDate,
+            requisites);
 
         await _unitOfWork.SaveChanges(ct);
 
